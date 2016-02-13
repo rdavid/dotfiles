@@ -42,4 +42,15 @@ syntax on
 highlight OverLength ctermbg=red ctermfg=white guibg=#592929
 match OverLength /\%81v.\+/
 
-set pastetoggle=<F2>          " Enables clear paste.
+set pastetoggle=<F2>            " Enables clear paste.
+
+"Plugins.
+set runtimepath^=~/.vim/bundle/ctrlp.vim
+set runtimepath^=~/.vim/bundle/ag
+
+let mapleader=","       " leader is comma.
+
+" Edit vimrc/zshrc and load vimrc bindings.
+nnoremap <leader>ev :vsp $MYVIMRC<CR>
+nnoremap <leader>ez :vsp ~/.zshrc<CR>
+nnoremap <leader>sv :source $MYVIMRC<CR>
