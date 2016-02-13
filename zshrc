@@ -54,7 +54,7 @@ plugins=(git git-flow git-extras osx web-search battery tmux)
 
 # User configuration
 
-export PATH="/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin"
+export PATH="/opt/local/bin/:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin"
 # export MANPATH="/usr/local/man:$MANPATH"
 
 source $ZSH/oh-my-zsh.sh
@@ -85,3 +85,5 @@ source $ZSH/oh-my-zsh.sh
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 
 alias src="source ~/.zshrc"
+alias vi="vim"
+alias h="history"

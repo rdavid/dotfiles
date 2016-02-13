@@ -1,5 +1,7 @@
 #!/bin/bash
 
+PATH=/opt/local/bin:$PATH
+
 # Aliases.
 
 # Easier navigation: .., ..., ...., ....., ~ and -
@@ -9,6 +11,7 @@ alias ....="cd ../../.."
 alias .....="cd ../../../.."
 alias ~="cd ~" # `cd` is probably faster to type though
 alias -- -="cd -"
+alias vi="vim"
 
 # Detect which `ls` flavor is in use
 if ls --color > /dev/null 2>&1; then # GNU `ls`
