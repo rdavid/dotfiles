@@ -32,6 +32,7 @@ set nobackup
 set noswapfile
 set title                       " Changes the terminal's title.
 set noerrorbells                " Don't beep.
+set lazyredraw                  " Redraw only when we need to.
 
 " Colors.
 colorscheme zenburn
