@@ -36,7 +36,7 @@ set lazyredraw                  " Redraw only when we need to.
 
 " Colors.
 colorscheme zenburn
-syntax on
+syntax enable                  " Enables syntax processing.
 
 " Highlights for text that goes over the 80 column limit.
 highlight OverLength ctermbg=red ctermfg=white guibg=#592929
@@ -54,3 +54,12 @@ let mapleader=","       " leader is comma.
 nnoremap <leader>ev :vsp $MYVIMRC<CR>
 nnoremap <leader>ez :vsp ~/.zshrc<CR>
 nnoremap <leader>sv :source $MYVIMRC<CR>
+
+" Turns off search highlight.
+nnoremap <leader><space> :nohlsearch<CR>
+
+set backup
+set backupdir=~/.vim-tmp,~/.tmp,~/tmp,/var/tmp,/tmp
+set backupskip=/tmp/*,/private/tmp/*
+set directory=~/.vim-tmp,~/.tmp,~/tmp,/var/tmp,/tmp
+set writebackup
