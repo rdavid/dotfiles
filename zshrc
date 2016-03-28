@@ -85,5 +85,18 @@ source $ZSH/oh-my-zsh.sh
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 
 alias src="source ~/.zshrc"
+alias src-tmux="tmux source-file ~/.tmux.conf"
 alias vi="vim"
 alias h="history"
+
+# Imperva related
+gw()
+{
+  if [[ -z $1 ]]; then
+    export BRANCH="trunk"
+  else
+    export BRANCH="$1"
+  fi
+
+  cd /c/Users/david.rabkin/work/$BRANCH/Gateway/src
+}  

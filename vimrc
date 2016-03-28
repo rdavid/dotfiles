@@ -2,7 +2,7 @@
 set nocompatible
 
 " General.
-set hidden                      "Hides buffers instead of closing them.
+set hidden                      " Hides buffers instead of closing them.
 set nowrap                      " Don't wrap lines.
 set linebreak                   " Break lines at word (requires Wrap lines).
 set showbreak=+++               " Wrap-broken line prefix.
@@ -33,6 +33,8 @@ set noswapfile
 set title                       " Changes the terminal's title.
 set noerrorbells                " Don't beep.
 set lazyredraw                  " Redraw only when we need to.
+
+set listchars=eol:$,tab:>-,trail:~,extends:>,precedes:< " Smart whitespaces.
 
 " Colors.
 colorscheme zenburn
