@@ -50,7 +50,7 @@ COMPLETION_WAITING_DOTS="true"
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(git git-flow git-extras osx web-search battery tmux)
+plugins=(git git-flow git-extras osx web-search battery tmux svn)
 
 # User configuration
 
@@ -88,6 +88,7 @@ alias src="source ~/.zshrc"
 alias src-tmux="tmux source-file ~/.tmux.conf"
 alias vi="vim"
 alias h="history"
+alias svn-stat="svn status | grep -v \"? \""
 
 # Imperva related
 gw()
