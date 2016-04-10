@@ -41,7 +41,7 @@ colorscheme zenburn
 syntax enable                  " Enables syntax processing.
 
 " Highlights for text that goes over the 80 column limit.
-highlight OverLength ctermbg=red ctermfg=white guibg=#592929
+highlight OverLength ctermbg=black ctermfg=white guibg=#592929
 match OverLength /\%81v.\+/
 
 set pastetoggle=<F2>            " Enables clear paste.

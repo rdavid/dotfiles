@@ -91,13 +91,28 @@ alias h="history"
 alias svn-stat="svn status | grep -v \"? \""
 
 # Imperva related
+
+alias shilo='ssh david@10.100.46.138'
+
+
+# Go work.
 gw()
 {
-  if [[ -z $1 ]]; then
+  if [[ -z "$1" ]]; then
     export BRANCH="trunk"
   else
     export BRANCH="$1"
   fi
 
   cd /c/Users/david.rabkin/work/$BRANCH/Gateway/src
-}  
+}
+
+# Source files search.
+fs()
+{
+  if [[ -z "$1" ]]; then
+    echo "fs: Pattern not found"
+  fi
+
+  grep --include=\*.{c,h,cpp} -rnw '.' -e "$1" 
+}
