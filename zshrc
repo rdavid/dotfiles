@@ -90,12 +90,10 @@ alias vi="vim"
 alias h="history"
 alias svn-stat="svn status | grep -v \"? \""
 
-# Imperva related
-
-alias shilo='ssh david@10.100.46.138'
+alias shilo='ssh david@10.100.46.88'
 
 
-# Go work.
+# Goes work.
 gw()
 {
   if [[ -z "$1" ]]; then
@@ -107,7 +105,7 @@ gw()
   cd /c/Users/david.rabkin/work/$BRANCH/Gateway/src
 }
 
-# Source files search.
+# Sources files search.
 fs()
 {
   if [[ -z "$1" ]]; then
@@ -116,3 +114,27 @@ fs()
 
   grep --include=\*.{c,h,cpp} -rnw '.' -e "$1" 
 }
+
+# Starts tmux.
+if [[ "$TERM" != "screen" ]] && 
+     [[ "$SSH_CONNECTION" == "" ]] &&
+       [[ -z "$TMUX" ]]   ; then
+  # Attempt to discover a detached session and attach 
+  # it, else create a new session
+
+  if tmux has-session -t main 2>/dev/null; then
+    tmux attach-session -t main
+  else
+    tmux new-session -s main -d
+  fi
+else
+  # One might want to do other things in this case, 
+  # here I print my motd, but only on servers where 
+  # one exists
+
+  # If inside tmux session then print MOTD
+  MOTD=/etc/motd.tcl
+  if [ -f $MOTD ]; then
+    $MOTD
+  fi
+fi
