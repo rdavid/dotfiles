@@ -1,3 +1,6 @@
+ # zshrc
+ # vim: tabstop=2 shiftwidth=2 expandtab textwidth=80 linebreak wrap
+
 # Path to your oh-my-zsh installation.
 export ZSH=~/.oh-my-zsh
 
@@ -88,22 +91,6 @@ alias src="source ~/.zshrc"
 alias src-tmux="tmux source-file ~/.tmux.conf"
 alias vi="vim"
 alias h="history"
-alias svn-stat="svn status | grep -v \"? \""
-
-alias shilo='ssh david@10.100.46.88'
-
-
-# Goes work.
-gw()
-{
-  if [[ -z "$1" ]]; then
-    export BRANCH="trunk"
-  else
-    export BRANCH="$1"
-  fi
-
-  cd /c/Users/david.rabkin/work/$BRANCH/Gateway/src
-}
 
 # Sources files search.
 fs()
@@ -138,3 +125,9 @@ else
     $MOTD
   fi
 fi
+
+# Cool man pager.
+export PAGER="most"
+
+# Correct work of tmuxp.
+export PATH="`python -m site --user-base`/bin":$PATH

@@ -1,3 +1,4 @@
+ # make.sh
  #!/usr/bin/env bash
  # vim: tabstop=2 shiftwidth=2 expandtab textwidth=80 linebreak wrap
  #
@@ -33,7 +34,7 @@ for file in $files; do
 done
 
 # Installs needfull software.
-pkgs="zsh tmux"
+pkgs="zsh tmux most python cowsay htop"
 for pkg in $pkgs; do
 
   # Tests to see if a package is installed.
@@ -78,3 +79,6 @@ fi
 if [[ ! -d $dir/tmux/ ]]; then
   git clone https://github.com/tmux-plugins/tpm ~/dotfiles/tmux/plugins/tpm
 fi
+
+# Installs tmux session manager.
+command -v tmuxp > /dev/null 2>&1 || pip install --user tmuxp
