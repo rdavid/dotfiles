@@ -39,12 +39,17 @@ for pkg in $pkgs; do
 
   # Tests to see if a package is installed.
   if [[ ! -f "/bin/$pkg" ]]; then
-    echo "$pkg is installed."
+    echo "/bin/$pkg is installed."
+    continue
+  fi
+
+  if [[ ! -f "/usr/bin/$pkg" ]]; then
+    echo "/usr/bin/$pkg is installed."
     continue
   fi
 
   if [[ ! -f "/usr/local/bin/$pkg" ]]; then
-    echo "$pkg is installed."
+    echo "/usr/local/bin/$pkg is installed."
     continue
   fi
   

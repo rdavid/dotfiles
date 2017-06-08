@@ -4,9 +4,6 @@
 # Cool man pager.
 export PAGER="most"
 
-# Correct work of tmuxp.
-export PATH="`python -m site --user-base`/bin":$PATH
-
 # Path to your oh-my-zsh installation.
 export ZSH=~/.oh-my-zsh
 
@@ -62,9 +59,10 @@ COMPLETION_WAITING_DOTS="true"
 plugins=(git git-flow git-extras osx web-search battery tmux svn)
 
 # User configuration
-
 export PATH="/opt/local/bin/:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin"
-# export MANPATH="/usr/local/man:$MANPATH"
+
+# Correct work of tmuxp.
+export PATH="`python -m site --user-base`/bin":$PATH
 
 source $ZSH/oh-my-zsh.sh
 
