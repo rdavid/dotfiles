@@ -1,6 +1,12 @@
  # zshrc
  # vim: tabstop=2 shiftwidth=2 expandtab textwidth=80 linebreak wrap
 
+# Cool man pager.
+export PAGER="most"
+
+# Correct work of tmuxp.
+export PATH="`python -m site --user-base`/bin":$PATH
+
 # Path to your oh-my-zsh installation.
 export ZSH=~/.oh-my-zsh
 
@@ -112,7 +118,8 @@ if [[ "$TERM" != "screen" ]] &&
   if tmux has-session -t main 2>/dev/null; then
     tmux attach-session -t main
   else
-    tmux new-session -s main -d
+    #tmux new-session -s main -d
+    tmuxp load ~/dotfiles/tmux/plugins/tmuxp/main.yaml
   fi
 else
   # One might want to do other things in this case, 
@@ -125,9 +132,3 @@ else
     $MOTD
   fi
 fi
-
-# Cool man pager.
-export PAGER="most"
-
-# Correct work of tmuxp.
-export PATH="`python -m site --user-base`/bin":$PATH
