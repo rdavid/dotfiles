@@ -1,0 +1,16 @@
+session_name: main
+windows:
+- window_name: su
+  layout: tiled
+  panes:
+    -
+    -
+    -
+    -
+- window_name: main
+  layout: tiled
+  panes:
+    - cowsay hello
+    - htop
+    -
+    -
