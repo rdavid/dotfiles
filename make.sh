@@ -38,17 +38,17 @@ pkgs="zsh tmux most python cowsay htop"
 for pkg in $pkgs; do
 
   # Tests to see if a package is installed.
-  if [[ ! -f "/bin/$pkg" ]]; then
+  if [[ -f "/bin/$pkg" ]]; then
     echo "/bin/$pkg is installed."
     continue
   fi
 
-  if [[ ! -f "/usr/bin/$pkg" ]]; then
+  if [[ -f "/usr/bin/$pkg" ]]; then
     echo "/usr/bin/$pkg is installed."
     continue
   fi
 
-  if [[ ! -f "/usr/local/bin/$pkg" ]]; then
+  if [[ -f "/usr/local/bin/$pkg" ]]; then
     echo "/usr/local/bin/$pkg is installed."
     continue
   fi
@@ -65,7 +65,11 @@ for pkg in $pkgs; do
       sudo apt-get install $pkg 
     fi
   elif [[ $platform == 'Darwin' ]]; then
-    su admin -c brew install $pkg
+    su admin -c "brew install $pkg"
+
+    if [[ $pkg == 'python' ]]; then
+      su admin -c "sudo easy_install pip"
+    fi
   elif [[ $platform == 'FreeBSD' ]]; then
     sudo pkg install $pkg
   fi
@@ -86,4 +90,6 @@ if [[ ! -d $dir/tmux/ ]]; then
 fi
 
 # Installs tmux session manager.
-command -v tmuxp > /dev/null 2>&1 || pip install --user tmuxp
+if [[ $(python -c "help('modules');" | grep tmuxp | wc -l) == "0" ]]; then
+  pip install --user tmuxp
+fi
