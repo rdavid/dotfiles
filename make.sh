@@ -63,6 +63,11 @@ for pkg in $pkgs; do
       sudo yum install $pkg 
     elif [[ -f /etc/debian_version ]]; then
       sudo apt-get install $pkg 
+
+      if [[ $pkg == 'python' ]]; then
+        sudo apt-get install python-pip
+      fi
+  elif [[ $platform == 'FreeBSD' ]]; then
     fi
   elif [[ $platform == 'Darwin' ]]; then
     su admin -c "brew install $pkg"
