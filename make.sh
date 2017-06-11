@@ -67,7 +67,6 @@ for pkg in $pkgs; do
       if [[ $pkg == 'python' ]]; then
         sudo apt-get install python-pip
       fi
-  elif [[ $platform == 'FreeBSD' ]]; then
     fi
   elif [[ $platform == 'Darwin' ]]; then
     su admin -c "brew install $pkg"
