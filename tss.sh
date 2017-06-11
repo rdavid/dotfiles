@@ -1,10 +1,9 @@
- # tss.sh
- #!/usr/bin/env zsh
- # vim: tabstop=2 shiftwidth=2 expandtab textwidth=80 linebreak wrap
- #
- # Copyright 2017 David Rabkin
- #
- # tss - Terminal Screen Saver
+#!/usr/bin/env zsh
+# vim: tabstop=2 shiftwidth=2 expandtab textwidth=80 linebreak wrap
+#
+# tss.sh - Terminal Screen Saver.
+#
+# Copyright 2017 David Rabkin
 
 # All cowsay types in array.
 declare -a TYPE=( $(cowsay -l | tail -n +2) )

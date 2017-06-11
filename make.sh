@@ -1,11 +1,12 @@
- # make.sh
- #!/usr/bin/env bash
- # vim: tabstop=2 shiftwidth=2 expandtab textwidth=80 linebreak wrap
- #
- # Copyright 2017 David Rabkin
- #
- # This script creates symlinks from the home directory to any desired
- # dotfiles in ~/dotfiles. Also it installs needfull modules.
+#!/usr/bin/env bash
+# vim: tabstop=2 shiftwidth=2 expandtab textwidth=80 linebreak wrap
+#
+# make.sh
+#
+# Copyright 2017 David Rabkin
+#
+# This script creates symlinks from the home directory to any desired
+# dotfiles in ~/dotfiles. Also it installs needfull modules.
 
 dir=~/dotfiles                    # dotfiles directory
 olddir=~/dotfiles_old             # old dotfiles backup directory
@@ -76,6 +77,10 @@ for pkg in $pkgs; do
     fi
   elif [[ $platform == 'FreeBSD' ]]; then
     sudo pkg install $pkg
+
+    if [[ $pkg == 'python' ]]; then
+      sudo pkg install py27-pip
+    fi
   fi
 done
 
@@ -89,7 +94,7 @@ if [[ ! -d $dir/oh-my-zsh/ ]]; then
   git clone https://github.com/robbyrussell/oh-my-zsh.git
 fi
 
-if [[ ! -d $dir/tmux/ ]]; then
+if [[ ! -d $dir/tmux/plugins/tpm ]]; then
   git clone https://github.com/tmux-plugins/tpm ~/dotfiles/tmux/plugins/tpm
 fi
 
