@@ -35,7 +35,7 @@ for file in $files; do
 done
 
 # Installs needfull software.
-pkgs="zsh tmux most python cowsay htop"
+pkgs="zsh tmux most python cowsay htop fortune lolcat"
 for pkg in $pkgs; do
 
   # Tests to see if a package is installed.
