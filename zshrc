@@ -58,11 +58,14 @@ COMPLETION_WAITING_DOTS="true"
 # Add wisely, as too many plugins slow down shell startup.
 plugins=(git git-flow git-extras osx web-search battery tmux svn)
 
-# User configuration
+# User configuration.
 export PATH="/opt/local/bin/:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin"
 
-# Correct work of tmuxp.
+# Corrects work of tmuxp.
 export PATH="`python -m site --user-base`/bin":$PATH
+
+# Corrects work of fortune at Win10 Ubuntu.
+export PATH="/usr/games":$PATH
 
 source $ZSH/oh-my-zsh.sh
 

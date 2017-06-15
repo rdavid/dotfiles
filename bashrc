@@ -1,5 +1,10 @@
 #!/bin/bash
 
+# Launch Zsh
+if [ -t 1 ]; then
+  exec zsh
+fi
+
 PATH=/opt/local/bin:$PATH
 
 # Aliases.
