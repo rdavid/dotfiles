@@ -2,6 +2,8 @@ session_name: main
 windows:
 - window_name: su
   layout: tiled
+  shell_command_before:
+    - cd ~/
   panes:
     -
     -
@@ -9,6 +11,8 @@ windows:
     -
 - window_name: main
   layout: tiled
+  shell_command_before:
+    - cd ~/
   panes:
     - ~/dotfiles/tss.sh 
     - htop
