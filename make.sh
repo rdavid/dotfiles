@@ -83,10 +83,15 @@ for pkg in $pkgs; do
       su admin -c "sudo easy_install pip"
     fi
   elif [[ $platform == 'FreeBSD' ]]; then
-    sudo pkg install $pkg
 
-    if [[ $pkg == 'python' ]]; then
-      sudo pkg install py27-pip
+    if [[ $pkg == 'lolcat' ]]; then
+      sudo pkg install rubygem-lolcat
+    else 
+      sudo pkg install $pkg
+
+      if [[ $pkg == 'python' ]]; then
+        sudo pkg install py27-pip
+      fi
     fi
   fi
 done
