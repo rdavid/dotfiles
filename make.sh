@@ -58,8 +58,15 @@ for pkg in $pkgs; do
 
   platform=$(uname);
   if [[ $platform == 'Linux' ]]; then
+
     if [[ -f /etc/arch-release ]]; then
-      sudo pacman -S $pkg
+
+      if [[ $pkg == 'fortune' ]]; then
+        sudo pacman -S fortune-mod
+      else 
+        sudo pacman -S $pkg
+      fi
+
     elif [[ -f /etc/redhat-release ]]; then
       sudo yum install $pkg 
     elif [[ -f /etc/debian_version ]]; then
