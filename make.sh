@@ -111,6 +111,6 @@ if [[ ! -d $dir/tmux/plugins/tpm ]]; then
 fi
 
 # Installs tmux session manager.
-if [[ $(python -c "help('modules');" | grep tmuxp | wc -l) == "0" ]]; then
+if [[ $(python -c "help('modules');" | grep tmuxp | wc -l | xargs) == "0" ]]; then
   pip install --user tmuxp
 fi
