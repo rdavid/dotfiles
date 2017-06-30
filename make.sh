@@ -116,7 +116,7 @@ if [[ $(python -c "help('modules');" | grep tmuxp | wc -l | xargs) == "0" ]]; th
 fi
 
 # Installs transcode-video.
-if [[ gem list -i video_transcoding  ]]; then
+if [[ $(gem list -i video_transcoding) == "false" ]]; then
   sudo gem install video_transcoding 
 else
   sudo gem update video_transcoding
