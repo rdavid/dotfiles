@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/usr/bin/env sh
 # bak.sh <arc|satashare>
 
 LOG="/tmp/bak.log"

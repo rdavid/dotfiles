@@ -1,4 +1,4 @@
-#!/usr/local/bin/bash
+#!/usr/bin/env bash 
 # transcode.sh
 
 # Calculates duration time for report.
