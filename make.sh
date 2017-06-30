@@ -114,3 +114,10 @@ fi
 if [[ $(python -c "help('modules');" | grep tmuxp | wc -l | xargs) == "0" ]]; then
   pip install --user tmuxp
 fi
+
+# Installs transcode-video.
+if [[ gem list -i video_transcoding  ]]; then
+  sudo gem install video_transcoding 
+else
+  sudo gem update video_transcoding
+fi
