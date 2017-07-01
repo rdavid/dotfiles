@@ -70,10 +70,10 @@ for pkg in $pkgs; do
     elif [[ -f /etc/redhat-release ]]; then
       sudo yum install $pkg 
     elif [[ -f /etc/debian_version ]]; then
-      sudo apt-get install $pkg 
+      sudo apt-get -y install $pkg 
 
       if [[ $pkg == 'python' ]]; then
-        sudo apt-get install python-pip
+        sudo apt-get -y install python-pip
       fi
     fi
   elif [[ $platform == 'Darwin' ]]; then

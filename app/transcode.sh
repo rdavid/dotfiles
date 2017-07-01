@@ -23,8 +23,8 @@ fi
 
 #declare -a AUD=( 2 1 1 )
 #declare -a SUB=( 1 1 1 ) 
-declare -a AUD=( $(for i in {1..36}; do echo 3; done) )
-declare -a SUB=( $(for i in {1..36}; do echo 2; done) )
+declare -a AUD=( $(for i in {1..88}; do echo 3; done) )
+declare -a SUB=( $(for i in {1..88}; do echo 2; done) )
 declare -a FIL=( "$@" )
 
 if [ ${#AUD[@]} -ne ${#SUB[@]} ]; then

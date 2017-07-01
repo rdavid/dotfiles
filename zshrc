@@ -114,23 +114,21 @@ fs()
 
 # Starts tmux.
 if [[ "$TERM" != "screen" ]] && 
-     [[ "$SSH_CONNECTION" == "" ]] &&
-       [[ -z "$TMUX" ]]   ; then
+     [[ -z "$TMUX" ]]; then
   # Attempt to discover a detached session and attach 
-  # it, else create a new session
+  # it, else create a new session.
 
   if tmux has-session -t main 2>/dev/null; then
     tmux attach-session -t main
   else
-    #tmux new-session -s main -d
     tmuxp load ~/dotfiles/tmux/plugins/tmuxp/main.yaml
   fi
 else
   # One might want to do other things in this case, 
   # here I print my motd, but only on servers where 
-  # one exists
+  # one exists.
 
-  # If inside tmux session then print MOTD
+  # If inside tmux session then print MOTD.
   MOTD=/etc/motd.tcl
   if [ -f $MOTD ]; then
     $MOTD
