@@ -19,15 +19,22 @@ mkdir -p $olddir
 
 # Changes to the dotfiles directory.
 cd $dir
-echo "done."
 
 # Moves any existing dotfiles in homedir to dotfiles_old directory,
 # then creates symlinks from the homedir to any files in the ~/dotfiles
 # directory specified in $files.
 for file in $files; do
-  mv ~/.$file ~/dotfiles_old/
+
+  if [ -e ~/.$file ]; then
+    mv ~/.$file ~/dotfiles_old/
+  fi
+
   ln -s $dir/$file ~/.$file
 done
+
+if [ -d ~/.config/conky ]; then
+  mv ~/.config/conky ~/dotfiles_old/
+fi
 
 ln -s $dir/conky ~/.config/conky
 
