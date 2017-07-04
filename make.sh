@@ -12,7 +12,7 @@ dir=~/dotfiles                    # dotfiles directory
 olddir=~/dotfiles_old             # old dotfiles backup directory
 
 # List of files/folders to symlink in homedir.
-files="bashrc bash_profile vimrc vim zshrc oh-my-zsh tmux.conf tmux xinitrc"
+files="bashrc bash_profile vimrc vim zshrc oh-my-zsh tmux.conf tmux xinitrc i3"
 
 # Creates dotfiles_old in homedir.
 mkdir -p $olddir
