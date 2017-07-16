@@ -114,15 +114,10 @@ fs()
 
 # Starts tmux.
 if [[ "$TERM" != "screen" ]] && 
-     [[ -z "$TMUX" ]]; then
-  # Attempt to discover a detached session and attach 
-  # it, else create a new session.
+   [[ -z "$TMUX" ]] &&
+   ! test tmux has-session -t main 2>/dev/null; then
 
-  if tmux has-session -t main 2>/dev/null; then
-    tmux attach-session -t main
-  else
-    tmuxp load ~/dotfiles/tmux/plugins/tmuxp/main.yaml
-  fi
+  tmuxp load ~/dotfiles/tmux/plugins/tmuxp/main.yaml
 else
   # One might want to do other things in this case, 
   # here I print my motd, but only on servers where 

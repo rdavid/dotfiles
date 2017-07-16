@@ -39,7 +39,7 @@ fi
 ln -s $dir/conky ~/.config/conky
 
 # Installs needfull software.
-pkgs="zsh tmux most python cowsay htop fortune lolcat"
+pkgs="zsh tmux most python cowsay htop fortune lolcat feh conky"
 for pkg in $pkgs; do
 
   # Tests to see if a package is installed.
