@@ -34,7 +34,9 @@ set title                       " Changes the terminal's title.
 set noerrorbells                " Don't beep.
 set lazyredraw                  " Redraw only when we need to.
 
-set listchars=eol:$,tab:>-,trail:~,extends:>,precedes:< " Smart whitespaces.
+set listchars=tab:»\ ,extends:›,precedes:‹,nbsp:·,trail:·
+set showbreak=↪\
+set list
 
 " Colors.
 colorscheme zenburn
