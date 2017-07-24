@@ -167,8 +167,15 @@ bar {
         status_command i3status
 }
 
+bindsym Mod1+Shift+x exec $HOME/dotfiles/app/lock.sh
+
 exec --no-startup-id feh --bg-fill /home/david/dotfiles/pic/bg.jpg
 exec --no-startup-id conky
+exec xautolock -time 15 -locker '$HOME/dotfiles/app/lock.sh' &
+
+# Language switcher.
+exec "setxkbmap -layout us,il,ru"
+exec "setxkbmap -option 'grp:alt_shift_toggle'"
 
 #######################################################################
 # automatically start i3-config-wizard to offer the user to create a

@@ -101,6 +101,7 @@ alias src="source ~/.zshrc"
 alias src-tmux="tmux source-file ~/.tmux.conf"
 alias vi="vim"
 alias h="history"
+alias grep="grep -Hn"
 
 # Sources files search.
 fs()
