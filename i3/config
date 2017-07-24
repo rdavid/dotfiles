@@ -104,11 +104,17 @@ bindsym Mod1+Shift+minus move scratchpad
 # If there are multiple scratchpad windows, this command cycles through them.
 bindsym Mod1+minus scratchpad show
 
-# switch to workspace
-bindsym Mod1+1 workspace 1
-bindsym Mod1+2 workspace 2
-bindsym Mod1+3 workspace 3
-bindsym Mod1+4 workspace 4
+# Name the workspaces
+set $tag1 "1:term"
+set $tag2 "2:inet"
+set $tag3 "3:code"
+set $tag4 "4:mail"
+
+# Switches to workspace.
+bindsym Mod1+1 workspace $tag1
+bindsym Mod1+2 workspace $tag2
+bindsym Mod1+3 workspace $tag3
+bindsym Mod1+4 workspace $tag4
 bindsym Mod1+5 workspace 5
 bindsym Mod1+6 workspace 6
 bindsym Mod1+7 workspace 7
@@ -161,17 +167,40 @@ mode "resize" {
 
 bindsym Mod1+r mode "resize"
 
-# Start i3bar to display a workspace bar (plus the system information i3status
-# finds out, if available)
+# Zenburn colors.
+client.focused              #688060 #688060 #303030 #ffcfaf
+client.focused_inactive     #3f3f3f #3F3F3F #7f9f7f #3f3f3f
+client.unfocused            #3f3f3f #3F3F3F #DCDCCC #3f3f3f
+client.urgent               #dca3a3 #dca3a3 #DCDCCC #3f3f3f
+
+# Starts i3bar to display a workspace bar (plus the system information i3status
+# finds out, if available).
 bar {
-        status_command i3status
+    colors {
+        background #3f3f3f
+        statusline #dcdccc
+
+        focused_workspace  #93b3a3 #3f3f3f #93b3a3
+        active_workspace   #ffcfaf #3f3f3f #ffcfaf
+        inactive_workspace #636363 #3f3f3f #dcdccc
+        urgent_workspace   #dca3a3 #3f3f3f #dca3a3
+    }
+
+    # i3bar position.
+    position top
+
+    # Using custom i3status.conf.
+    status_command i3status -c ~/.i3/i3status.conf
 }
 
-bindsym Mod1+Shift+x exec $HOME/dotfiles/app/lock.sh
+bindsym Mod1+Shift+x exec /home/david/dotfiles/app/lock.sh
+exec xautolock -time 15 -locker '/home/david/dotfiles/app/lock.sh' &
 
+# Startup programs.
+exec --no-startup-id nm-applet
 exec --no-startup-id feh --bg-fill /home/david/dotfiles/pic/bg.jpg
 exec --no-startup-id conky
-exec xautolock -time 15 -locker '$HOME/dotfiles/app/lock.sh' &
+exec --no-startup-id dropbox start
 
 # Language switcher.
 exec "setxkbmap -layout us,il,ru"
