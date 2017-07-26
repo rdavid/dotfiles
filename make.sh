@@ -40,7 +40,7 @@ ln -s $dir/conky ~/.config/conky
 
 # Installs needfull software.
 pkgs="zsh tmux most python cowsay htop fortune lolcat feh conky scrot
-imagemagick i3 i3lock cmatrix hollywood"
+imagemagick i3 i3lock cmatrix hollywood hddtemp glances htop"
 for pkg in $pkgs; do
 
   # Tests to see if a package is installed.
