@@ -205,7 +205,7 @@ exec --no-startup-id xscreensaver -no-splash
 
 # Language switcher.
 exec "setxkbmap -layout us,il,ru"
-exec "setxkbmap -option 'grp:alt_shift_toggle'"
+exec "setxkbmap -option 'grp:alt_space_toggle'"
 
 #######################################################################
 # automatically start i3-config-wizard to offer the user to create a

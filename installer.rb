@@ -9,6 +9,7 @@
 # dotfiles in ~/dotfiles. Also it installs needfull packages.
 
 require 'os'
+require 'fileutils'
 
 class Installer
   def initialize()
@@ -37,10 +38,12 @@ class Installer
     }.reject { |k, v| v.nil? }
 
     # List of files/folders to symlink in homedir.
-    @dotf = ['bashrc', 'bash_profile', 'vimrc', 'vim', 'zshrc', 'oh-my-zsh', 'tmux.conf', 'tmux', 'xinitrc', 'i3']
+    #@dotf = ['bashrc', 'bash_profile', 'vimrc', 'vim', 'zshrc', 'oh-my-zsh', 'tmux.conf', 'tmux', 'xinitrc', 'i3']
+    @dotf = ['foobar1', 'foobar2']
 
-    @ndir = '~/dotfiles'
-    @odir = '~/dotfiles-old'
+    @ndir = File.join(Dir.home, "dotfiles")
+    @odir = File.join(Dir.home, "dotfiles-old")
+
   end
 
   def pkgs
@@ -73,7 +76,24 @@ class Installer
     cmd = install(new_pkgs.join(' ')) if new_pkgs.any?
     (puts "Install: #{cmd}."; system "#{cmd}") unless cmd.nil?
 
-    #
+    # Creates directory for existing dot files.
+    FileUtils.mkdir_p @odir
+
+    # Moves any existing dotfiles in homedir to dotfiles_old directory,
+    # then creates symlinks from the homedir to any files in the ~/dotfiles
+    # directory specified in $files.
+    @dotf.each do |name|
+      src = File.join(Dir.home, '.' + name)
+      dst = File.join(@odir, '.' + name)
+      (puts "mv #{src}->#{dst}"; File.rename(src, dst)) if File.exist?(src)
+      FileUtils.ln_s(File.join(@ndir, name), src, :force => true)
+    end
+
+    # Handles manually.
+    src = File.join(Dir.home, '.config', 'conky1')
+    dst = File.join(@odir, '.config', 'conky')
+    (puts "mv #{src}->#{dst}"; File.rename(src, dst)) if File.exist?(src)
+    FileUtils.ln_s(File.join(@ndir, 'conky1'), src, :force => true)
 
     puts "Bye-bye."
   end

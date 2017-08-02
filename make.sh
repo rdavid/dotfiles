@@ -6,7 +6,7 @@
 # Copyright 2017 David Rabkin
 #
 # This script creates symlinks from the home directory to any desired
-# dotfiles in ~/dotfiles. Also it installs needfull modules.
+# dotfiles in ~/dotfiles. Also it installs needful modules.
 
 dir=~/dotfiles                    # dotfiles directory
 olddir=~/dotfiles_old             # old dotfiles backup directory
