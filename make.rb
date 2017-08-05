@@ -20,7 +20,8 @@ class Installer
     @pkgs = [
       'zsh', 'tmux', 'most', 'python', 'cowsay', 'htop', 'fortune',
       'lolcat', 'feh', 'conky', 'scrot', 'imagemagick', 'i3', 'i3lock',
-      'cmatrix', 'hollywood', 'hddtemp', 'glances', 'htop'
+      'cmatrix', 'hollywood', 'hddtemp', 'glances', 'htop',
+      'fonts-inconsolata'
     ]
 
     # [<packages list>, <existence command>, <install command>]
