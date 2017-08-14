@@ -10,19 +10,51 @@
 
 require 'os'
 require "git"
+require 'optparse'
 require 'fileutils'
+
+class Configuration
+  def initialize
+    ARGV << '-h' if ARGV.empty?
+    @options = {}
+    OptionParser.new do |opts|
+      opts.banner = "Usage: make.rb [options]."
+      opts.on("-g", "--[no-]xorg",
+              "Install X packages or not.") { |o| @options[:xorg] = o }
+    end.parse!
+
+    raise 'Xorg option is not given' if @options[:xorg].nil?
+  end
+
+  def xorg?
+    @options[:xorg]
+  end
+end
 
 class Installer
 
-  def initialize()
-
-    # Packages to install.
+  def initialize(cfg)
+    # Packages without Xorg to install.
     @pkgs = [
-      'zsh', 'tmux', 'most', 'python', 'cowsay', 'htop', 'fortune',
-      'lolcat', 'feh', 'conky', 'scrot', 'imagemagick', 'i3', 'i3lock',
-      'cmatrix', 'hollywood', 'hddtemp', 'glances', 'htop',
-      'fonts-inconsolata'
+      'zsh', 'tmux', 'most', 'python', 'cowsay', 'fortune', 'lolcat', 'scrot',
+      'imagemagick', 'cmatrix', 'hollywood', 'hddtemp', 'glances', 'htop', 'mc',
+      'fonts-inconsolata', 'fonts-font-awesome'
     ]
+
+    # Extends with Xorg related packages.
+    @pkgs += [
+      'i3', 'i3lock', 'i3blocks', 'feh', 'conky'
+    ] if cfg.xorg?
+
+    # List of files/folders to symlink in homedir.
+    @dotf = [
+      'bashrc', 'bash_profile', 'vimrc', 'vim', 'zshrc', 'oh-my-zsh',
+      'tmux.conf', 'tmux'
+    ]
+
+    @dotf += [
+      'xinitrc', 'i3', 'conky'
+    ] if cfg.xorg?
 
     # [<packages list>, <existence command>, <install command>]
     @osdb = {
@@ -53,12 +85,6 @@ class Installer
                          ] if OS.linux? && File.file?("/etc/redhat-release"))
     }.reject { |k, v| v.nil? }
 
-    # List of files/folders to symlink in homedir.
-    @dotf = [
-      'bashrc', 'bash_profile', 'vimrc', 'vim', 'zshrc', 'oh-my-zsh',
-      'tmux.conf', 'tmux', 'xinitrc', 'i3'
-    ]
-
     @ndir = File.join(Dir.home, "dotfiles")
     @odir = File.join(Dir.home, "dotfiles-old")
   end
@@ -80,7 +106,7 @@ class Installer
   end
 
   def do
-    puts "Hello #{os}: #{pkgs}."
+    puts "Hello #{os}: #{pkgs}: #{@dotf}."
 
     # Tests if a package is installed.
     new_pkgs = Array.new
@@ -100,17 +126,19 @@ class Installer
     # then creates symlinks from the homedir to any files in the ~/dotfiles
     # directory specified in $files.
     @dotf.each do |name|
+      if name.eql? 'conky'
+        src = File.join(Dir.home, '.config', 'conky')
+        dst = File.join(@odir, '.config', 'conky')
+        (puts "mv #{src}->#{dst}"; File.rename(src, dst)) if File.exist?(src)
+        FileUtils.ln_s(File.join(@ndir, 'conky'), src, :force => true)
+        next
+      end
+
       src = File.join(Dir.home, '.' + name)
       dst = File.join(@odir, '.' + name)
       (puts "mv #{src}->#{dst}"; File.rename(src, dst)) if File.exist?(src)
       FileUtils.ln_s(File.join(@ndir, name), src, :force => true)
     end
-
-    # Handles manually.
-    src = File.join(Dir.home, '.config', 'conky1')
-    dst = File.join(@odir, '.config', 'conky')
-    (puts "mv #{src}->#{dst}"; File.rename(src, dst)) if File.exist?(src)
-    FileUtils.ln_s(File.join(@ndir, 'conky1'), src, :force => true)
 
     # Sets the default shell to zsh if it isn't currently set to zsh.
     shell = ENV["SHELL"]
@@ -144,4 +172,4 @@ class Installer
   end
 end
 
-Installer.new.do
+Installer.new(Configuration.new).do
