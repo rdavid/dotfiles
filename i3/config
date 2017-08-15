@@ -88,16 +88,16 @@ bindsym Mod1+Shift+minus move scratchpad
 bindsym Mod1+minus scratchpad show
 
 # Names the workspaces.
-set $tag1 "1: term"
-set $tag2 "2: inet"
-set $tag3 "3: code"
-set $tag4 "4: code"
-set $tag5 "5: mail"
-set $tag6 "6: misc"
-set $tag7 "7: misc"
-set $tag8 "8: misc"
-set $tag9 "9: misc"
-set $tag0 "0: misc"
+set $tag1 "1:  "
+set $tag2 "2:  "
+set $tag3 "3:  "
+set $tag4 "4:  "
+set $tag5 "5:  "
+set $tag6 "6:  "
+set $tag7 "7:  "
+set $tag8 "8:  "
+set $tag9 "9:  "
+set $tag0 "0:  "
 
 # Switches to workspace.
 bindsym Mod1+1 workspace $tag1

@@ -38,7 +38,7 @@ class Installer
     @pkgs = [
       'zsh', 'tmux', 'most', 'python', 'cowsay', 'fortune', 'lolcat', 'scrot',
       'imagemagick', 'cmatrix', 'hollywood', 'hddtemp', 'glances', 'htop', 'mc',
-      'fonts-inconsolata', 'fonts-font-awesome'
+      'cmus', 'fonts-inconsolata', 'fonts-font-awesome'
     ]
 
     # Extends with Xorg related packages.
@@ -52,6 +52,7 @@ class Installer
       'tmux.conf', 'tmux'
     ]
 
+    # Extends with Xorg related packages.
     @dotf += [
       'xinitrc', 'i3', 'conky'
     ] if cfg.xorg?
