@@ -150,7 +150,7 @@ class Installer
 
     # Clones oh-my-zsh repository from GitHub.
     dir = File.join(@ndir, 'oh-my-zsh')
-    Git.clone('https://github.com/robbyrussell/oh-my-zsh.git', dir) unless Dir.exist?(dir)
+    Git.clone('https://github.com/robbyrussell/oh-my-zsh', dir) unless Dir.exist?(dir)
 
     # Clones tpm plugin from GitHub.
     dir = File.join(@ndir, 'tmux', 'plugins', 'tpm')
