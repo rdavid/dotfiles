@@ -33,6 +33,7 @@ set noswapfile
 set title                       " Changes the terminal's title.
 set noerrorbells                " Don't beep.
 set lazyredraw                  " Redraw only when we need to.
+set nocompatible                " We're running Vim, not Vi!
 
 set listchars=tab:»\ ,extends:›,precedes:‹,nbsp:·,trail:·
 set showbreak=↪\
@@ -41,6 +42,9 @@ set list
 " Colors.
 colorscheme zenburn
 syntax enable                  " Enables syntax processing.
+filetype on                    " Enable filetype detection
+filetype indent on             " Enable filetype-specific indenting
+filetype plugin on             " Enable filetype-specific plugins
 
 " Highlights for text that goes over the 80 column limit.
 highlight OverLength ctermbg=black ctermfg=white guibg=#592929
