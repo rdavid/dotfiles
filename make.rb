@@ -71,7 +71,8 @@ class Installer
                           "sudo pkg install -y %s"
                          ] if OS.freebsd?),
         :'archlinux' => ([@pkgs
-                          .map{|x|x == 'fortune' ? 'fortune-mod' : x},
+                          .map{|x|x == 'fortune' ? 'fortune-mod' : x}
+                          .map{|x|x == 'fonts-inconsolata' ? 'ttf-inconsolata' : x},
                           "pacman -Qs %s >/dev/null 2>&1",
                           "sudo pacman -Sy %s"
                          ] if OS.linux? && File.file?("/etc/arch-release")),
@@ -130,6 +131,7 @@ class Installer
       if name.eql? 'conky'
         src = File.join(Dir.home, '.config', 'conky')
         dst = File.join(@odir, '.config', 'conky')
+        FileUtils.mkdir_p(File.join(@odir, '.config'))
         (puts "mv #{src}->#{dst}"; File.rename(src, dst)) if File.exist?(src)
         FileUtils.ln_s(File.join(@ndir, 'conky'), src, :force => true)
         next
