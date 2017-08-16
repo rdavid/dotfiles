@@ -79,7 +79,7 @@ class Installer
                           .map{|x|x == 'fonts-font-awesome' ? '' : x},
                           "pacman -Qs %s >/dev/null 2>&1",
                           "sudo pacman -Sy %s",
-                          'sed -i \'s/usr\/share/usr\/lib/g\' ~/i3/i3blocks; ' +
+                          'sed -i \'s/usr\/share/usr\/lib/g\' ~/.i3/i3blocks.conf; ' +
                           'yaourt -Sy ttf-font-awesome'
                          ] if OS.linux? && File.file?('/etc/arch-release')),
         :'debian'    => ([@pkgs
@@ -111,7 +111,7 @@ class Installer
       @osdb.values[0][2].dup % pkgs
   end
 
-  def post-install-cmd
+  def post_install_cmd
       @osdb.values[0][3]
   end
 
@@ -155,7 +155,7 @@ class Installer
       FileUtils.ln_s(File.join(@ndir, name), src, :force => true)
     end
 
-    system(post-install-cmd) unless post-install-cmd.to_s.empty?
+    system(post_install_cmd) unless post_install_cmd.to_s.empty?
 
     # Sets the default shell to zsh if it isn't currently set to zsh.
     shell = ENV["SHELL"]
