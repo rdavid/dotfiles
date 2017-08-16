@@ -31,7 +31,7 @@ else:
     commasplitstatus = commasplitstatus_batteries[0]
     percentleft = int(sum(percentleft_batteries)/len(percentleft_batteries))
     # stands for charging
-    FA_LIGHTNING = "<span color='yellow'><span font='FontAwesome'>\uf0e7</span></span>"
+    FA_LIGHTNING = "<span color='green'><span font='FontAwesome'>\uf0e7</span></span>"
 
     # stands for plugged in
     FA_PLUG = "<span font='FontAwesome'>\uf1e6</span>"
