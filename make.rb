@@ -57,34 +57,42 @@ class Installer
       'xinitrc', 'i3', 'conky'
     ] if cfg.xorg?
 
-    # [<packages list>, <existence command>, <install command>]
+    # [<packages list>, <existence command>, <install command>, <post-install
+    # command>]
     @osdb = {
         :'darwin'    => ([@pkgs,
                           "brew ls --versions %s >/dev/null 2>&1",
                           "su admin -c \"brew install %s\"; " +
-                          "su admin -c \"sudo easy_install pip\""
+                          "su admin -c \"sudo easy_install pip\"",
+                          ''
                          ] if OS.mac?),
         :'freebsd'   => ([@pkgs
                          .map{|x|x == 'lolcat' ? 'rubygem-lolcat' : x}
                          .push('py27-pip'),
                           "pkg info %s >/dev/null 2>&1",
-                          "sudo pkg install -y %s"
+                          "sudo pkg install -y %s",
+                          ''
                          ] if OS.freebsd?),
         :'archlinux' => ([@pkgs
                           .map{|x|x == 'fortune' ? 'fortune-mod' : x}
-                          .map{|x|x == 'fonts-inconsolata' ? 'ttf-inconsolata' : x},
+                          .map{|x|x == 'fonts-inconsolata' ? 'ttf-inconsolata' : x}
+                          .map{|x|x == 'fonts-font-awesome' ? '' : x},
                           "pacman -Qs %s >/dev/null 2>&1",
-                          "sudo pacman -Sy %s"
-                         ] if OS.linux? && File.file?("/etc/arch-release")),
+                          "sudo pacman -Sy %s",
+                          'sed -i \'s/usr\/share/usr\/lib/g\' ~/i3/i3blocks; ' +
+                          'yaourt -Sy ttf-font-awesome'
+                         ] if OS.linux? && File.file?('/etc/arch-release')),
         :'debian'    => ([@pkgs
                           .push('python-pip'),
                           "dpkg -l %s >/dev/null 2>&1",
-                          "sudo apt-get -y install %s"
-                         ] if OS.linux? && File.file?("/etc/debian_version")),
+                          "sudo apt-get -y install %s",
+                          ''
+                         ] if OS.linux? && File.file?('/etc/debian_version')),
         :'redhat'    => ([@pkgs,
                           "yum list installed %s >/dev/null 2>&1",
-                          "sudo yum -y install %s"
-                         ] if OS.linux? && File.file?("/etc/redhat-release"))
+                          "sudo yum -y install %s",
+                          ''
+                         ] if OS.linux? && File.file?('/etc/redhat-release'))
     }.reject { |k, v| v.nil? }
 
     @ndir = File.join(Dir.home, "dotfiles")
@@ -101,6 +109,10 @@ class Installer
 
   def install(pkgs)
       @osdb.values[0][2].dup % pkgs
+  end
+
+  def post-install-cmd
+      @osdb.values[0][3]
   end
 
   def os
@@ -142,6 +154,8 @@ class Installer
       (puts "mv #{src}->#{dst}"; File.rename(src, dst)) if File.exist?(src)
       FileUtils.ln_s(File.join(@ndir, name), src, :force => true)
     end
+
+    system(post-install-cmd) unless post-install-cmd.to_s.empty?
 
     # Sets the default shell to zsh if it isn't currently set to zsh.
     shell = ENV["SHELL"]
