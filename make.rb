@@ -36,26 +36,28 @@ class Installer
   def initialize(cfg)
     # Packages without Xorg to install.
     @pkgs = [
-      'zsh', 'tmux', 'most', 'python', 'cowsay', 'fortune', 'lolcat', 'scrot',
-      'imagemagick', 'cmatrix', 'hollywood', 'hddtemp', 'glances', 'htop', 'mc',
-      'cmus', 'fonts-inconsolata', 'fonts-font-awesome'
+      'cmatrix', 'cmus', 'cowsay', 'fonts-font-awesome', 'fonts-inconsolata',
+      'fortune', 'glances', 'hddtemp', 'hollywood', 'htop', 'imagemagick',
+      'lolcat', 'mc', 'most', 'python', 'scrot', 'tmux', 'zsh'
     ]
-
-    # Extends with Xorg related packages.
-    @pkgs += [
-      'i3', 'i3lock', 'i3blocks', 'feh', 'conky'
-    ] if cfg.xorg?
 
     # List of files/folders to symlink in homedir.
     @dotf = [
-      'bashrc', 'bash_profile', 'vimrc', 'vim', 'zshrc', 'oh-my-zsh',
-      'tmux.conf', 'tmux'
+      'bash_profile', 'bashrc', 'oh-my-zsh', 'tmux.conf', 'tmux', 'vim',
+      'vimrc', 'zshrc'
+    ]
+
+    # List of files/folders to symlink in ~/.config.
+    @conf = [
+      'mc'
     ]
 
     # Extends with Xorg related packages.
-    @dotf += [
-      'xinitrc', 'i3', 'conky'
-    ] if cfg.xorg?
+    if (cfg.xorg?)
+      @pkgs += ['conky', 'feh', 'i3', 'i3blocks', 'i3lock']
+      @dotf += ['i3', 'xinitrc']
+      @conf += ['conky']
+    end
 
     # [<packages list>, <existence command>, <install command>, <post-install
     # command>]
@@ -126,56 +128,56 @@ class Installer
     new_pkgs = Array.new
     pkgs.each do |pkg|
       system "#{test(pkg)}"
-      new_pkgs.push(pkg) if $?.exitstatus > 0
+      new_pkgs.push(pkg) if ($?.exitstatus > 0)
     end
 
     # Installs needfull packages.
-    cmd = install(new_pkgs.join(' ')) if new_pkgs.any?
-    (puts "Install: #{cmd}."; system "#{cmd}") unless cmd.nil?
+    cmd = install(new_pkgs.join(' ')) if (new_pkgs.any?)
+    (puts "Install: #{cmd}."; system "#{cmd}") unless (cmd.nil?)
 
     # Creates directory for existing dot files.
-    FileUtils.mkdir_p @odir
+    FileUtils.mkdir_p(@odir)
 
     # Moves any existing dotfiles in homedir to dotfiles_old directory,
     # then creates symlinks from the homedir to any files in the ~/dotfiles
     # directory specified in $files.
     @dotf.each do |name|
-      if name.eql? 'conky'
-        src = File.join(Dir.home, '.config', 'conky')
-        dst = File.join(@odir, '.config', 'conky')
-        FileUtils.mkdir_p(File.join(@odir, '.config'))
-        (puts "mv #{src}->#{dst}"; File.rename(src, dst)) if File.exist?(src)
-        FileUtils.ln_s(File.join(@ndir, 'conky'), src, :force => true)
-        next
-      end
-
       src = File.join(Dir.home, '.' + name)
       dst = File.join(@odir, '.' + name)
       (puts "mv #{src}->#{dst}"; File.rename(src, dst)) if File.exist?(src)
       FileUtils.ln_s(File.join(@ndir, name), src, :force => true)
     end
 
-    system(post_install_cmd) unless post_install_cmd.to_s.empty?
+    # Handles ~/.config in similar way.
+    FileUtils.mkdir_p(File.join(@odir, '.config'))
+    @conf.each do |name|
+      src = File.join(Dir.home, '.config', name)
+      dst = File.join(@odir, '.config', name)
+      (puts "mv #{src}->#{dst}"; File.rename(src, dst)) if File.exist?(src)
+      FileUtils.ln_s(File.join(@ndir, name), src, :force => true)
+    end
+
+    system(post_install_cmd) unless (post_install_cmd.to_s.empty?)
 
     # Sets the default shell to zsh if it isn't currently set to zsh.
     shell = ENV["SHELL"]
     unless (shell.eql? `which zsh`.strip)
       system('chsh -s $(which zsh)')
-      puts("Unable to switch current #{shell} to zsh.") unless $?.exitstatus > 0
+      puts("Unable to switch current #{shell} to zsh.") unless ($?.exitstatus > 0)
     end
 
     # Clones oh-my-zsh repository from GitHub.
     dir = File.join(@ndir, 'oh-my-zsh')
-    Git.clone('https://github.com/robbyrussell/oh-my-zsh', dir) unless Dir.exist?(dir)
+    Git.clone('https://github.com/robbyrussell/oh-my-zsh', dir) unless (Dir.exist?(dir))
 
     # Clones tpm plugin from GitHub.
     dir = File.join(@ndir, 'tmux', 'plugins', 'tpm')
-    Git.clone('https://github.com/tmux-plugins/tpm', dir) unless Dir.exist?(dir)
+    Git.clone('https://github.com/tmux-plugins/tpm', dir) unless (Dir.exist?(dir))
 
     # Installs tmux session manager.
     if (`python -c "help('modules');" | grep tmuxp | wc -l | xargs`.strip.eql? 0)
       system('pip install --user tmuxp')
-      puts("Unable to install tmuxp.") unless $?.exitstatus > 0
+      puts("Unable to install tmuxp.") unless ($?.exitstatus > 0)
     end
 
     # Installs transcode-video.
