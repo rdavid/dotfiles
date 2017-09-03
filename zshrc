@@ -42,6 +42,8 @@ export PATH="`python -m site --user-base`/bin":$PATH
 # Corrects work of fortune at Win10 Ubuntu.
 export PATH="/usr/games":$PATH
 
+. ~/dotfiles/app/z.sh
+
 source $ZSH/oh-my-zsh.sh
 
 alias src="source ~/.zshrc"
