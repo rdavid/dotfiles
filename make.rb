@@ -98,7 +98,7 @@ class Installer
         :'alpine'    => ([@pkgs
                           .push('py-pip'),
                           "apk info %s >/dev/null 2>&1",
-                          "sudo apk add -U %s",
+                          "sudo apk add %s",
                           ''
                          ] if OS.linux? && File.file?('/etc/alpine-release'))
     }.reject { |k, v| v.nil? }
