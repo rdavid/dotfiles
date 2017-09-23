@@ -38,7 +38,8 @@ class Installer
     @pkgs = [
       'cmatrix', 'cmus', 'cowsay', 'fonts-font-awesome', 'fonts-inconsolata',
       'fortune', 'glances', 'hddtemp', 'hollywood', 'htop', 'imagemagick',
-      'lolcat', 'mc', 'most', 'python', 'scrot', 'tmux', 'zsh'
+      'lolcat', 'mc', 'most', 'python', 'scrot', 'tmux', 'zsh',
+      'zsh-syntax-highlighting'
     ]
 
     # List of files/folders to symlink in homedir.
@@ -59,8 +60,7 @@ class Installer
       @conf += ['conky']
     end
 
-    # [<packages list>, <existence command>, <install command>, <post-install
-    # command>]
+    # [<packages list>, <existence command>, <install command>, <post-install command>]
     @osdb = {
         :'darwin'    => ([@pkgs,
                           "brew ls --versions %s >/dev/null 2>&1",
@@ -94,7 +94,12 @@ class Installer
                           "yum list installed %s >/dev/null 2>&1",
                           "sudo yum -y install %s",
                           ''
-                         ] if OS.linux? && File.file?('/etc/redhat-release'))
+                         ] if OS.linux? && File.file?('/etc/redhat-release')),
+        :'alpine'    => ([@pkgs,
+                          "apk info %s >/dev/null 2>&1",
+                          "sudo apk -y add %s",
+                          ''
+                         ] if OS.linux? && File.file?('/etc/alpine-release'))
     }.reject { |k, v| v.nil? }
 
     @ndir = File.join(Dir.home, "dotfiles")
@@ -126,9 +131,9 @@ class Installer
 
     # Tests if a package is installed.
     new_pkgs = Array.new
-    pkgs.each do |pkg|
-      system "#{test(pkg)}"
-      new_pkgs.push(pkg) if ($?.exitstatus > 0)
+    pkgs.each do |p|
+      system "#{test(p)}"
+      new_pkgs.push(p) if ($?.exitstatus > 0)
     end
 
     # Installs needfull packages.
@@ -141,18 +146,18 @@ class Installer
     # Moves any existing dotfiles in homedir to dotfiles_old directory,
     # then creates symlinks from the homedir to any files in the ~/dotfiles
     # directory specified in $files.
-    @dotf.each do |name|
-      src = File.join(Dir.home, '.' + name)
-      dst = File.join(@odir, '.' + name)
+    @dotf.each do |f|
+      src = File.join(Dir.home, '.' + f)
+      dst = File.join(@odir, '.' + f)
       (puts "mv #{src}->#{dst}"; File.rename(src, dst)) if File.exist?(src)
       FileUtils.ln_s(File.join(@ndir, name), src, :force => true)
     end
 
     # Handles ~/.config in similar way.
     FileUtils.mkdir_p(File.join(@odir, '.config'))
-    @conf.each do |name|
-      src = File.join(Dir.home, '.config', name)
-      dst = File.join(@odir, '.config', name)
+    @conf.each do |f|
+      src = File.join(Dir.home, '.config', f)
+      dst = File.join(@odir, '.config', f)
       (puts "mv #{src}->#{dst}"; File.rename(src, dst)) if File.exist?(src)
       FileUtils.ln_s(File.join(@ndir, name), src, :force => true)
     end
