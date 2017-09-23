@@ -97,7 +97,7 @@ class Installer
                          ] if OS.linux? && File.file?('/etc/redhat-release')),
         :'alpine'    => ([@pkgs,
                           "apk info %s >/dev/null 2>&1",
-                          "sudo apk -y add %s",
+                          "sudo apk add %s",
                           ''
                          ] if OS.linux? && File.file?('/etc/alpine-release'))
     }.reject { |k, v| v.nil? }
@@ -150,7 +150,7 @@ class Installer
       src = File.join(Dir.home, '.' + f)
       dst = File.join(@odir, '.' + f)
       (puts "mv #{src}->#{dst}"; File.rename(src, dst)) if File.exist?(src)
-      FileUtils.ln_s(File.join(@ndir, name), src, :force => true)
+      FileUtils.ln_s(File.join(@ndir, f), src, :force => true)
     end
 
     # Handles ~/.config in similar way.
@@ -159,7 +159,7 @@ class Installer
       src = File.join(Dir.home, '.config', f)
       dst = File.join(@odir, '.config', f)
       (puts "mv #{src}->#{dst}"; File.rename(src, dst)) if File.exist?(src)
-      FileUtils.ln_s(File.join(@ndir, name), src, :force => true)
+      FileUtils.ln_s(File.join(@ndir, f), src, :force => true)
     end
 
     system(post_install_cmd) unless (post_install_cmd.to_s.empty?)
