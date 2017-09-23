@@ -114,8 +114,8 @@ class Installer
       @osdb.values[0][1].dup % pkg
   end
 
-  def install(pkgs)
-      @osdb.values[0][2].dup % pkgs
+  def install(pkg)
+      @osdb.values[0][2].dup % pkg
   end
 
   def post_install_cmd
@@ -129,16 +129,19 @@ class Installer
   def do
     puts "Hello #{os}: #{pkgs}: #{@dotf}."
 
-    # Tests if a package is installed.
-    new_pkgs = Array.new
+    # Install packages.
     pkgs.each do |p|
+      # Tests if a package is installed.
       system "#{test(p)}"
-      new_pkgs.push(p) if ($?.exitstatus > 0)
-    end
 
-    # Installs needfull packages.
-    cmd = install(new_pkgs.join(' ')) if (new_pkgs.any?)
-    (puts "Install: #{cmd}."; system "#{cmd}") unless (cmd.nil?)
+      # Installs new packages.
+      if $?.exitstatus > 0
+        puts "Install: #{p}."
+        system "#{install(p)}"
+      else
+        puts "#{p} is already installed."
+      end
+    end
 
     # Creates directory for existing dot files.
     FileUtils.mkdir_p(@odir)
