@@ -95,9 +95,10 @@ class Installer
                           "sudo yum -y install %s",
                           ''
                          ] if OS.linux? && File.file?('/etc/redhat-release')),
-        :'alpine'    => ([@pkgs,
+        :'alpine'    => ([@pkgs
+                          .push('py-pip'),
                           "apk info %s >/dev/null 2>&1",
-                          "sudo apk add %s",
+                          "sudo apk add -U %s",
                           ''
                          ] if OS.linux? && File.file?('/etc/alpine-release'))
     }.reject { |k, v| v.nil? }
@@ -185,7 +186,7 @@ class Installer
     # Installs tmux session manager.
     if (`python -c "help('modules');" | grep tmuxp | wc -l | xargs`.strip.eql? 0)
       system('pip install --user tmuxp')
-      puts("Unable to install tmuxp.") unless ($?.exitstatus > 0)
+      puts('Unable to install tmuxp.') unless ($?.exitstatus > 0)
     end
 
     # Installs transcode-video.
