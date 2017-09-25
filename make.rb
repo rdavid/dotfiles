@@ -36,9 +36,9 @@ class Installer
   def initialize(cfg)
     # Packages without Xorg to install.
     @pkgs = [
-      'cmatrix', 'cmus', 'cowsay', 'fonts-font-awesome', 'fonts-inconsolata',
-      'fortune', 'glances', 'hddtemp', 'hollywood', 'htop', 'imagemagick',
-      'lolcat', 'mc', 'most', 'python', 'scrot', 'tmux', 'zsh',
+      'apcalc', 'cmatrix', 'cmus', 'cowsay', 'fonts-font-awesome',
+      'fonts-inconsolata', 'fortune', 'glances', 'hddtemp', 'hollywood', 'htop',
+      'imagemagick', 'lolcat', 'mc', 'most', 'python', 'scrot', 'tmux', 'zsh',
       'zsh-syntax-highlighting'
     ]
 
@@ -54,7 +54,7 @@ class Installer
     ]
 
     # Extends with Xorg related packages.
-    if (cfg.xorg?)
+    if cfg.xorg?
       @pkgs += ['conky', 'feh', 'i3', 'i3blocks', 'i3lock']
       @dotf += ['i3', 'xinitrc']
       @conf += ['conky']
@@ -103,8 +103,8 @@ class Installer
                          ] if OS.linux? && File.file?('/etc/alpine-release'))
     }.reject { |k, v| v.nil? }
 
-    @ndir = File.join(Dir.home, "dotfiles")
-    @odir = File.join(Dir.home, "dotfiles-old")
+    @ndir = File.join(Dir.home, 'dotfiles')
+    @odir = File.join(Dir.home, 'dotfiles-old')
   end
 
   def pkgs
@@ -133,12 +133,12 @@ class Installer
     # Install packages.
     pkgs.each do |p|
       # Tests if a package is installed.
-      system "#{test(p)}"
+      system test(p)
 
       # Installs new packages.
       if $?.exitstatus > 0
         puts "Install: #{p}."
-        system "#{install(p)}"
+        system install(p)
       else
         puts "#{p} is already installed."
       end
@@ -166,37 +166,37 @@ class Installer
       FileUtils.ln_s(File.join(@ndir, f), src, :force => true)
     end
 
-    system(post_install_cmd) unless (post_install_cmd.to_s.empty?)
+    system post_install_cmd unless post_install_cmd.to_s.empty?
 
     # Sets the default shell to zsh if it isn't currently set to zsh.
     shell = ENV["SHELL"]
-    unless (shell.eql? `which zsh`.strip)
-      system('chsh -s $(which zsh)')
-      puts("Unable to switch current #{shell} to zsh.") unless ($?.exitstatus > 0)
+    unless shell.eql? `which zsh`.strip
+      system 'chsh -s $(which zsh)'
+      puts "Unable to switch current #{shell} to zsh." unless $?.exitstatus > 0
     end
 
     # Clones oh-my-zsh repository from GitHub.
     dir = File.join(@ndir, 'oh-my-zsh')
-    Git.clone('https://github.com/robbyrussell/oh-my-zsh', dir) unless (Dir.exist?(dir))
+    Git.clone('https://github.com/robbyrussell/oh-my-zsh', dir) unless Dir.exist?(dir)
 
     # Clones tpm plugin from GitHub.
     dir = File.join(@ndir, 'tmux', 'plugins', 'tpm')
-    Git.clone('https://github.com/tmux-plugins/tpm', dir) unless (Dir.exist?(dir))
+    Git.clone('https://github.com/tmux-plugins/tpm', dir) unless Dir.exist?(dir)
 
     # Installs tmux session manager.
-    if (`python -c "help('modules');" | grep tmuxp | wc -l | xargs`.strip.eql? 0)
-      system('pip install --user tmuxp')
-      puts('Unable to install tmuxp.') unless ($?.exitstatus > 0)
+    if `python -c "help('modules');" | grep tmuxp | wc -l | xargs`.strip.eql? 0
+      system 'pip install --user tmuxp'
+      puts 'Unable to install tmuxp.' unless $?.exitstatus > 0
     end
 
     # Installs transcode-video.
-    if (`gem list -i video_transcoding`.strip.eql? 'false')
-      system('sudo gem install video_transcoding')
+    if `gem list -i video_transcoding`.strip.eql? 'false'
+      system 'sudo gem install video_transcoding'
     else
-      system('sudo gem update video_transcoding')
+      system 'sudo gem update video_transcoding'
     end
 
-    puts "Bye-bye."
+    puts 'Bye-bye.'
   end
 end
 
