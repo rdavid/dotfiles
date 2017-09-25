@@ -33,6 +33,79 @@ class Configuration
   end
 end
 
+# Base class for definition of multiple OS.
+class OS
+  def configure(cfg)
+    return unless cfg.xorg?
+
+    # Extends with Xorg related packages.
+    @pkgs += %w[conky feh i3 i3blocks i3lock]
+    @dotf += %w[i3 xinitrc]
+    @conf += %w[conky]
+  end
+
+  def initialize(cfg)
+    # Packages without Xorg to install.
+    @pkgs = %w[
+      apcalc cmatrix cmus cowsay fonts-font-awesome fonts-inconsolata fortune
+      glances hddtemp hollywood htop imagemagick lolcat mc most python scrot
+      tmux zsh zsh-syntax-highlighting
+    ]
+
+    # List of files/folders to symlink in homedir.
+    @dotf = %w[bash_profile bashrc oh-my-zsh tmux.conf tmux vim vimrc zshrc]
+
+    # List of files/folders to symlink in ~/.config.
+    @conf = %w[mc]
+
+    configure(cfg)
+  end
+
+  def packages
+    raise NotImplementedError, 'Implement packages() in a child class'
+  end
+
+  def installed?(_)
+    raise NotImplementedError, 'Implement installed?() in a child class'
+  end
+
+  def install(_)
+    raise NotImplementedError, 'Implement install() in a child class'
+  end
+
+  def post_install
+    raise NotImplementedError, 'Implement post-install() in a child class'
+  end
+end
+
+# Implements MacOS.
+class MacOS < OS
+  def initialize(cfg)
+    super(cfg)
+  end
+
+  def packages
+    @pkgs
+  end
+
+  def installed?(pkg)
+    "brew ls --versions #{pkg} >/dev/null 2>&1"
+  end
+
+  def install(pkg)
+    "su admin -c \"brew install #{pkg}\""
+  end
+
+  def post_install
+    'su admin -c "sudo easy_install pip"'
+  end
+end
+
+#os = MacOS.new(Configuration.new)
+#os.packages.each do |p|
+#  puts os.installed?(p) + ' : ' + os.install(p)
+#end
+
 # Actually does the job.
 class Installer
   def initialize(cfg)
@@ -51,7 +124,7 @@ class Installer
 
     # Extends with Xorg related packages.
     if cfg.xorg?
-      pkgs += %w[conky feh i3 i3blocks i3lock]
+      pkgs  += %w[conky feh i3 i3blocks i3lock]
       @dotf += %w[i3 xinitrc]
       @conf += %w[conky]
     end
@@ -62,8 +135,8 @@ class Installer
       darwin: ([
         pkgs,
         'brew ls --versions %s >/dev/null 2>&1',
-        'su admin -c "brew install %s"; su admin -c "sudo easy_install pip"',
-        ''
+        'su admin -c "brew install %s"',
+        'su admin -c "sudo easy_install pip"'
       ] if OS.mac?),
       freebsd: ([
         pkgs
