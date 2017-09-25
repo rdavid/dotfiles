@@ -9,18 +9,20 @@
 # dotfiles in ~/dotfiles. Also it installs needfull packages.
 
 require 'os'
-require "git"
+require 'git'
 require 'optparse'
 require 'fileutils'
+require 'English'
 
+# Handles parameters.
 class Configuration
   def initialize
     ARGV << '-h' if ARGV.empty?
     @options = {}
     OptionParser.new do |opts|
-      opts.banner = "Usage: make.rb [options]."
-      opts.on("-g", "--[no-]xorg",
-              "Install X packages or not.") { |o| @options[:xorg] = o }
+      opts.banner = 'Usage: make.rb [options].'
+      opts.on('-g', '--[no-]xorg',
+              'Install X packages or not.') { |o| @options[:xorg] = o }
     end.parse!
 
     raise 'Xorg option is not given' if @options[:xorg].nil?
@@ -31,100 +33,98 @@ class Configuration
   end
 end
 
+# Actually does the job.
 class Installer
-
   def initialize(cfg)
     # Packages without Xorg to install.
-    @pkgs = [
-      'apcalc', 'cmatrix', 'cmus', 'cowsay', 'fonts-font-awesome',
-      'fonts-inconsolata', 'fortune', 'glances', 'hddtemp', 'hollywood', 'htop',
-      'imagemagick', 'lolcat', 'mc', 'most', 'python', 'scrot', 'tmux', 'zsh',
-      'zsh-syntax-highlighting'
+    pkgs = %w[
+      apcalc cmatrix cmus cowsay fonts-font-awesome fonts-inconsolata fortune
+      glances hddtemp hollywood htop imagemagick lolcat mc most python scrot
+      tmux zsh zsh-syntax-highlighting
     ]
 
     # List of files/folders to symlink in homedir.
-    @dotf = [
-      'bash_profile', 'bashrc', 'oh-my-zsh', 'tmux.conf', 'tmux', 'vim',
-      'vimrc', 'zshrc'
-    ]
+    @dotf = %w[bash_profile bashrc oh-my-zsh tmux.conf tmux vim vimrc zshrc]
 
     # List of files/folders to symlink in ~/.config.
-    @conf = [
-      'mc'
-    ]
+    @conf = %w[mc]
 
     # Extends with Xorg related packages.
     if cfg.xorg?
-      @pkgs += ['conky', 'feh', 'i3', 'i3blocks', 'i3lock']
-      @dotf += ['i3', 'xinitrc']
-      @conf += ['conky']
+      pkgs += %w[conky feh i3 i3blocks i3lock]
+      @dotf += %w[i3 xinitrc]
+      @conf += %w[conky]
     end
 
-    # [<packages list>, <existence command>, <install command>, <post-install command>]
+    # [<packages list>, <existence command>, <install command>,
+    # <post-install command>]
     @osdb = {
-        :'darwin'    => ([@pkgs,
-                          "brew ls --versions %s >/dev/null 2>&1",
-                          "su admin -c \"brew install %s\"; " +
-                          "su admin -c \"sudo easy_install pip\"",
-                          ''
-                         ] if OS.mac?),
-        :'freebsd'   => ([@pkgs
-                         .map{|x|x == 'lolcat' ? 'rubygem-lolcat' : x}
-                         .push('py27-pip'),
-                          "pkg info %s >/dev/null 2>&1",
-                          "sudo pkg install -y %s",
-                          ''
-                         ] if OS.freebsd?),
-        :'archlinux' => ([@pkgs
-                          .map{|x|x == 'fortune' ? 'fortune-mod' : x}
-                          .map{|x|x == 'fonts-inconsolata' ? 'ttf-inconsolata' : x}
-                          .map{|x|x == 'fonts-font-awesome' ? '' : x},
-                          "pacman -Qs %s >/dev/null 2>&1",
-                          "sudo pacman -Sy %s",
-                          'sed -i \'s/usr\/share/usr\/lib/g\' ~/.i3/i3blocks.conf; ' +
-                          'yaourt -Sy ttf-font-awesome'
-                         ] if OS.linux? && File.file?('/etc/arch-release')),
-        :'debian'    => ([@pkgs
-                          .push('python-pip'),
-                          "dpkg -l %s >/dev/null 2>&1",
-                          "sudo apt-get -y install %s",
-                          ''
-                         ] if OS.linux? && File.file?('/etc/debian_version')),
-        :'redhat'    => ([@pkgs,
-                          "yum list installed %s >/dev/null 2>&1",
-                          "sudo yum -y install %s",
-                          ''
-                         ] if OS.linux? && File.file?('/etc/redhat-release')),
-        :'alpine'    => ([@pkgs
-                          .push('py-pip'),
-                          "apk info %s >/dev/null 2>&1",
-                          "sudo apk add %s",
-                          ''
-                         ] if OS.linux? && File.file?('/etc/alpine-release'))
-    }.reject { |k, v| v.nil? }
+      darwin: ([
+        pkgs,
+        'brew ls --versions %s >/dev/null 2>&1',
+        'su admin -c "brew install %s"; su admin -c "sudo easy_install pip"',
+        ''
+      ] if OS.mac?),
+      freebsd: ([
+        pkgs
+          .map { |x| x == 'lolcat' ? 'rubygem-lolcat' : x }
+          .push('py27-pip'),
+        'pkg info %s >/dev/null 2>&1',
+        'sudo pkg install -y %s',
+        ''
+      ] if OS.freebsd?),
+      archlinux: ([
+        pkgs
+          .map { |x| x == 'fortune' ? 'fortune-mod' : x }
+          .map { |x| x == 'fonts-inconsolata' ? 'ttf-inconsolata' : x }
+          .map { |x| x == 'fonts-font-awesome' ? '' : x },
+        'pacman -Qs %s >/dev/null 2>&1',
+        'sudo pacman -Sy %s',
+        'sed -i \'s/usr\/share/usr\/lib/g\' ~/.i3/i3blocks.conf; ' \
+          'yaourt -Sy ttf-font-awesome'
+      ] if OS.linux? && File.file?('/etc/arch-release')),
+      debian: ([
+        pkgs.push('python-pip'),
+        'dpkg -l %s >/dev/null 2>&1',
+        'sudo apt-get -y install %s',
+        ''
+      ] if OS.linux? && File.file?('/etc/debian_version')),
+      redhat: ([
+        pkgs,
+        'yum list installed %s >/dev/null 2>&1',
+        'sudo yum -y install %s',
+        ''
+      ] if OS.linux? && File.file?('/etc/redhat-release')),
+      alpine: ([
+        pkgs.push('py-pip'),
+        'apk info %s >/dev/null 2>&1',
+        'sudo apk add %s',
+        ''
+      ] if OS.linux? && File.file?('/etc/alpine-release'))
+    }.reject { |_, v| v.nil? }
 
     @ndir = File.join(Dir.home, 'dotfiles')
     @odir = File.join(Dir.home, 'dotfiles-old')
   end
 
   def pkgs
-      @osdb.values[0][0]
+    @osdb.values[0][0]
   end
 
   def test(pkg)
-      @osdb.values[0][1].dup % pkg
+    @osdb.values[0][1].dup % pkg
   end
 
   def install(pkg)
-      @osdb.values[0][2].dup % pkg
+    @osdb.values[0][2].dup % pkg
   end
 
   def post_install_cmd
-      @osdb.values[0][3]
+    @osdb.values[0][3]
   end
 
   def os
-      @osdb.keys[0]
+    @osdb.keys[0]
   end
 
   def do
@@ -136,7 +136,7 @@ class Installer
       system test(p)
 
       # Installs new packages.
-      if $?.exitstatus > 0
+      if $CHILD_STATUS.exitstatus > 0
         puts "Install: #{p}."
         system install(p)
       else
@@ -153,8 +153,13 @@ class Installer
     @dotf.each do |f|
       src = File.join(Dir.home, '.' + f)
       dst = File.join(@odir, '.' + f)
-      (puts "mv #{src}->#{dst}"; File.rename(src, dst)) if File.exist?(src)
-      FileUtils.ln_s(File.join(@ndir, f), src, :force => true)
+
+      if File.exist?(src)
+        puts "mv #{src}->#{dst}"
+        File.rename(src, dst)
+      end
+
+      FileUtils.ln_s(File.join(@ndir, f), src, force: true)
     end
 
     # Handles ~/.config in similar way.
@@ -162,22 +167,28 @@ class Installer
     @conf.each do |f|
       src = File.join(Dir.home, '.config', f)
       dst = File.join(@odir, '.config', f)
-      (puts "mv #{src}->#{dst}"; File.rename(src, dst)) if File.exist?(src)
-      FileUtils.ln_s(File.join(@ndir, f), src, :force => true)
+
+      if File.exist?(src)
+        puts "mv #{src}->#{dst}"
+        File.rename(src, dst)
+      end
+
+      FileUtils.ln_s(File.join(@ndir, f), src, force: true)
     end
 
     system post_install_cmd unless post_install_cmd.to_s.empty?
 
     # Sets the default shell to zsh if it isn't currently set to zsh.
-    shell = ENV["SHELL"]
+    sh = ENV['SHELL']
     unless shell.eql? `which zsh`.strip
       system 'chsh -s $(which zsh)'
-      puts "Unable to switch current #{shell} to zsh." unless $?.exitstatus > 0
+      puts "Unable to switch #{sh} to zsh." unless $CHILD_STATUS.exitstatus > 0
     end
 
     # Clones oh-my-zsh repository from GitHub.
     dir = File.join(@ndir, 'oh-my-zsh')
-    Git.clone('https://github.com/robbyrussell/oh-my-zsh', dir) unless Dir.exist?(dir)
+    src = 'https://github.com/robbyrussell/oh-my-zsh'
+    Git.clone(src, dir) unless Dir.exist?(dir)
 
     # Clones tpm plugin from GitHub.
     dir = File.join(@ndir, 'tmux', 'plugins', 'tpm')
@@ -186,7 +197,7 @@ class Installer
     # Installs tmux session manager.
     if `python -c "help('modules');" | grep tmuxp | wc -l | xargs`.strip.eql? 0
       system 'pip install --user tmuxp'
-      puts 'Unable to install tmuxp.' unless $?.exitstatus > 0
+      puts 'Unable to install tmuxp.' unless $CHILD_STATUS.exitstatus > 0
     end
 
     # Installs transcode-video.
