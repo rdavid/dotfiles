@@ -35,6 +35,14 @@ end
 
 # Base class for definition of multiple OS.
 class OS
+  attr_reader :type
+  attr_reader :test
+  attr_reader :inst
+  attr_reader :post
+  attr_reader :pkgs
+  attr_reader :dotf
+  attr_reader :conf
+
   def configure(cfg)
     return unless cfg.xorg?
 
@@ -45,11 +53,15 @@ class OS
   end
 
   def initialize(cfg)
+    @type = ''
+    @test = ''
+    @inst = ''
+    @post = ''
+
     # Packages without Xorg to install.
     @pkgs = %w[
-      apcalc cmatrix cmus cowsay fonts-font-awesome fonts-inconsolata fortune
-      glances hddtemp hollywood htop imagemagick lolcat mc most python scrot
-      tmux zsh zsh-syntax-highlighting
+      apcalc cmatrix cmus cowsay glances hddtemp hollywood htop imagemagick mc
+      most python scrot tmux zsh zsh-syntax-highlighting
     ]
 
     # List of files/folders to symlink in homedir.
@@ -61,157 +73,108 @@ class OS
     configure(cfg)
   end
 
-  def packages
-    raise NotImplementedError, 'Implement packages() in a child class'
-  end
-
-  def installed?(_)
-    raise NotImplementedError, 'Implement installed?() in a child class'
-  end
-
-  def install(_)
-    raise NotImplementedError, 'Implement install() in a child class'
-  end
-
-  def post_install
-    raise NotImplementedError, 'Implement post-install() in a child class'
-  end
+  private :configure
 end
 
 # Implements MacOS.
-class MacOS < OS
-  def initialize(cfg)
-    super(cfg)
-  end
-
-  def packages
-    @pkgs
-  end
-
-  def installed?(pkg)
-    "brew ls --versions #{pkg} >/dev/null 2>&1"
-  end
-
-  def install(pkg)
-    "su admin -c \"brew install #{pkg}\""
-  end
-
-  def post_install
-    'su admin -c "sudo easy_install pip"'
+module MacOS
+  def self.extended(mod)
+    mod.type << 'MacOS'
+    mod.pkgs << 'lolcat' << 'fortune' << 'fonts-inconsolata' << 'fonts-font-awesome'
+    mod.test << 'brew ls --versions %s >/dev/null 2>&1'
+    mod.inst << 'su admin -c "brew install %s"'
+    mod.post << 'su admin -c "sudo easy_install pip"'
   end
 end
 
-#os = MacOS.new(Configuration.new)
-#os.packages.each do |p|
-#  puts os.installed?(p) + ' : ' + os.install(p)
-#end
+# Implements FreeBSD.
+module FreeBSD
+  def self.extended(mod)
+    mod.type << 'FreeBSD'
+    mod.pkgs << 'rubygem-lolcat' << 'py27-pip' << 'fortune' << 'fonts-inconsolata' \
+      << 'fonts-font-awesome'
+    mod.test << 'pkg info %s >/dev/null 2>&1'
+    mod.inst << 'sudo pkg install -y %s'
+  end
+end
+
+# Implements Arch Linux.
+module Arch
+  def self.extended(mod)
+    mod.type << 'Arch'
+    mod.pkgs << 'lolcat' << 'fortune-mod' << 'ttf-inconsolata'
+    mod.test << 'pacman -Qs %s >/dev/null 2>&1'
+    mod.inst << 'sudo pacman -Sy %s'
+    mod.post << 'sed -i \'s/usr\/share/usr\/lib/g\' ~/.i3/i3blocks.conf; ' \
+      'yaourt -Sy ttf-font-awesome'
+  end
+end
+
+# Implements Debian Linux.
+module Debian
+  def self.extended(mod)
+    mod.type << 'Debian'
+    mod.pkgs << 'lolcat' << 'fortune' << 'fonts-inconsolata' << 'fonts-font-awesome' \
+      << 'python-pip'
+    mod.test << 'dpkg -l %s >/dev/null 2>&1'
+    mod.inst << 'sudo apt-get -y install %s'
+  end
+end
+
+# Implements RedHat Linux.
+module RedHat
+  def self.extended(mod)
+    mod.type << 'RedHat'
+    mod.pkgs << 'lolcat' << 'fortune' << 'fonts-inconsolata' << 'fonts-font-awesome'
+    mod.test << 'yum list installed %s >/dev/null 2>&1'
+    mod.inst << 'sudo yum -y install %s'
+  end
+end
+
+# Implements Alpine Linux.
+module Alpine
+  def self.extended(mod)
+    mod.type << 'Alpine'
+    mod.pkgs << 'lolcat' << 'fortune' << 'fonts-inconsolata' << 'fonts-font-awesome' \
+      << 'py-pip'
+    mod.test << 'apk info %s >/dev/null 2>&1'
+    mod.inst << 'sudo apk add %s'
+  end
+end
+
+class CurrentOS
+  def get
+    return MacOS if OS.mac?
+    return FreeBSD if OS.freebsd?
+    return Arch if OS.linux? && File.file?('/etc/arch-release')
+    return Debian if OS.linux? && File.file?('/etc/debian_version')
+    return RedHat if OS.linux? && File.file?('/etc/redhat-release')
+    return Alpine if OS.linux? && File.file?('/etc/alpine-release')
+
+    raise 'Current OS is not supported.'
+  end
+end
 
 # Actually does the job.
 class Installer
-  def initialize(cfg)
-    # Packages without Xorg to install.
-    pkgs = %w[
-      apcalc cmatrix cmus cowsay fonts-font-awesome fonts-inconsolata fortune
-      glances hddtemp hollywood htop imagemagick lolcat mc most python scrot
-      tmux zsh zsh-syntax-highlighting
-    ]
-
-    # List of files/folders to symlink in homedir.
-    @dotf = %w[bash_profile bashrc oh-my-zsh tmux.conf tmux vim vimrc zshrc]
-
-    # List of files/folders to symlink in ~/.config.
-    @conf = %w[mc]
-
-    # Extends with Xorg related packages.
-    if cfg.xorg?
-      pkgs  += %w[conky feh i3 i3blocks i3lock]
-      @dotf += %w[i3 xinitrc]
-      @conf += %w[conky]
-    end
-
-    # [<packages list>, <existence command>, <install command>,
-    # <post-install command>]
-    @osdb = {
-      darwin: ([
-        pkgs,
-        'brew ls --versions %s >/dev/null 2>&1',
-        'su admin -c "brew install %s"',
-        'su admin -c "sudo easy_install pip"'
-      ] if OS.mac?),
-      freebsd: ([
-        pkgs
-          .map { |x| x == 'lolcat' ? 'rubygem-lolcat' : x }
-          .push('py27-pip'),
-        'pkg info %s >/dev/null 2>&1',
-        'sudo pkg install -y %s',
-        ''
-      ] if OS.freebsd?),
-      archlinux: ([
-        pkgs
-          .map { |x| x == 'fortune' ? 'fortune-mod' : x }
-          .map { |x| x == 'fonts-inconsolata' ? 'ttf-inconsolata' : x }
-          .map { |x| x == 'fonts-font-awesome' ? '' : x },
-        'pacman -Qs %s >/dev/null 2>&1',
-        'sudo pacman -Sy %s',
-        'sed -i \'s/usr\/share/usr\/lib/g\' ~/.i3/i3blocks.conf; ' \
-          'yaourt -Sy ttf-font-awesome'
-      ] if OS.linux? && File.file?('/etc/arch-release')),
-      debian: ([
-        pkgs.push('python-pip'),
-        'dpkg -l %s >/dev/null 2>&1',
-        'sudo apt-get -y install %s',
-        ''
-      ] if OS.linux? && File.file?('/etc/debian_version')),
-      redhat: ([
-        pkgs,
-        'yum list installed %s >/dev/null 2>&1',
-        'sudo yum -y install %s',
-        ''
-      ] if OS.linux? && File.file?('/etc/redhat-release')),
-      alpine: ([
-        pkgs.push('py-pip'),
-        'apk info %s >/dev/null 2>&1',
-        'sudo apk add %s',
-        ''
-      ] if OS.linux? && File.file?('/etc/alpine-release'))
-    }.reject { |_, v| v.nil? }
-
+  def initialize
+    @os = OS.new(Configuration.new).extend((CurrentOS.new).get)
     @ndir = File.join(Dir.home, 'dotfiles')
     @odir = File.join(Dir.home, 'dotfiles-old')
   end
 
-  def pkgs
-    @osdb.values[0][0]
-  end
-
-  def test(pkg)
-    @osdb.values[0][1].dup % pkg
-  end
-
-  def install(pkg)
-    @osdb.values[0][2].dup % pkg
-  end
-
-  def post_install_cmd
-    @osdb.values[0][3]
-  end
-
-  def os
-    @osdb.keys[0]
-  end
-
   def do
-    puts "Hello #{os}: #{pkgs}: #{@dotf}."
+    puts "Hello #{@os.type}: #{@os.pkgs}: #{@os.dotf}: #{@os.conf}."
 
     # Install packages.
-    pkgs.each do |p|
+    os.pkgs.each do |p|
       # Tests if a package is installed.
-      system test(p)
+      system os.test % p
 
       # Installs new packages.
       if $CHILD_STATUS.exitstatus > 0
         puts "Install: #{p}."
-        system install(p)
+        system os.inst % p
       else
         puts "#{p} is already installed."
       end
@@ -223,7 +186,7 @@ class Installer
     # Moves any existing dotfiles in homedir to dotfiles_old directory,
     # then creates symlinks from the homedir to any files in the ~/dotfiles
     # directory specified in $files.
-    @dotf.each do |f|
+    os.dotf.each do |f|
       src = File.join(Dir.home, '.' + f)
       dst = File.join(@odir, '.' + f)
 
@@ -237,7 +200,7 @@ class Installer
 
     # Handles ~/.config in similar way.
     FileUtils.mkdir_p(File.join(@odir, '.config'))
-    @conf.each do |f|
+    os.conf.each do |f|
       src = File.join(Dir.home, '.config', f)
       dst = File.join(@odir, '.config', f)
 
@@ -249,7 +212,7 @@ class Installer
       FileUtils.ln_s(File.join(@ndir, f), src, force: true)
     end
 
-    system post_install_cmd unless post_install_cmd.to_s.empty?
+    system os.post unless os.post.empty?
 
     # Sets the default shell to zsh if it isn't currently set to zsh.
     sh = ENV['SHELL']
@@ -281,7 +244,8 @@ class Installer
     end
 
     puts 'Bye-bye.'
+
   end
 end
 
-Installer.new(Configuration.new).do
+(Installer.new).do
