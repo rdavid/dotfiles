@@ -14,7 +14,7 @@ require 'optparse'
 require 'fileutils'
 require 'English'
 
-# Handles parameters.
+# Handles input parameters.
 class Configuration
   def initialize
     ARGV << '-h' if ARGV.empty?
@@ -43,15 +43,6 @@ class OS
   attr_reader :dotf
   attr_reader :conf
 
-  def configure(cfg)
-    return unless cfg.xorg?
-
-    # Extends with Xorg related packages.
-    @pkgs += %w[conky feh i3 i3blocks i3lock]
-    @dotf += %w[i3 xinitrc]
-    @conf += %w[conky]
-  end
-
   def initialize(cfg)
     @type = ''
     @test = ''
@@ -73,6 +64,15 @@ class OS
     configure(cfg)
   end
 
+  def configure(cfg)
+    return unless cfg.xorg?
+
+    # Extends with Xorg related packages.
+    @pkgs += %w[conky feh i3 i3blocks i3lock]
+    @dotf += %w[i3 xinitrc]
+    @conf += %w[conky]
+  end
+
   private :configure
 end
 
@@ -80,7 +80,8 @@ end
 module MacOS
   def self.extended(mod)
     mod.type << 'MacOS'
-    mod.pkgs << 'lolcat' << 'fortune' << 'fonts-inconsolata' << 'fonts-font-awesome'
+    mod.pkgs << 'lolcat' << 'fortune' << 'fonts-inconsolata' << \
+      'fonts-font-awesome'
     mod.test << 'brew ls --versions %s >/dev/null 2>&1'
     mod.inst << 'su admin -c "brew install %s"'
     mod.post << 'su admin -c "sudo easy_install pip"'
@@ -91,8 +92,8 @@ end
 module FreeBSD
   def self.extended(mod)
     mod.type << 'FreeBSD'
-    mod.pkgs << 'rubygem-lolcat' << 'py27-pip' << 'fortune' << 'fonts-inconsolata' \
-      << 'fonts-font-awesome'
+    mod.pkgs << 'rubygem-lolcat' << 'py27-pip' << 'fortune' << \
+      'fonts-inconsolata' << 'fonts-font-awesome'
     mod.test << 'pkg info %s >/dev/null 2>&1'
     mod.inst << 'sudo pkg install -y %s'
   end
@@ -114,8 +115,8 @@ end
 module Debian
   def self.extended(mod)
     mod.type << 'Debian'
-    mod.pkgs << 'lolcat' << 'fortune' << 'fonts-inconsolata' << 'fonts-font-awesome' \
-      << 'python-pip'
+    mod.pkgs << 'lolcat' << 'fortune' << 'fonts-inconsolata' \
+      << 'fonts-font-awesome' << 'python-pip'
     mod.test << 'dpkg -l %s >/dev/null 2>&1'
     mod.inst << 'sudo apt-get -y install %s'
   end
@@ -125,7 +126,8 @@ end
 module RedHat
   def self.extended(mod)
     mod.type << 'RedHat'
-    mod.pkgs << 'lolcat' << 'fortune' << 'fonts-inconsolata' << 'fonts-font-awesome'
+    mod.pkgs << 'lolcat' << 'fortune' << 'fonts-inconsolata' \
+      << 'fonts-font-awesome'
     mod.test << 'yum list installed %s >/dev/null 2>&1'
     mod.inst << 'sudo yum -y install %s'
   end
@@ -135,13 +137,14 @@ end
 module Alpine
   def self.extended(mod)
     mod.type << 'Alpine'
-    mod.pkgs << 'lolcat' << 'fortune' << 'fonts-inconsolata' << 'fonts-font-awesome' \
-      << 'py-pip'
+    mod.pkgs << 'lolcat' << 'fortune' << 'fonts-inconsolata' \
+      << 'fonts-font-awesome' << 'py-pip'
     mod.test << 'apk info %s >/dev/null 2>&1'
     mod.inst << 'sudo apk add %s'
   end
 end
 
+# Defines current OS.
 class CurrentOS
   def get
     return MacOS if OS.mac?
@@ -158,7 +161,7 @@ end
 # Actually does the job.
 class Installer
   def initialize
-    @os = OS.new(Configuration.new).extend((CurrentOS.new).get)
+    @os = OS.new(Configuration.new).extend(CurrentOS.new.get)
     @ndir = File.join(Dir.home, 'dotfiles')
     @odir = File.join(Dir.home, 'dotfiles-old')
   end
@@ -167,14 +170,14 @@ class Installer
     puts "Hello #{@os.type}: #{@os.pkgs}: #{@os.dotf}: #{@os.conf}."
 
     # Install packages.
-    os.pkgs.each do |p|
+    @os.pkgs.each do |p|
       # Tests if a package is installed.
-      system os.test % p
+      system @os.test % p
 
       # Installs new packages.
       if $CHILD_STATUS.exitstatus > 0
         puts "Install: #{p}."
-        system os.inst % p
+        system @os.inst % p
       else
         puts "#{p} is already installed."
       end
@@ -186,13 +189,13 @@ class Installer
     # Moves any existing dotfiles in homedir to dotfiles_old directory,
     # then creates symlinks from the homedir to any files in the ~/dotfiles
     # directory specified in $files.
-    os.dotf.each do |f|
+    @os.dotf.each do |f|
       src = File.join(Dir.home, '.' + f)
       dst = File.join(@odir, '.' + f)
 
       if File.exist?(src)
         puts "mv #{src}->#{dst}"
-        File.rename(src, dst)
+        FileUtils.mv(src, dst)
       end
 
       FileUtils.ln_s(File.join(@ndir, f), src, force: true)
@@ -200,23 +203,23 @@ class Installer
 
     # Handles ~/.config in similar way.
     FileUtils.mkdir_p(File.join(@odir, '.config'))
-    os.conf.each do |f|
+    @os.conf.each do |f|
       src = File.join(Dir.home, '.config', f)
       dst = File.join(@odir, '.config', f)
 
       if File.exist?(src)
         puts "mv #{src}->#{dst}"
-        File.rename(src, dst)
+        FileUtils.mv(src, dst)
       end
 
       FileUtils.ln_s(File.join(@ndir, f), src, force: true)
     end
 
-    system os.post unless os.post.empty?
+    system @os.post unless @os.post.empty?
 
     # Sets the default shell to zsh if it isn't currently set to zsh.
     sh = ENV['SHELL']
-    unless shell.eql? `which zsh`.strip
+    unless sh.eql? `which zsh`.strip
       system 'chsh -s $(which zsh)'
       puts "Unable to switch #{sh} to zsh." unless $CHILD_STATUS.exitstatus > 0
     end
@@ -244,8 +247,7 @@ class Installer
     end
 
     puts 'Bye-bye.'
-
   end
 end
 
-(Installer.new).do
+Installer.new.do
