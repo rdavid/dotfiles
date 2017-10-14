@@ -103,11 +103,11 @@ end
 module Arch
   def self.extended(mod)
     mod.type << 'Arch'
-    mod.pkgs << 'lolcat' << 'fortune-mod' << 'ttf-inconsolata'
-    mod.test << 'pacman -Qs %s >/dev/null 2>&1'
-    mod.inst << 'sudo pacman -Sy %s'
-    mod.post << 'sed -i \'s/usr\/share/usr\/lib/g\' ~/.i3/i3blocks.conf; ' \
-      'yaourt -Sy ttf-font-awesome'
+    mod.pkgs << 'lolcat' << 'fortune-mod' << 'ttf-inconsolata' << \
+      'ttf-font-awesome'
+    mod.test << 'yaourt -Qs --nameonly %s >/dev/null 2>&1'
+    mod.inst << 'sudo yaourt -Sy %s'
+    mod.post << 'sed -i \'s/usr\/share/usr\/lib/g\' ~/.i3/i3blocks.conf'
   end
 end
 
@@ -147,12 +147,12 @@ end
 # Defines current OS.
 class CurrentOS
   def get
-    return MacOS if OS.mac?
+    return MacOS   if OS.mac?
     return FreeBSD if OS.freebsd?
-    return Arch if OS.linux? && File.file?('/etc/arch-release')
-    return Debian if OS.linux? && File.file?('/etc/debian_version')
-    return RedHat if OS.linux? && File.file?('/etc/redhat-release')
-    return Alpine if OS.linux? && File.file?('/etc/alpine-release')
+    return Arch    if OS.linux? && File.file?('/etc/arch-release')
+    return Debian  if OS.linux? && File.file?('/etc/debian_version')
+    return RedHat  if OS.linux? && File.file?('/etc/redhat-release')
+    return Alpine  if OS.linux? && File.file?('/etc/alpine-release')
 
     raise 'Current OS is not supported.'
   end
@@ -194,7 +194,7 @@ class Installer
       dst = File.join(@odir, '.' + f)
 
       if File.exist?(src)
-        puts "mv #{src}->#{dst}"
+        puts "mv #{src}->#{dst}."
         FileUtils.mv(src, dst)
       end
 
@@ -208,7 +208,7 @@ class Installer
       dst = File.join(@odir, '.config', f)
 
       if File.exist?(src)
-        puts "mv #{src}->#{dst}"
+        puts "mv #{src}->#{dst}."
         FileUtils.mv(src, dst)
       end
 

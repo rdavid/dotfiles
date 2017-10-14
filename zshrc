@@ -42,6 +42,9 @@ export PATH="`python -m site --user-base`/bin":$PATH
 # Corrects work of fortune at Win10 Ubuntu.
 export PATH="/usr/games":$PATH
 
+# Corrects unity-control-center at Ubuntu 16.04.
+XDG_CURRENT_DESKTOP=Unity
+
 . ~/dotfiles/app/z.sh
 
 source $ZSH/oh-my-zsh.sh
