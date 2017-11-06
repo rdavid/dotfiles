@@ -52,7 +52,7 @@ match OverLength /\%81v.\+/
 
 set pastetoggle=<F2>            " Enables clear paste.
 
-"Plugins.
+" Plugins.
 set runtimepath^=~/.vim/bundle/ctrlp.vim
 set runtimepath^=~/.vim/bundle/ag
 

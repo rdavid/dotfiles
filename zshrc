@@ -1,4 +1,4 @@
- # zshrc
+# zshrc
  # vim: tabstop=2 shiftwidth=2 expandtab textwidth=80 linebreak wrap
 
 # Cool man pager.
@@ -34,7 +34,11 @@ plugins=(archlinux battery brew catimg common-aliases compleat debian gem git \
          terminator tmux vi-mode web-search yarn)
 
 # User configuration.
-export PATH="/opt/local/bin/:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin"
+export PATH="/opt/local/bin/:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/home/linuxbrew/.linuxbrew/bin"
+
+export PATH="/home/linuxbrew/.linuxbrew/bin:$PATH"
+export MANPATH="/home/linuxbrew/.linuxbrew/share/man:$MANPATH"
+export INFOPATH="/home/linuxbrew/.linuxbrew/share/info:$INFOPATH"
 
 # Corrects work of tmuxp.
 export PATH="`python -m site --user-base`/bin":$PATH
@@ -72,3 +76,11 @@ else
     $MOTD
   fi
 fi
+
+# fh - repeat history
+fh() {
+  print -z $( ([ -n "$ZSH_NAME" ] && fc -l 1 || history) | fzf +s --tac | sed 's/ *[0-9]* *//')
+}
+
+# OPAM configuration
+. /home/david/.opam/opam-init/init.zsh > /dev/null 2> /dev/null || true

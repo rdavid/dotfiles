@@ -220,7 +220,7 @@ class Installer
     # Sets the default shell to zsh if it isn't currently set to zsh.
     sh = ENV['SHELL']
     unless sh.eql? `which zsh`.strip
-      system 'chsh -s $(which zsh)'
+      system('chsh -s $(which zsh)')
       puts "Unable to switch #{sh} to zsh." unless $CHILD_STATUS.exitstatus > 0
     end
 
@@ -235,16 +235,18 @@ class Installer
 
     # Installs tmux session manager.
     if `python -c "help('modules');" | grep tmuxp | wc -l | xargs`.strip.eql? 0
-      system 'pip install --user tmuxp'
+      system('pip install --user tmuxp')
       puts 'Unable to install tmuxp.' unless $CHILD_STATUS.exitstatus > 0
     end
 
     # Installs transcode-video.
     if `gem list -i video_transcoding`.strip.eql? 'false'
-      system 'sudo gem install video_transcoding'
+      system('sudo gem install video_transcoding')
     else
-      system 'sudo gem update video_transcoding'
+      system('sudo gem update video_transcoding')
     end
+
+    system('sh -c "$(curl -fsSL https://raw.githubusercontent.com/Linuxbrew/install/master/install.sh)"')
 
     puts 'Bye-bye.'
   end
