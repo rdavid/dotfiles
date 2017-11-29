@@ -58,6 +58,7 @@ alias src-tmux="tmux source-file ~/.tmux.conf"
 alias vi="vim"
 alias h="history"
 alias grep="grep -Hn"
+alias vpn="sudo openvpn --config ~/app/dat/David_Rabkin@vpn.safe-t.com.ovpn"
 
 # Starts tmux.
 if [[ "$TERM" != "screen" ]] && 
