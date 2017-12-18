@@ -9,7 +9,6 @@ windows:
       - htop
       - shell_command:
         - pwd
-        - sudo apt-get update
       -
   - window_name: main
     layout: tiled

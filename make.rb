@@ -51,8 +51,8 @@ class OS
 
     # Packages without Xorg to install.
     @pkgs = %w[
-      apcalc cmatrix cmus cowsay glances hddtemp hollywood htop imagemagick mc
-      most python scrot tmux zsh zsh-syntax-highlighting
+      cmatrix cmus cowsay glances hddtemp hollywood htop imagemagick mc most
+      python scrot tmux zsh zsh-syntax-highlighting
     ]
 
     # List of files/folders to symlink in homedir.
@@ -68,9 +68,9 @@ class OS
     return unless cfg.xorg?
 
     # Extends with Xorg related packages.
-    @pkgs += %w[conky feh i3 i3blocks i3lock]
-    @dotf += %w[i3 xinitrc]
-    @conf += %w[conky]
+    (@pkgs << %w[conky feh i3 i3blocks i3lock]).flatten!
+    (@dotf << %w[i3 xinitrc]).flatten!
+    (@conf << %w[conky]).flatten!
   end
 
   private :configure
@@ -80,8 +80,11 @@ end
 module MacOS
   def self.extended(mod)
     mod.type << 'MacOS'
-    mod.pkgs << 'lolcat' << 'fortune' << 'fonts-inconsolata' << \
-      'fonts-font-awesome'
+    (
+      mod.pkgs << %w[
+        fonts-inconsolata fonts-font-awesome fortune lolcat
+      ]
+    ).flatten!
     mod.test << 'brew ls --versions %s >/dev/null 2>&1'
     mod.inst << 'su admin -c "brew install %s"'
     mod.post << 'su admin -c "sudo easy_install pip"'
@@ -92,8 +95,11 @@ end
 module FreeBSD
   def self.extended(mod)
     mod.type << 'FreeBSD'
-    mod.pkgs << 'rubygem-lolcat' << 'py27-pip' << 'fortune' << \
-      'fonts-inconsolata' << 'fonts-font-awesome'
+    (
+      mod.pkgs << %w[
+        fonts-inconsolata fonts-font-awesome fortune py27-pip rubygem-lolcat
+      ]
+    ).flatten!
     mod.test << 'pkg info %s >/dev/null 2>&1'
     mod.inst << 'sudo pkg install -y %s'
   end
@@ -103,8 +109,11 @@ end
 module Arch
   def self.extended(mod)
     mod.type << 'Arch'
-    mod.pkgs << 'lolcat' << 'fortune-mod' << 'ttf-inconsolata' << \
-      'ttf-font-awesome'
+    (
+      mod.pkgs << %w[
+        fortune-mod lolcat ttf-inconsolata ttf-font-awesome
+      ]
+    ).flatten!
     mod.test << 'yaourt -Qs --nameonly %s >/dev/null 2>&1'
     mod.inst << 'sudo yaourt -Sy %s'
     mod.post << 'sed -i \'s/usr\/share/usr\/lib/g\' ~/.i3/i3blocks.conf'
@@ -115,8 +124,11 @@ end
 module Debian
   def self.extended(mod)
     mod.type << 'Debian'
-    mod.pkgs << 'lolcat' << 'fortune' << 'fonts-inconsolata' \
-      << 'fonts-font-awesome' << 'python-pip'
+    (
+      mod.pkgs << %w[
+        apcalc fonts-inconsolata fonts-font-awesome fortune lolcat python-pip
+      ]
+    ).flatten!
     mod.test << 'dpkg -l %s >/dev/null 2>&1'
     mod.inst << 'sudo apt-get -y install %s'
   end
@@ -126,8 +138,11 @@ end
 module RedHat
   def self.extended(mod)
     mod.type << 'RedHat'
-    mod.pkgs << 'lolcat' << 'fortune' << 'fonts-inconsolata' \
-      << 'fonts-font-awesome'
+    (
+      mod.pkgs << %w[
+        fonts-inconsolata fonts-font-awesome fortune lolcat
+      ]
+    ).flatten!
     mod.test << 'yum list installed %s >/dev/null 2>&1'
     mod.inst << 'sudo yum -y install %s'
   end
@@ -137,8 +152,11 @@ end
 module Alpine
   def self.extended(mod)
     mod.type << 'Alpine'
-    mod.pkgs << 'lolcat' << 'fortune' << 'fonts-inconsolata' \
-      << 'fonts-font-awesome' << 'py-pip'
+    (
+      mod.pkgs << %w[
+        fonts-inconsolata fonts-font-awesome fortune lolcat py-pip
+      ]
+    ).flatten!
     mod.test << 'apk info %s >/dev/null 2>&1'
     mod.inst << 'sudo apk add %s'
   end
@@ -167,19 +185,19 @@ class Installer
   end
 
   def do
-    puts "Hello #{@os.type}: #{@os.pkgs}: #{@os.dotf}: #{@os.conf}."
+    puts("Hello #{@os.type}: #{@os.pkgs}: #{@os.dotf}: #{@os.conf}.")
 
     # Install packages.
     @os.pkgs.each do |p|
       # Tests if a package is installed.
-      system @os.test % p
+      system(@os.test % p)
 
       # Installs new packages.
       if $CHILD_STATUS.exitstatus > 0
-        puts "Install: #{p}."
-        system @os.inst % p
+        puts("Install: #{p}.")
+        system(@os.inst % p)
       else
-        puts "#{p} is already installed."
+        puts("#{p} is already installed.")
       end
     end
 
@@ -193,8 +211,8 @@ class Installer
       src = File.join(Dir.home, '.' + f)
       dst = File.join(@odir, '.' + f)
 
-      if File.exist?(src)
-        puts "mv #{src}->#{dst}."
+      if File.exist?(src) && !File.symlink?(src)
+        puts("mv #{src}->#{dst}.")
         FileUtils.mv(src, dst)
       end
 
@@ -207,21 +225,21 @@ class Installer
       src = File.join(Dir.home, '.config', f)
       dst = File.join(@odir, '.config', f)
 
-      if File.exist?(src)
-        puts "mv #{src}->#{dst}."
+      if File.exist?(src) && !File.symlink?(src)
+        puts("mv #{src}->#{dst}.")
         FileUtils.mv(src, dst)
       end
 
       FileUtils.ln_s(File.join(@ndir, f), src, force: true)
     end
 
-    system @os.post unless @os.post.empty?
+    system(@os.post) unless @os.post.empty?
 
     # Sets the default shell to zsh if it isn't currently set to zsh.
     sh = ENV['SHELL']
     unless sh.eql? `which zsh`.strip
       system('chsh -s $(which zsh)')
-      puts "Unable to switch #{sh} to zsh." unless $CHILD_STATUS.exitstatus > 0
+      puts("Unable to switch #{sh} to zsh.") unless $CHILD_STATUS.exitstatus > 0
     end
 
     # Clones oh-my-zsh repository from GitHub.
@@ -236,7 +254,7 @@ class Installer
     # Installs tmux session manager.
     if `python -c "help('modules');" | grep tmuxp | wc -l | xargs`.strip.eql? 0
       system('pip install --user tmuxp')
-      puts 'Unable to install tmuxp.' unless $CHILD_STATUS.exitstatus > 0
+      puts('Unable to install tmuxp.') unless $CHILD_STATUS.exitstatus > 0
     end
 
     # Installs transcode-video.
@@ -246,9 +264,10 @@ class Installer
       system('sudo gem update video_transcoding')
     end
 
-    system('sh -c "$(curl -fsSL https://raw.githubusercontent.com/Linuxbrew/install/master/install.sh)"')
+    system('sh -c "$(curl -fsSL '\
+           'https://raw.githubusercontent.com/Linuxbrew/install/master/install.sh)"')
 
-    puts 'Bye-bye.'
+    puts('Bye-bye.')
   end
 end
 
