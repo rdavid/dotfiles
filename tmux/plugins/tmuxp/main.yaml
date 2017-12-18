@@ -1,20 +1,20 @@
 session_name: main
+start_directory: $HOME
+shell_command_before: clear
 windows:
-- window_name: su
-  layout: tiled
-  shell_command_before:
-    - cd ~/
-  panes:
-    -
-    -
-    -
-    -
-- window_name: main
-  layout: tiled
-  shell_command_before:
-    - cd ~/
-  panes:
-    - ~/dotfiles/app/tss.sh 
-    - htop
-    -
-    -
+  - window_name: su
+    layout: tiled
+    panes:
+      - ~/dotfiles/app/tss.sh
+      - htop
+      - shell_command:
+        - pwd
+        - sudo apt-get update
+      -
+  - window_name: main
+    layout: tiled
+    panes:
+      - exit
+      - exit
+      -
+      -
