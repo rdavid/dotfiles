@@ -29,9 +29,9 @@ HIST_STAMPS="yyyy-mm-dd"
 # ~/.oh-my-zsh/plugins/*). Custom plugins may be added to
 # ~/.oh-my-zsh/custom/plugins/. Example format: plugins=(git textmate ruby)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(archlinux battery brew catimg common-aliases compleat debian gem git \
-         git-extras git-flow github history lol osx pip python ruby sudo      \
-         terminator tmux vi-mode web-search yarn)
+plugins=(archlinux battery brew catimg common-aliases compleat debian docker \
+         docker-compose gem git git-extras git-flow github history lol osx \
+         pip python ruby sudo terminator tmux vi-mode web-search yarn z)
 
 # User configuration.
 export PATH="/opt/local/bin/:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/home/linuxbrew/.linuxbrew/bin"
