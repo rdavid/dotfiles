@@ -27,9 +27,10 @@ else:
             commasplitstatus = battery.split(", ")
             percentleft_batteries.append(int(commasplitstatus[1].rstrip("%\n")))
             commasplitstatus_batteries.append(commasplitstatus)
-    state = state_batteries[0]
-    commasplitstatus = commasplitstatus_batteries[0]
+    state = state_batteries[-1]
+    commasplitstatus = commasplitstatus_batteries[-1]
     percentleft = int(sum(percentleft_batteries)/len(percentleft_batteries))
+
     # stands for charging
     FA_LIGHTNING = "<span color='green'><span font='FontAwesome'>\uf0e7</span></span>"
 
@@ -46,7 +47,8 @@ else:
     elif state == "Full":
         fulltext = FA_PLUG + " "
     elif state == "Unknown":
-        fulltext = "<span font='FontAwesome'>\uf128</span> "
+        fulltext = FA_PLUG + " "
+#        fulltext = "<span font='FontAwesome'>\uf128</span> "
     else:
         fulltext = FA_LIGHTNING + " " + FA_PLUG + " "
 

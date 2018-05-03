@@ -186,11 +186,14 @@ exec --no-startup-id dropbox start
 exec --no-startup-id xscreensaver -no-splash
 
 # Managed two monitors setup at work.
-exec --no-startup-id xrandr --output DP-2-3 --auto --left-of DP-2-1
+exec --no-startup-id xrandr --output DP-2-1 --auto --left-of DP-2-2
+
+# Do not turn off display on station.
+exec --no-startup-id xset -dpms
 
 # Language switcher.
 exec "setxkbmap -layout us,il,ru"
-exec "setxkbmap -option 'grp:alt_space_toggle'"
+exec "setxkbmap -option 'grp:ctrl_alt_toggle'"
 
 #######################################################################
 # automatically start i3-config-wizard to offer the user to create a
