@@ -7,9 +7,6 @@ export PAGER="most"
 # Path to your oh-my-zsh installation.
 export ZSH=~/.oh-my-zsh
 
-# Helps Xorg.
-export DISPLAY=:0
-
 ZSH_THEME="wezm"
 
 # Uncomment the following line to change how often to auto-update (in days).
@@ -57,8 +54,12 @@ alias src="source ~/.zshrc"
 alias src-tmux="tmux source-file ~/.tmux.conf"
 alias vi="vim"
 alias h="history"
-alias grep="grep -Hn"
 alias vpn="sudo openvpn --config ~/app/dat/David_Rabkin@vpn.safe-t.com.ovpn"
+
+#Starts X.
+if [[ ! $DISPLAY && $XDG_VTNR -eq 1 ]]; then
+  exec startx
+fi
 
 # Starts tmux.
 if [[ "$TERM" != "screen" ]] && 
