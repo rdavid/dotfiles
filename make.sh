@@ -12,21 +12,21 @@ pkgs="ruby"
 for pkg in $pkgs; do
   # Tests to see if a package is installed.
   if [[ -f "/bin/$pkg" ]]; then
-    echo "/bin/$pkg is installed."
+    echo "/bin/$pkg is already installed."
     continue
   fi
 
   if [[ -f "/usr/bin/$pkg" ]]; then
-    echo "/usr/bin/$pkg is installed."
+    echo "/usr/bin/$pkg is already installed."
     continue
   fi
 
   if [[ -f "/usr/local/bin/$pkg" ]]; then
-    echo "/usr/local/bin/$pkg is installed."
+    echo "/usr/local/bin/$pkg is already installed."
     continue
   fi
 
-  echo "Install $pkg."
+  echo "$pkg is installed."
 
   platform=$(uname);
   if [[ $platform == 'Linux' ]]; then
@@ -45,7 +45,15 @@ for pkg in $pkgs; do
 done
 
 # Installs needful packages.
-gems = "os git"
+gems="os git"
 for g in $gems; do
-  gem install g
+  if [[ ! `gem list -i $g` ]]; then
+    sudo gem install $g
+    echo "Gem $g is installed."
+  else
+    echo "Gem $g is already installed."
+  fi
 done
+
+# Runs Ruby's make.
+$(dirname "$0")/make.rb "$@"

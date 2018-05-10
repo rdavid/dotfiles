@@ -59,7 +59,7 @@ class OS
     @dotf = %w[bash_profile bashrc oh-my-zsh tmux.conf tmux vim vimrc zshrc]
 
     # List of files/folders to symlink in ~/.config.
-    @conf = %w[mc terminator]
+    @conf = %w[mc]
 
     configure(cfg)
   end
@@ -70,7 +70,7 @@ class OS
     # Extends with Xorg related packages.
     (@pkgs << %w[conky feh i3 i3blocks i3lock terminator]).flatten!
     (@dotf << %w[i3 xinitrc]).flatten!
-    (@conf << %w[conky]).flatten!
+    (@conf << %w[conky terminator]).flatten!
   end
 
   private :configure
