@@ -111,7 +111,7 @@ module Arch
     mod.type << 'Arch'
     (
       mod.pkgs << %w[
-        fortune-mod lolcat ttf-inconsolata ttf-font-awesome
+        fortune-mod fzf lolcat ttf-inconsolata ttf-font-awesome
       ]
     ).flatten!
     mod.test << 'yaourt -Qs --nameonly %s >/dev/null 2>&1'
