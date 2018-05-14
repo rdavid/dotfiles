@@ -52,7 +52,7 @@ class OS
     # Packages without Xorg to install.
     @pkgs = %w[
       cmatrix cmus cowsay glances hddtemp hollywood htop imagemagick mc most
-      python scrot tmux zsh zsh-syntax-highlighting
+      ncdu python scrot tmux zsh zsh-syntax-highlighting
     ]
 
     # List of files/folders to symlink in homedir.
