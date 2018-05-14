@@ -47,7 +47,7 @@ done
 # Installs needful packages.
 gems="os git"
 for g in $gems; do
-  if [[ ! `gem list -i $g` ]]; then
+  if ! `gem list -i $g`; then
     sudo gem install $g
     echo "Gem $g is installed."
   else
