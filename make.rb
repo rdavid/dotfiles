@@ -252,7 +252,7 @@ class Installer
     Git.clone('https://github.com/tmux-plugins/tpm', dir) unless Dir.exist?(dir)
 
     # Installs tmux session manager.
-    if `python -c "help('modules');" | grep tmuxp | wc -l | xargs`.strip.eql? 0
+    if `python -c "help('modules');" | grep tmuxp | wc -l | xargs`.strip.eql? '0'
       system('pip install --user tmuxp')
       puts('Unable to install tmuxp.') unless $CHILD_STATUS.exitstatus > 0
     end
@@ -264,8 +264,10 @@ class Installer
       system('sudo gem update video_transcoding')
     end
 
-    system('sh -c "$(curl -fsSL '\
-           'https://raw.githubusercontent.com/Linuxbrew/install/master/install.sh)"')
+    if `which brew`.to_s.empty?
+      system('sh -c "$(curl -fsSL '\
+             'https://raw.githubusercontent.com/Linuxbrew/install/master/install.sh)"')
+    end
 
     puts('Bye-bye.')
   end
