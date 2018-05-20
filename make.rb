@@ -97,7 +97,7 @@ module FreeBSD
     mod.type << 'FreeBSD'
     (
       mod.pkgs << %w[
-        fonts-inconsolata fonts-font-awesome fortune py27-pip rubygem-lolcat
+        inconsolata-ttf font-awesome fortune-mod-freebsd-classic py27-pip rubygem-lolcat
       ]
     ).flatten!
     mod.test << 'pkg info %s >/dev/null 2>&1'
