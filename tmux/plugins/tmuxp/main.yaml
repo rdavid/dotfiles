@@ -1,15 +1,18 @@
 session_name: main
 start_directory: $HOME
-shell_command_before: clear
+#shell_command_before: clear
 windows:
-  - window_name: su
+  - window_name: mon
     layout: tiled
     panes:
-      - ~/dotfiles/app/tss.sh
+      - glances
+  - window_name: root
+    layout: tiled
+    panes:
+      - exit
+      - exit
       - htop
-      - shell_command:
-        - pwd
-      -
+      - sudo su
   - window_name: main
     layout: tiled
     panes:
