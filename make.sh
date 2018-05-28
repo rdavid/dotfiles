@@ -40,7 +40,7 @@ for pkg in $pkgs; do
   elif [[ $platform == 'Darwin' ]]; then
     su admin -c "brew install $pkg"
   elif [[ $platform == 'FreeBSD' ]]; then
-    sudo pkg install $pkg
+    sudo pkg install $pkg devel/ruby-gems
   fi
 done
 

@@ -52,7 +52,7 @@ class OS
     # Packages without Xorg to install.
     @pkgs = %w[
       cmatrix cmus cowsay curl glances hddtemp hollywood htop imagemagick mc
-      most ncdu python scrot tmux zsh zsh-syntax-highlighting
+      most ncdu python scrot tmux vim zsh zsh-syntax-highlighting
     ]
 
     # List of files/folders to symlink in homedir.
@@ -97,7 +97,7 @@ module FreeBSD
     mod.type << 'FreeBSD'
     (
       mod.pkgs << %w[
-        fonts-inconsolata fonts-font-awesome fortune py27-pip rubygem-lolcat
+        inconsolata-ttf font-awesome fortune-mod-freebsd-classic py27-pip rubygem-lolcat
       ]
     ).flatten!
     mod.test << 'pkg info %s >/dev/null 2>&1'
