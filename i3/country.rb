@@ -1,0 +1,27 @@
+#!/usr/bin/env ruby
+# vim: tabstop=2 shiftwidth=2 expandtab textwidth=80 linebreak wrap
+#
+# country.rb
+#
+# Copyright 2018 David Rabkin
+#
+# This script prints a country name by public IP.
+
+require 'rubygems'
+require 'json'
+
+# Runs curl silently with 1 second time out.
+str = `curl -s -m 1 ipinfo.io`
+print 'no' if str.include?('timed out')
+
+# Extracts country name.
+val = JSON.parse(str)['country'].downcase
+
+case val
+when 'us'
+  val = ''
+when 'il'
+  val = ''
+end
+
+print val
