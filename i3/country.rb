@@ -22,6 +22,12 @@ when 'us'
   val = ''
 when 'il'
   val = ''
+when 'ge', 'fr'
+  val = ''
+when 'uk'
+  val = ''
+when 'ru'
+  val = ''
 end
 
 print val

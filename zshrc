@@ -1,5 +1,5 @@
 # zshrc
- # vim: tabstop=2 shiftwidth=2 expandtab textwidth=80 linebreak wrap
+# vim: tabstop=2 shiftwidth=2 expandtab textwidth=80 linebreak wrap
 
 # Cool man pager.
 export PAGER="most"
@@ -11,9 +11,6 @@ ZSH_THEME="wezm"
 
 # Uncomment the following line to change how often to auto-update (in days).
 export UPDATE_ZSH_DAYS=30
-
-# Uncomment the following line to disable colors in ls.
-# DISABLE_LS_COLORS="true"
 
 # Uncomment the following line to display red dots whilst waiting for completion.
 COMPLETION_WAITING_DOTS="true"
@@ -42,9 +39,6 @@ export PATH="`python -m site --user-base`/bin":$PATH
 
 # Corrects work of fortune at Win10 Ubuntu.
 export PATH="/usr/games":$PATH
-
-# Corrects unity-control-center at Ubuntu 16.04.
-XDG_CURRENT_DESKTOP=Unity
 
 . ~/dotfiles/app/z.sh
 
@@ -83,6 +77,3 @@ fi
 fh() {
   print -z $( ([ -n "$ZSH_NAME" ] && fc -l 1 || history) | fzf +s --tac | sed 's/ *[0-9]* *//')
 }
-
-# OPAM configuration
-. /home/david/.opam/opam-init/init.zsh > /dev/null 2> /dev/null || true
