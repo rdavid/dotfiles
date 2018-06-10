@@ -12,7 +12,10 @@ require 'json'
 
 # Runs curl silently with 1 second time out.
 str = `curl -s -m 1 ipinfo.io`
-print 'no' if !$?.success? || str.include?('timed out')
+if !$?.success? || str.include?('timed out')
+  print 'no'
+  exit
+end
 
 # Extracts country name.
 val = JSON.parse(str)['country'].downcase
