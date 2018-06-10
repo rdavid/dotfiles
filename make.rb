@@ -3,7 +3,7 @@
 #
 # make.rb
 #
-# Copyright 2017 David Rabkin
+# Copyright 2018 David Rabkin
 #
 # This script creates symlinks from the home directory to any desired
 # dotfiles in ~/dotfiles. Also it installs needfull packages.
