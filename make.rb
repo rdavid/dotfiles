@@ -68,7 +68,9 @@ class OS
     return unless cfg.xorg?
 
     # Extends with Xorg related packages.
-    (@pkgs << %w[conky feh i3 i3blocks i3lock terminator]).flatten!
+    (@pkgs << %w[
+      conky feh i3 i3blocks i3lock lxappearance-gtk3 terminator
+    ]).flatten!
     (@dotf << %w[i3 xinitrc]).flatten!
     (@conf << %w[conky terminator]).flatten!
   end

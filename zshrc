@@ -1,8 +1,10 @@
 # zshrc
 # vim: tabstop=2 shiftwidth=2 expandtab textwidth=80 linebreak wrap
 
-# Cool man pager.
-export PAGER="most"
+# Cool man pager, viewer and editor.
+export PAGER=most
+export VISUAL=vim
+export EDITOR=vim
 
 # Path to your oh-my-zsh installation.
 export ZSH=~/.oh-my-zsh
