@@ -136,6 +136,7 @@ module Debian
     ).flatten!
     mod.test << 'dpkg -l %s >/dev/null 2>&1'
     mod.inst << 'sudo apt-get -y install %s'
+    mod.post << 'cp ~/dotfiles/inconsolata-g.otf /usr/share/fonts/ && fc-cache -fv'
   end
 end
 
