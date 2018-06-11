@@ -52,7 +52,7 @@ class OS
     # Packages without Xorg to install.
     @pkgs = %w[
       atop cmatrix cmus cowsay curl glances gtop hddtemp hollywood htop
-      imagemagick mc most ncdu python scrot s-tui tmux vim zsh
+      imagemagick mc most ncdu python pry scrot s-tui tmux vim zsh
       zsh-syntax-highlighting
     ]
 
@@ -70,7 +70,7 @@ class OS
 
     # Extends with Xorg related packages.
     (@pkgs << %w[
-      conky feh i3 i3blocks i3lock lxappearance-gtk3 terminator
+      conky feh i3 i3blocks i3lock terminator
     ]).flatten!
     (@dotf << %w[i3 xinitrc]).flatten!
     (@conf << %w[conky terminator]).flatten!
@@ -136,7 +136,12 @@ module Debian
     ).flatten!
     mod.test << 'dpkg -l %s >/dev/null 2>&1'
     mod.inst << 'sudo apt-get -y install %s'
-    mod.post << 'cp ~/dotfiles/inconsolata-g.otf /usr/share/fonts/ && fc-cache -fv'
+    mod.post << %{
+      if [[ ! -e /usr/share/fonts/inconsolata-g.otf ]]; then
+        sudo cp ~/dotfiles/inconsolata-g.otf /usr/share/fonts/
+        fc-cache -fv
+      fi
+    }
   end
 end
 
@@ -239,7 +244,7 @@ class Installer
       FileUtils.ln_s(File.join(@ndir, f), src, force: true)
     end
 
-    system(@os.post) unless @os.post.empty?
+    system('bash', '-c', @os.post) unless @os.post.empty?
 
     # Sets the default shell to zsh if it isn't currently set to zsh.
     sh = ENV['SHELL']
