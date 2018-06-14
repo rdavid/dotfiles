@@ -43,6 +43,7 @@ class OS
   attr_reader :pkgs
   attr_reader :dotf
   attr_reader :conf
+  attr_reader :font
 
   def initialize(cfg)
     @type = ''
@@ -167,7 +168,7 @@ module Debian
     ).flatten!
     mod.test << 'dpkg -l %s >/dev/null 2>&1'
     mod.inst << 'sudo apt-get -y install %s'
-    mod.post << @font
+    mod.post << mod.font
   end
 end
 
@@ -182,7 +183,7 @@ module RedHat
     ).flatten!
     mod.test << 'yum list installed %s >/dev/null 2>&1'
     mod.inst << 'sudo yum -y install %s'
-    mod.post << @font
+    mod.post << mod.font
   end
 end
 
@@ -197,7 +198,7 @@ module Alpine
     ).flatten!
     mod.test << 'apk info %s >/dev/null 2>&1'
     mod.inst << 'sudo apk add %s'
-    mod.post << @font
+    mod.post << mod.font
   end
 end
 
