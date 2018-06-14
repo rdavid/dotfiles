@@ -38,6 +38,7 @@ class OS
   attr_reader :type
   attr_reader :test
   attr_reader :inst
+  attr_reader :prec
   attr_reader :post
   attr_reader :pkgs
   attr_reader :dotf
@@ -47,13 +48,15 @@ class OS
     @type = ''
     @test = ''
     @inst = ''
+    @prec = ''
     @post = ''
+    @font = ''
 
     # Packages without Xorg to install.
     @pkgs = %w[
-      atop cmatrix cmus cowsay curl glances gtop hddtemp hollywood htop
-      imagemagick mc most ncdu python pry scrot s-tui tmux vim zsh
-      zsh-syntax-highlighting
+      atop cmatrix cmus cowsay curl ffmpeg figlet glances gtop hddtemp hollywood
+      htop imagemagick mc most ncdu python pry scrot tmux vim wget
+      youtube-dl zsh zsh-syntax-highlighting
     ]
 
     # List of files/folders to symlink in homedir.
@@ -61,6 +64,14 @@ class OS
 
     # List of files/folders to symlink in ~/.config.
     @conf = %w[mc]
+
+    # Manual install for some distros.
+    @font << %{
+      if [[ ! -e /usr/share/fonts/inconsolata-g.otf ]]; then
+        sudo cp ~/dotfiles/inconsolata-g.otf /usr/share/fonts/
+        fc-cache -fv
+      fi
+    }
 
     configure(cfg)
   end
@@ -70,7 +81,7 @@ class OS
 
     # Extends with Xorg related packages.
     (@pkgs << %w[
-      conky feh i3 i3blocks i3lock terminator
+      conky dropbox feh firefox google-chrome i3 i3blocks i3lock terminator
     ]).flatten!
     (@dotf << %w[i3 xinitrc]).flatten!
     (@conf << %w[conky terminator]).flatten!
@@ -83,6 +94,20 @@ end
 module MacOS
   def self.extended(mod)
     mod.type << 'MacOS'
+    mod.prec << %{
+      export HOMEBREW_CASK_OPTS="--appdir=/Applications"
+      if hash brew &> /dev/null; then
+        echo "Homebrew already installed."
+      else
+        ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
+      fi
+      su admin -c "brew install caskroom/cask/brew-cask"
+      su admin -c "brew update && brew upgrade brew-cask"
+      su admin -c "brew cleanup && brew cask cleanup"
+      if [[ ! -e ~/Library/Fonts/inconsolata-g.otf ]]; then
+        cp ~/dotfiles/inconsolata-g.otf ~/Library/Fonts/
+      fi
+    }
     (
       mod.pkgs << %w[
         fonts-inconsolata fonts-font-awesome fortune lolcat
@@ -106,6 +131,12 @@ module FreeBSD
     ).flatten!
     mod.test << 'pkg info %s >/dev/null 2>&1'
     mod.inst << 'sudo pkg install -y %s'
+    mod.post << %w[
+      if [[ ! -e ~/.fonts/inconsolata-g.otf ]]; then
+        cp ~/dotfiles/inconsolata-g.otf ~/.fonts/
+        fc-cache -vf
+      fi
+    ]
   end
 end
 
@@ -120,7 +151,7 @@ module Arch
       ]
     ).flatten!
     mod.test << 'yaourt -Qs --nameonly %s >/dev/null 2>&1'
-    mod.inst << 'sudo yaourt -Sy %s'
+    mod.inst << 'sudo yaourt -Sy --noconfirm %s'
     mod.post << 'sed -i \'s/usr\/share/usr\/lib/g\' ~/.i3/i3blocks.conf'
   end
 end
@@ -136,12 +167,7 @@ module Debian
     ).flatten!
     mod.test << 'dpkg -l %s >/dev/null 2>&1'
     mod.inst << 'sudo apt-get -y install %s'
-    mod.post << %{
-      if [[ ! -e /usr/share/fonts/inconsolata-g.otf ]]; then
-        sudo cp ~/dotfiles/inconsolata-g.otf /usr/share/fonts/
-        fc-cache -fv
-      fi
-    }
+    mod.post << @font
   end
 end
 
@@ -151,11 +177,12 @@ module RedHat
     mod.type << 'RedHat'
     (
       mod.pkgs << %w[
-        fonts-inconsolata fonts-font-awesome fortune lolcat
+        inconsolata-fonts fontawesome-fonts fortune lolcat
       ]
     ).flatten!
     mod.test << 'yum list installed %s >/dev/null 2>&1'
     mod.inst << 'sudo yum -y install %s'
+    mod.post << @font
   end
 end
 
@@ -170,6 +197,7 @@ module Alpine
     ).flatten!
     mod.test << 'apk info %s >/dev/null 2>&1'
     mod.inst << 'sudo apk add %s'
+    mod.post << @font
   end
 end
 
@@ -197,6 +225,9 @@ class Installer
 
   def do
     puts("Hello #{@os.type}: #{@os.pkgs}: #{@os.dotf}: #{@os.conf}.")
+
+    # Runs pre-install commands.
+    system('bash', '-c', @os.prec) unless @os.prec.empty?
 
     # Install packages.
     @os.pkgs.each do |p|
@@ -249,30 +280,38 @@ class Installer
     # Sets the default shell to zsh if it isn't currently set to zsh.
     sh = ENV['SHELL']
     unless sh.eql? `which zsh`.strip
-      system('chsh -s $(which zsh)')
+      system('bash', '-c', 'sudo chsh -s $(which zsh)')
       puts("Unable to switch #{sh} to zsh.") unless $CHILD_STATUS.exitstatus > 0
     end
 
-    # Clones oh-my-zsh repository from GitHub.
-    dir = File.join(@ndir, 'oh-my-zsh')
-    src = 'https://github.com/robbyrussell/oh-my-zsh'
-    Git.clone(src, dir) unless Dir.exist?(dir)
-
-    # Clones tpm plugin from GitHub.
-    dir = File.join(@ndir, 'tmux', 'plugins', 'tpm')
-    Git.clone('https://github.com/tmux-plugins/tpm', dir) unless Dir.exist?(dir)
-
-    # Installs tmux session manager.
-    if `python -c "help('modules');" | grep tmuxp | wc -l | xargs`.strip.eql? '0'
-      system('pip install --user tmuxp')
-      puts('Unable to install tmuxp.') unless $CHILD_STATUS.exitstatus > 0
+    # Clones repositories out from GitHub.
+    [
+      {
+        src: 'https://github.com/robbyrussell/oh-my-zsh',
+        dst: File.join(@ndir, 'oh-my-zsh')
+      },
+      {
+        src: 'https://github.com/tmux-plugins/tpm',
+        dst: File.join(@ndir, 'tmux', 'plugins', 'tpm')
+      }
+    ].each do |i|
+      Git.clone(i[:src], i[:dst]) unless Dir.exist?(i[:dst])
     end
 
-    # Installs transcode-video.
-    if `gem list -i video_transcoding`.strip.eql? 'false'
-      system('sudo gem install video_transcoding')
-    else
-      system('sudo gem update video_transcoding')
+    # Installs Python packages.
+    %w[s_tui tmuxp].each do |p|
+      chk = "python -c \"help('modules');\" | grep #{p} | wc -l | xargs"
+      next if `#{chk}`.strip.eql? '1'
+      system("pip install --user #{p}")
+      puts("Unable to install #{p}.") unless $CHILD_STATUS.exitstatus > 0
+    end
+
+    # Installs Ruby packages.
+    %w[video_transcoding].each do |p|
+      chk = "gem list -i #{p}"
+      next if `#{chk}`.strip.eql? 'true'
+      system("gem install #{p}")
+      puts("Unable to install #{p}.") unless $CHILD_STATUS.exitstatus > 0
     end
 
     if `which brew`.to_s.empty?
