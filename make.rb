@@ -55,7 +55,7 @@ class OS
 
     # Packages without Xorg to install.
     @pkgs = %w[
-      atop cmatrix cmus cowsay curl ffmpeg figlet glances gtop hddtemp hollywood
+      atop cmatrix cmus cowsay curl ffmpeg figlet glances hddtemp hollywood
       htop imagemagick mc most ncdu python pry scrot tmux vim wget
       youtube-dl zsh zsh-syntax-highlighting
     ]
@@ -82,7 +82,7 @@ class OS
 
     # Extends with Xorg related packages.
     (@pkgs << %w[
-      conky dropbox feh firefox google-chrome i3 i3blocks i3lock terminator
+      conky dropbox feh firefox i3 i3blocks i3lock terminator
     ]).flatten!
     (@dotf << %w[i3 xinitrc]).flatten!
     (@conf << %w[conky terminator]).flatten!
@@ -161,9 +161,16 @@ end
 module Debian
   def self.extended(mod)
     mod.type << 'Debian'
+    mod.prec << %{
+      sudo apt-get install software-properties-common
+      sudo apt-add-repository ppa:hollywood/ppa
+      sudo apt-get update
+      sudo apt-get dist-upgrade
+      curl -sL https://deb.nodesource.com/setup_9.x | sudo -E bash -
+    }
     (
       mod.pkgs << %w[
-        apcalc fonts-inconsolata fonts-font-awesome fortune lolcat python-pip
+        apcalc byobu fonts-inconsolata fonts-font-awesome fortune lolcat python-pip
       ]
     ).flatten!
     mod.test << 'dpkg -l %s >/dev/null 2>&1'
@@ -312,6 +319,14 @@ class Installer
       chk = "gem list -i #{p}"
       next if `#{chk}`.strip.eql? 'true'
       system("gem install #{p}")
+      puts("Unable to install #{p}.") unless $CHILD_STATUS.exitstatus > 0
+    end
+
+    # Installs NoJS packages.
+    %w[gtop].each do |p|
+      system("npm list -g #{p}")
+      next unless $CHILD_STATUS.exitstatus
+      system("npm install #{p}")
       puts("Unable to install #{p}.") unless $CHILD_STATUS.exitstatus > 0
     end
 
