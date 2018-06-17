@@ -56,7 +56,7 @@ class OS
     # Packages without Xorg to install.
     @pkgs = %w[
       atop cmatrix cmus cowsay curl ffmpeg figlet hollywood
-      htop imagemagick mc most ncdu python scrot tmux vim wget
+      htop imagemagick mc most ncdu npm python scrot tmux vim wget
       zsh zsh-syntax-highlighting
     ]
 
@@ -332,7 +332,7 @@ class Installer
     %w[gtop].each do |p|
       system("npm list -g #{p}")
       next unless $CHILD_STATUS.exitstatus
-      system("npm install #{p}")
+      system("sudo npm install #{p}")
       puts("Unable to install #{p}.") unless $CHILD_STATUS.exitstatus > 0
     end
 
