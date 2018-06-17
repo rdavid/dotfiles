@@ -135,6 +135,7 @@ module FreeBSD
     mod.inst << 'sudo pkg install -y %s'
     mod.post << %{
       if [[ ! -e ~/.fonts/inconsolata-g.otf ]]; then
+        mkdir -p ~/.fonts
         cp ~/dotfiles/inconsolata-g.otf ~/.fonts/
         fc-cache -vf
       fi
