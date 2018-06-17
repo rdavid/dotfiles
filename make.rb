@@ -55,9 +55,9 @@ class OS
 
     # Packages without Xorg to install.
     @pkgs = %w[
-      atop cmatrix cmus cowsay curl ffmpeg figlet glances hddtemp hollywood
-      htop imagemagick mc most ncdu python pry scrot tmux vim wget
-      youtube-dl zsh zsh-syntax-highlighting
+      atop cmatrix cmus cowsay curl ffmpeg figlet hollywood
+      htop imagemagick mc most ncdu python scrot tmux vim wget
+      zsh zsh-syntax-highlighting
     ]
 
     # List of files/folders to symlink in homedir.
@@ -111,7 +111,8 @@ module MacOS
     }
     (
       mod.pkgs << %w[
-        fonts-inconsolata fonts-font-awesome fortune lolcat
+        fonts-inconsolata fonts-font-awesome fortune glances lolcat pry
+        youtube-dl
       ]
     ).flatten!
     mod.test << 'brew ls --versions %s >/dev/null 2>&1'
@@ -127,17 +128,18 @@ module FreeBSD
     (
       mod.pkgs << %w[
         inconsolata-ttf font-awesome fortune-mod-freebsd-classic py27-pip
-        rubygem-lolcat
+        rubygem-pry-rails rubygem-lolcat youtube_dl
       ]
     ).flatten!
     mod.test << 'pkg info %s >/dev/null 2>&1'
     mod.inst << 'sudo pkg install -y %s'
-    mod.post << %w[
+    mod.post << %{
       if [[ ! -e ~/.fonts/inconsolata-g.otf ]]; then
         cp ~/dotfiles/inconsolata-g.otf ~/.fonts/
         fc-cache -vf
       fi
-    ]
+      which glances || (cd /usr/ports/misc/py-glance && sudo make -DBATCH install clean)
+    }
   end
 end
 
@@ -147,8 +149,8 @@ module Arch
     mod.type << 'Arch'
     (
       mod.pkgs << %w[
-        fortune-mod fzf lolcat ttf-inconsolata ttf-inconsolata-g
-        ttf-font-awesome
+        fortune-mod fzf glances lolcat pry ttf-inconsolata ttf-inconsolata-g
+        ttf-font-awesome youtube-dl
       ]
     ).flatten!
     mod.test << 'yaourt -Qs --nameonly %s >/dev/null 2>&1'
@@ -170,7 +172,8 @@ module Debian
     }
     (
       mod.pkgs << %w[
-        apcalc byobu fonts-inconsolata fonts-font-awesome fortune lolcat python-pip
+        apcalc byobu fonts-inconsolata fonts-font-awesome fortune glances lolcat
+        pry python-pip youtube-dl
       ]
     ).flatten!
     mod.test << 'dpkg -l %s >/dev/null 2>&1'
@@ -185,7 +188,8 @@ module RedHat
     mod.type << 'RedHat'
     (
       mod.pkgs << %w[
-        inconsolata-fonts fontawesome-fonts fortune lolcat
+        inconsolata-fonts fontawesome-fonts fortune glances lolcat pry
+        youtube-dl
       ]
     ).flatten!
     mod.test << 'yum list installed %s >/dev/null 2>&1'
@@ -200,7 +204,8 @@ module Alpine
     mod.type << 'Alpine'
     (
       mod.pkgs << %w[
-        fonts-inconsolata fonts-font-awesome fortune lolcat py-pip
+        fonts-inconsolata fonts-font-awesome fortune glances lolcat py-pip
+        pry youtube-dl
       ]
     ).flatten!
     mod.test << 'apk info %s >/dev/null 2>&1'
@@ -328,11 +333,6 @@ class Installer
       next unless $CHILD_STATUS.exitstatus
       system("npm install #{p}")
       puts("Unable to install #{p}.") unless $CHILD_STATUS.exitstatus > 0
-    end
-
-    if `which brew`.to_s.empty?
-      system('sh -c "$(curl -fsSL '\
-             'https://raw.githubusercontent.com/Linuxbrew/install/master/install.sh)"')
     end
 
     puts('Bye-bye.')
