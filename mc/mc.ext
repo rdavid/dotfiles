@@ -567,6 +567,7 @@ type/^PostScript
 type/^PDF
 	Open=/usr/lib/mc/ext.d/doc.sh open pdf
 	View=%view{ascii} /usr/lib/mc/ext.d/doc.sh view pdf
+#	View=(okular %f &)
 
 # html
 regex/i/\.html?$

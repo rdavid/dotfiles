@@ -46,11 +46,14 @@ export PATH="/usr/games":$PATH
 
 source $ZSH/oh-my-zsh.sh
 
-alias src="source ~/.zshrc"
-alias src-tmux="tmux source-file ~/.tmux.conf"
-alias vi="vim"
-alias h="history"
-alias vpn="sudo openvpn --config ~/app/dat/David_Rabkin@vpn.safe-t.com.ovpn"
+alias src='source ~/.zshrc'
+alias src-tmux='tmux source-file ~/.tmux.conf'
+alias vi='vim'
+alias h='history'
+alias vpn='sudo openvpn --config ~/app/dat/David_Rabkin@vpn.safe-t.com.ovpn'
+
+# Changes last directory of mc into shell.
+alias mc='. /usr/lib/mc/mc-wrapper.sh'
 
 #Starts X.
 if [[ ! $DISPLAY && $XDG_VTNR -eq 1 ]]; then
