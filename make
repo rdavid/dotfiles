@@ -48,7 +48,7 @@ done
 gems="os git"
 for g in $gems; do
   if ! `gem list -i $g`; then
-    sudo gem install $g
+    gem install $g
     echo "Gem $g is installed."
   else
     echo "Gem $g is already installed."
