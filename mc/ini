@@ -120,6 +120,8 @@ color_terminals=
 
 xterm=
 
+xterm-256color=
+
 [Panels]
 show_mini_info=true
 kilobyte_si=false
