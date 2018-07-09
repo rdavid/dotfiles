@@ -66,10 +66,12 @@ class OS
     # List of files/folders to symlink in ~/.config.
     @conf = %w[mc]
 
-    # Manual install for some distros.
+    # Manual install fonts for some distros.
     @font << %{
-      if [[ ! -e /usr/share/fonts/inconsolata-g.otf ]]; then
-        sudo cp ~/dotfiles/inconsolata-g.otf /usr/share/fonts/
+      if [[ ! -e /usr/share/fonts/pragmatapro.ttf ]]; then
+        unzip -P sekret ~/dotfiles/bin.zip -d ~/dotfiles
+        sudo cp ~/dotfiles/bin/inconsolata-g.otf /usr/share/fonts/
+        sudo cp ~/dotfiles/bin/pragmatapro.ttf /usr/share/fonts/
         fc-cache -fv
       fi
     }
