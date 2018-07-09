@@ -66,14 +66,13 @@ class OS
     # List of files/folders to symlink in ~/.config.
     @conf = %w[mc]
 
-    # Manual install fonts for some distros.
-    @font << %{
-      if [[ ! -e /usr/share/fonts/pragmatapro.ttf ]]; then
-        unzip -P sekret ~/dotfiles/bin.zip -d ~/dotfiles
-        sudo cp ~/dotfiles/bin/inconsolata-g.otf /usr/share/fonts/
-        sudo cp ~/dotfiles/bin/pragmatapro.ttf /usr/share/fonts/
-        fc-cache -fv
-      fi
+    @font = %w{
+      for f in inconsolata-g.otf pragmatapro.ttf; do
+        if [[ ! -e /usr/share/fonts/$f ]]; then
+          sudo p ~/dotfiles/bin/$f /usr/share/fonts/
+        fi
+      done
+      fc-cache -vf
     }
 
     configure(cfg)
@@ -107,9 +106,11 @@ module MacOS
       su admin -c "brew install caskroom/cask/brew-cask"
       su admin -c "brew update && brew upgrade brew-cask"
       su admin -c "brew cleanup && brew cask cleanup"
-      if [[ ! -e ~/Library/Fonts/inconsolata-g.otf ]]; then
-        cp ~/dotfiles/inconsolata-g.otf ~/Library/Fonts/
-      fi
+      for f in inconsolata-g.otf pragmatapro.ttf; do
+        if [[ ! -e ~/Library/Fonts/$f ]]; then
+          cp ~/dotfiles/bin/$f ~/Library/Fonts/
+        fi
+      done
     }
     (
       mod.pkgs << %w[
@@ -136,11 +137,13 @@ module FreeBSD
     mod.test << 'pkg info %s >/dev/null 2>&1'
     mod.inst << 'sudo pkg install -y %s'
     mod.post << %{
-      if [[ ! -e ~/.fonts/inconsolata-g.otf ]]; then
-        mkdir -p ~/.fonts
-        cp ~/dotfiles/inconsolata-g.otf ~/.fonts/
-        fc-cache -vf
-      fi
+      mkdir -p ~/.fonts
+      for f in inconsolata-g.otf pragmatapro.ttf; do
+        if [[ ! -e ~/.fonts/$f ]]; then
+          cp ~/dotfiles/bin/$f ~/.fonts/
+        fi
+      done
+      fc-cache -vf
       which glances || (cd /usr/ports/misc/py-glance && sudo make -DBATCH install clean)
     }
   end
@@ -158,7 +161,15 @@ module Arch
     ).flatten!
     mod.test << 'yaourt -Qs --nameonly %s >/dev/null 2>&1'
     mod.inst << 'sudo yaourt -Sy --noconfirm %s'
-    mod.post << 'sed -i \'s/usr\/share/usr\/lib/g\' ~/.i3/i3blocks.conf'
+    mod.post << %{
+      #sed -i 's/usr\/share/usr\/lib/g' ~/.i3/i3blocks.conf
+      for f in pragmatapro.ttf; do
+        if [[ ! -e /usr/share/fonts/$f ]]; then
+          sudo cp ~/dotfiles/bin/$f /usr/share/fonts/
+        fi
+      done
+      fc-cache -vf
+    }
   end
 end
 
@@ -241,6 +252,9 @@ class Installer
 
   def do
     puts("Hello #{@os.type}: #{@os.pkgs}: #{@os.dotf}: #{@os.conf}.")
+
+    # Runs pre-install for all OSs.
+    system('rm -rf ~/dotfiles/bin && unzip -P sekret ~/dotfiles/bin.zip -d ~/dotfiles')
 
     # Runs pre-install commands.
     system('bash', '-c', @os.prec) unless @os.prec.empty?
