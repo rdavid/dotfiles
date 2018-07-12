@@ -23,13 +23,20 @@ class Configuration
       opts.banner = 'Usage: make.rb [options].'
       opts.on('-g', '--[no-]xorg',
               'Install X packages or not.') { |o| @options[:xorg] = o }
+      opts.on('-p', '--pass pass',
+              'Password for binary archive.') { |o| @options[:pass] = o }
     end.parse!
 
     raise 'Xorg option is not given' if @options[:xorg].nil?
+    raise 'Pass option is not given' if @options[:pass].nil?
   end
 
   def xorg?
     @options[:xorg]
+  end
+
+  def pass
+    @options[:pass]
   end
 end
 
@@ -79,11 +86,17 @@ class OS
   end
 
   def configure(cfg)
+    return if cfg.pass.nil?
+
+    # Runs pre-install for all OSs.
+    system("rm -rf ~/dotfiles/bin && unzip -P #{cfg.pass} "\
+           '~/dotfiles/bin.zip -d ~/dotfiles')
+
     return unless cfg.xorg?
 
     # Extends with Xorg related packages.
     (@pkgs << %w[
-      conky dropbox feh firefox i3 i3blocks i3lock terminator
+      conky dropbox feh firefox i3 i3blocks i3lock okular terminator
     ]).flatten!
     (@dotf << %w[i3 xinitrc]).flatten!
     (@conf << %w[conky terminator]).flatten!
@@ -153,6 +166,16 @@ end
 module Arch
   def self.extended(mod)
     mod.type << 'Arch'
+    mod.prec << %{
+      if [[ ! `cat /etc/pacman.conf | grep archlinuxfr` ]]; then
+        echo "
+          [archlinuxfr]
+          SigLevel = Never
+          Server = http://repo.archlinux.fr/$arch
+        " | sudo tee -a /etc/pacman.conf
+      fi
+      yaourt -Syauu --noconfirm
+    }
     (
       mod.pkgs << %w[
         fortune-mod fzf glances lolcat pry ttf-inconsolata ttf-inconsolata-g
@@ -253,9 +276,6 @@ class Installer
   def do
     puts("Hello #{@os.type}: #{@os.pkgs}: #{@os.dotf}: #{@os.conf}.")
 
-    # Runs pre-install for all OSs.
-    system('rm -rf ~/dotfiles/bin && unzip -P sekret ~/dotfiles/bin.zip -d ~/dotfiles')
-
     # Runs pre-install commands.
     system('bash', '-c', @os.prec) unless @os.prec.empty?
 
@@ -348,7 +368,7 @@ class Installer
     %w[gtop].each do |p|
       system("npm list -g #{p}")
       next unless $CHILD_STATUS.exitstatus
-      system("sudo npm install #{p}")
+      system("npm install #{p}")
       puts("Unable to install #{p}.") unless $CHILD_STATUS.exitstatus > 0
     end
 
