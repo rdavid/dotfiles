@@ -73,7 +73,7 @@ class OS
     # List of files/folders to symlink in ~/.config.
     @conf = %w[mc]
 
-    @font = %w{
+    @font = %{
       for f in inconsolata-g.otf pragmatapro.ttf; do
         if [[ ! -e /usr/share/fonts/$f ]]; then
           sudo p ~/dotfiles/bin/$f /usr/share/fonts/
