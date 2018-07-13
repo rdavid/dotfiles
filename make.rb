@@ -116,9 +116,9 @@ module MacOS
       else
         ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
       fi
-      su admin -c "brew install caskroom/cask/brew-cask"
-      su admin -c "brew update && brew upgrade brew-cask"
-      su admin -c "brew cleanup && brew cask cleanup"
+      brew install caskroom/cask/brew-cask
+      brew update && brew upgrade brew-cask
+      brew cleanup && brew cask cleanup
       for f in inconsolata-g.otf pragmatapro.ttf; do
         if [[ ! -e ~/Library/Fonts/$f ]]; then
           cp ~/dotfiles/bin/$f ~/Library/Fonts/
@@ -132,8 +132,8 @@ module MacOS
       ]
     ).flatten!
     mod.test << 'brew ls --versions %s >/dev/null 2>&1'
-    mod.inst << 'su admin -c "brew install %s"'
-    mod.post << 'su admin -c "sudo easy_install pip"'
+    mod.inst << 'brew install %s'
+    mod.post << 'sudo easy_install pip'
   end
 end
 
