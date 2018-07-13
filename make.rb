@@ -76,7 +76,7 @@ class OS
     @font = %{
       for f in inconsolata-g.otf pragmatapro.ttf; do
         if [[ ! -e /usr/share/fonts/$f ]]; then
-          sudo p ~/dotfiles/bin/$f /usr/share/fonts/
+          sudo cp ~/dotfiles/bin/$f /usr/share/fonts/
         fi
       done
       fc-cache -vf
@@ -215,7 +215,15 @@ module Debian
     ).flatten!
     mod.test << 'dpkg -l %s >/dev/null 2>&1'
     mod.inst << 'sudo apt-get -y install %s'
-    mod.post << mod.font
+    mod.post << %{
+      mkdir -p ~/.fonts
+      for f in inconsolata-g.otf pragmatapro.ttf; do
+        if [[ ! -e ~/.fonts/$f ]]; then
+          cp ~/dotfiles/bin/$f ~/.fonts/
+        fi
+      done
+      fc-cache -vf
+    }
   end
 end
 
