@@ -62,9 +62,8 @@ class OS
 
     # Packages without Xorg to install.
     @pkgs = %w[
-      atop cmatrix cmus cowsay curl ffmpeg figlet hollywood
-      htop imagemagick mc most ncdu npm python scrot tmux vim wget
-      zsh zsh-syntax-highlighting
+      atop cmatrix cmus cowsay curl ffmpeg figlet htop imagemagick mc most ncdu
+      npm python scrot tmux vim wget zsh zsh-syntax-highlighting
     ]
 
     # List of files/folders to symlink in homedir.
@@ -74,9 +73,10 @@ class OS
     @conf = %w[mc]
 
     @font = %{
+      mkdir -p ~/.fonts
       for f in inconsolata-g.otf pragmatapro.ttf; do
-        if [[ ! -e /usr/share/fonts/$f ]]; then
-          sudo cp ~/dotfiles/bin/$f /usr/share/fonts/
+        if [[ ! -e ~/.fonts/$f ]]; then
+          ln -s ~/dotfiles/bin/$f ~/.fonts
         fi
       done
       fc-cache -vf
@@ -149,14 +149,7 @@ module FreeBSD
     ).flatten!
     mod.test << 'pkg info %s >/dev/null 2>&1'
     mod.inst << 'sudo pkg install -y %s'
-    mod.post << %{
-      mkdir -p ~/.fonts
-      for f in inconsolata-g.otf pragmatapro.ttf; do
-        if [[ ! -e ~/.fonts/$f ]]; then
-          cp ~/dotfiles/bin/$f ~/.fonts/
-        fi
-      done
-      fc-cache -vf
+    mod.post << mod.font << %{
       which glances || (cd /usr/ports/misc/py-glance && sudo make -DBATCH install clean)
     }
   end
@@ -173,6 +166,7 @@ module Arch
           SigLevel = Never
           Server = http://repo.archlinux.fr/$arch
         " | sudo tee -a /etc/pacman.conf
+        sudo pacman -Sy yaourt --noconfirm
       fi
       yaourt -Syauu --noconfirm
     }
@@ -183,15 +177,9 @@ module Arch
       ]
     ).flatten!
     mod.test << 'yaourt -Qs --nameonly %s >/dev/null 2>&1'
-    mod.inst << 'sudo yaourt -Sy --noconfirm %s'
-    mod.post << %{
+    mod.inst << 'yaourt -Sy --noconfirm %s'
+    mod.post << mod.font << %{
       #sed -i 's/usr\/share/usr\/lib/g' ~/.i3/i3blocks.conf
-      for f in pragmatapro.ttf; do
-        if [[ ! -e /usr/share/fonts/$f ]]; then
-          sudo cp ~/dotfiles/bin/$f /usr/share/fonts/
-        fi
-      done
-      fc-cache -vf
     }
   end
 end
@@ -201,10 +189,8 @@ module Debian
   def self.extended(mod)
     mod.type << 'Debian'
     mod.prec << %{
-      sudo apt-get install software-properties-common
-      sudo apt-add-repository ppa:hollywood/ppa
-      sudo apt-get update
-      sudo apt-get dist-upgrade
+      sudo apt-get -y update
+      sudo apt-get -y dist-upgrade
       curl -sL https://deb.nodesource.com/setup_9.x | sudo -E bash -
     }
     (
@@ -215,15 +201,7 @@ module Debian
     ).flatten!
     mod.test << 'dpkg -l %s >/dev/null 2>&1'
     mod.inst << 'sudo apt-get -y install %s'
-    mod.post << %{
-      mkdir -p ~/.fonts
-      for f in inconsolata-g.otf pragmatapro.ttf; do
-        if [[ ! -e ~/.fonts/$f ]]; then
-          cp ~/dotfiles/bin/$f ~/.fonts/
-        fi
-      done
-      fc-cache -vf
-    }
+    mod.post << mod.font
   end
 end
 
