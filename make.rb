@@ -116,8 +116,7 @@ module MacOS
       else
         ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
       fi
-      brew install caskroom/cask/brew-cask
-      brew update && brew upgrade brew-cask
+      brew cask upgrade
       brew cleanup && brew cask cleanup
       for f in inconsolata-g.otf pragmatapro.ttf; do
         if [[ ! -e ~/Library/Fonts/$f ]]; then
@@ -127,12 +126,13 @@ module MacOS
     }
     (
       mod.pkgs << %w[
-        fonts-inconsolata fonts-font-awesome fortune glances lolcat pry
-        youtube-dl
+        docker dropbox fonts-inconsolata firefox fonts-font-awesome fortune
+        glances google-chrome iterm2 keepassxc lolcat pry sublime-text
+        virtualbox vox youtube-dl
       ]
     ).flatten!
     mod.test << 'brew ls --versions %s >/dev/null 2>&1'
-    mod.inst << 'brew install %s'
+    mod.inst << 'brew install %s || brew cask install %s'
     mod.post << 'sudo easy_install pip'
   end
 end
@@ -273,7 +273,7 @@ class Installer
       # Installs new packages.
       if $CHILD_STATUS.exitstatus > 0
         puts("Install: #{p}.")
-        system(@os.inst % p)
+        system(@os.inst.gsub('%s', p))
       else
         puts("#{p} is already installed.")
       end
