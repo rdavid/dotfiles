@@ -38,7 +38,7 @@ for pkg in $pkgs; do
       sudo apt-get -y install $pkg 
     fi
   elif [[ $platform == 'Darwin' ]]; then
-    su admin -c "brew install $pkg"
+    brew cask install $pkg
   elif [[ $platform == 'FreeBSD' ]]; then
     sudo pkg install $pkg devel/ruby-gems
   fi
@@ -48,7 +48,12 @@ done
 gems="os git"
 for g in $gems; do
   if ! `gem list -i $g`; then
-    gem install $g
+    platform=$(uname);
+    if [[ $platform == 'Darwin' ]]; then
+      sudo gem install $g
+    else
+      gem install $g
+    fi
     echo "Gem $g is installed."
   else
     echo "Gem $g is already installed."
