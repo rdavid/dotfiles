@@ -172,8 +172,8 @@ module Arch
     }
     (
       mod.pkgs << %w[
-        fortune-mod fzf glances lolcat pry ttf-inconsolata ttf-inconsolata-g
-        ttf-font-awesome youtube-dl
+        fortune-mod fzf glances lolcat python-pip ruby-pry ttf-inconsolata
+        ttf-inconsolata-g ttf-font-awesome youtube-dl
       ]
     ).flatten!
     mod.test << 'yaourt -Qs --nameonly %s >/dev/null 2>&1'
@@ -293,9 +293,11 @@ class Installer
         puts("mv #{src}->#{dst}.")
         FileUtils.mv(src, dst)
       end
-
       FileUtils.ln_s(File.join(@ndir, f), src, force: true)
     end
+
+    # Prevents mc link error.
+    FileUtils.mkdir_p(File.join(Dir.home, '.config'))
 
     # Handles ~/.config in similar way.
     FileUtils.mkdir_p(File.join(@odir, '.config'))
@@ -316,7 +318,7 @@ class Installer
     # Sets the default shell to zsh if it isn't currently set to zsh.
     sh = ENV['SHELL']
     unless sh.eql? `which zsh`.strip
-      system('bash', '-c', 'sudo chsh -s $(which zsh)')
+      system('bash', '-c', 'chsh -s $(which zsh)')
       puts("Unable to switch #{sh} to zsh.") unless $CHILD_STATUS.exitstatus > 0
     end
 
