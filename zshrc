@@ -55,13 +55,15 @@ alias vpn='sudo openvpn --config ~/app/dat/David_Rabkin@vpn.safe-t.com.ovpn'
 # Changes last directory of mc into shell.
 alias mc='. /usr/lib/mc/mc-wrapper.sh'
 
-#Starts X.
+# Starts X if installed.
 if [[ ! $DISPLAY && $XDG_VTNR -eq 1 ]]; then
-  exec startx
+  if [[ `which startx` ]]; then
+    exec startx
+  fi
 fi
 
 # Starts tmux.
-if [[ "$TERM" != "screen" ]] && 
+if [[ "$TERM" != "screen" ]] &&
    [[ -z "$TMUX" ]] &&
    ! test tmux has-session -t main 2>/dev/null; then
 
