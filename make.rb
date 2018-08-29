@@ -127,8 +127,8 @@ module MacOS
     (
       mod.pkgs << %w[
         docker dropbox fonts-inconsolata firefox fonts-font-awesome fortune
-        glances google-chrome iterm2 keepassxc lolcat pry sublime-text
-        virtualbox vox youtube-dl
+        glances google-chrome iterm2 keepassxc keepingyouawake lolcat pry
+        sublime-text virtualbox vox youtube-dl
       ]
     ).flatten!
     mod.test << 'brew ls --versions %s >/dev/null 2>&1'
