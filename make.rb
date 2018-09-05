@@ -172,8 +172,8 @@ module Arch
     }
     (
       mod.pkgs << %w[
-        fortune-mod fzf glances lolcat python-pip ruby-pry ttf-inconsolata
-        ttf-inconsolata-g ttf-font-awesome youtube-dl
+        alsa-utils fortune-mod fzf glances lolcat python-pip ruby-pry
+        ttf-inconsolata ttf-inconsolata-g ttf-font-awesome youtube-dl
       ]
     ).flatten!
     mod.test << 'yaourt -Qs --nameonly %s >/dev/null 2>&1'
