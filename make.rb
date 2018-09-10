@@ -127,7 +127,7 @@ module MacOS
     (
       mod.pkgs << %w[
         docker dropbox fonts-inconsolata firefox fonts-font-awesome fortune
-        glances google-chrome iterm2 keepassxc keepingyouawake lolcat pry
+        glances google-chrome iterm2 keepassxc keepingyouawake lolcat nmap pry
         sublime-text virtualbox vox youtube-dl
       ]
     ).flatten!
