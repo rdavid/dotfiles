@@ -128,7 +128,8 @@ module MacOS
       mod.pkgs << %w[
         docker dropbox fonts-inconsolata firefox fonts-font-awesome fortune
         glances google-chrome iterm2 keepassxc keepingyouawake lolcat nmap pry
-        sublime-text telegram tunnelblick virtualbox vox youtube-dl
+        speedtest-cli sublime-text telegram tunnelblick virtualbox vox
+        youtube-dl
       ]
     ).flatten!
     mod.test << 'brew ls --versions %s >/dev/null 2>&1'
@@ -144,7 +145,7 @@ module FreeBSD
     (
       mod.pkgs << %w[
         inconsolata-ttf font-awesome fortune-mod-freebsd-classic py27-pip
-        rubygem-pry-rails rubygem-lolcat youtube_dl
+        rubygem-pry-rails rubygem-lolcat py27-speedtest-cli youtube_dl
       ]
     ).flatten!
     mod.test << 'pkg info %s >/dev/null 2>&1'
@@ -173,7 +174,8 @@ module Arch
     (
       mod.pkgs << %w[
         alsa-utils fortune-mod fzf glances lolcat python-pip ruby-pry
-        ttf-inconsolata ttf-inconsolata-g ttf-font-awesome youtube-dl
+        speedtest-cli ttf-inconsolata ttf-inconsolata-g ttf-font-awesome
+        youtube-dl
       ]
     ).flatten!
     mod.test << 'yaourt -Qs --nameonly %s >/dev/null 2>&1'
@@ -196,7 +198,7 @@ module Debian
     (
       mod.pkgs << %w[
         apcalc byobu fonts-inconsolata fonts-font-awesome fortune glances lolcat
-        pry python-pip youtube-dl
+        pry python-pip speedtest-cli youtube-dl
       ]
     ).flatten!
     mod.test << 'dpkg -l %s >/dev/null 2>&1'
@@ -212,7 +214,7 @@ module RedHat
     (
       mod.pkgs << %w[
         inconsolata-fonts fontawesome-fonts fortune glances lolcat pry
-        youtube-dl
+        speedtest-cli youtube-dl
       ]
     ).flatten!
     mod.test << 'yum list installed %s >/dev/null 2>&1'
@@ -228,7 +230,7 @@ module Alpine
     (
       mod.pkgs << %w[
         fonts-inconsolata fonts-font-awesome fortune glances lolcat py-pip
-        pry youtube-dl
+        pry speedtest-cli youtube-dl
       ]
     ).flatten!
     mod.test << 'apk info %s >/dev/null 2>&1'
