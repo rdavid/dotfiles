@@ -1,4 +1,4 @@
-#!/usr/bin/env bash 
+#!/usr/bin/env bash
 # transcode.sh
 
 # Calculates duration time for report.
@@ -13,16 +13,14 @@ duration()
 
 if [ 0 -eq $# ]; then
   echo "transcode.sh <file name>"
-  exit 0 
+  exit 0
 fi
 
 if [ $1 = "scan" ]; then
   transcode-video --scan $2
-  exit 0 
+  exit 0
 fi
 
-#declare -a AUD=( 2 1 1 )
-#declare -a SUB=( 1 1 1 ) 
 declare -a AUD=( $(for i in {1..88}; do echo 3; done) )
 declare -a SUB=( $(for i in {1..88}; do echo 2; done) )
 declare -a FIL=( "$@" )
@@ -57,23 +55,23 @@ BEG="$(date +%s)"
 
 for (( i=0; i < ${#FIL[@]}; i++ ))
 do
-  #transcode-video --no-log \
-  #                --m4v \
-  #                --main-audio ${AUD[$i]} \
-  #                --burn-subtitle ${SUB[$i]} \
-  #                --preset veryslow \
-  #                --output /home/david/ ${FIL[$i]}
-
-  #transcode-video --no-log \
-  #                --m4v \
-  #                --main-audio ${AUD[$i]} \
-  #                --preset veryslow \
-  #                --output /home/david/ ${FIL[$i]}
-
   transcode-video --no-log \
                   --m4v \
+                  --main-audio ${AUD[$i]} \
+                  --burn-subtitle ${SUB[$i]} \
                   --preset veryslow \
                   --output /home/david/ ${FIL[$i]}
+
+  #transcode-video --no-log \
+  #                --m4v \
+  #                --main-audio ${AUD[$i]} \
+  #                --preset veryslow \
+  #                --output /home/david/ ${FIL[$i]}
+
+  #transcode-video --no-log \
+  #                --m4v \
+  #                --preset veryslow \
+  #                --output /home/david/ ${FIL[$i]}
 
   #transcode-video --title 3 \
   #                --no-log \
