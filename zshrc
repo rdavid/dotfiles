@@ -51,6 +51,11 @@ alias src-tmux='tmux source-file ~/.tmux.conf'
 alias vi='vim'
 alias h='history'
 alias vpn='sudo openvpn --config ~/app/dat/David_Rabkin@vpn.safe-t.com.ovpn'
+alias untar='tar -zxvf'
+alias speed='speedtest-cli --server 2406 --simple'
+alias ipe='curl ipinfo.io/ip'
+alias ipi='ipconfig getifaddr en0'
+alias c='clear'
 
 # Changes last directory of mc into shell.
 alias mc='. /usr/lib/mc/mc-wrapper.sh'

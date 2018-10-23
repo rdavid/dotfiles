@@ -40,7 +40,12 @@ export LS_COLORS='no=00:fi=00:di=01;34:ln=01;36:pi=40;33:so=01;35:do=01;35:bd=40
 alias grep='grep --color=auto'
 alias fgrep='fgrep --color=auto'
 alias egrep='egrep --color=auto'
-alias h="history"
+alias h='history'
+alias untar='tar -zxvf'
+alias speed='speedtest-cli --server 2406 --simple'
+alias ipe='curl ipinfo.io/ip'
+alias ipi='ipconfig getifaddr en0'
+alias c='clear'
 
 # Make vim the default editor.
 export EDITOR='vim';
@@ -92,8 +97,3 @@ function fs() {
     du $arg .[^.]* ./*;
   fi;
 }
-
-export http_proxy=''
-export https_proxy=''
-export ftp_proxy=''
-export socks_proxy=''
