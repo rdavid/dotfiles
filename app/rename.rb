@@ -28,14 +28,79 @@ class Configuration
   end
 end
 
+class Action
+  def do(_)
+    raise 'Undefined method Action.do is called.'
+  end
+  def name
+    raise 'Undefined method Action.name is called.'
+  end
+end
+
+class DummyAction < Action
+  def do(src)
+    src
+  end
+  def name
+    'dummy'
+  end
+end
+
+class DowncaseAction < Action
+  def do(src)
+    src.downcase
+  end
+  def name
+    'downcase'
+  end
+end
+
+class ReplacePointAction < Action
+  def do(src)
+    dst = ''
+    File.basename(src, ".*").each_char { |s| dst << (s == '.' ? '-' : s) }
+    dst << File.extname(src)
+    dst
+  end
+  def name
+    'replace-point'
+  end
+end
+
+class ReplaceAction < Action
+  def do(src)
+    dst = ''
+    sym = ['_', '%', '$']
+    src.each_char { |s| dst << (sym.include?(s) ? '-' : s) }
+    dst
+  end
+  def name
+    'replace'
+  end
+end
+
 class Renamer
   def initialize
     @dir = Configuration.new.dir?
+    @act = [
+      DummyAction.new,
+      DowncaseAction.new,
+      ReplacePointAction.new
+      ReplaceAction.new,
+    ]
   end
 
   def do
-    files = Dir["#{@dir}/*"]
-    puts("Renames files at #{@dir}: #{files}.")
+    str = ''
+    @act.each { |a| str << a.name << ', ' }
+    str = str[0..-3]
+    puts("Renames files at #{@dir} with #{str}.")
+    Dir["#{@dir}/*"].each { |f|
+      t = File.basename(f)
+      @act.each { |a| t = a.do(t) }
+      n = "#{File.dirname(f)}/#{t}"
+      puts("Renames #{f} to #{n}.")
+    }
   end
 end
 
