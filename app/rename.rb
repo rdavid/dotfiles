@@ -70,12 +70,32 @@ end
 class ReplaceAction < Action
   def do(src)
     dst = ''
-    sym = ['_', '%', '$']
+    sym = ' (){}.,~\'![]_#@=“”`—’+;·‡&«»$'.chars
+    sym += ['---', '--']
     src.each_char { |s| dst << (sym.include?(s) ? '-' : s) }
     dst
   end
   def name
     'replace'
+  end
+end
+
+class AndAction < Action
+  def do(src)
+    src.gsub('-&-', '-and-')
+  end
+  def name
+    'and'
+  end
+end
+
+class TrimAction < Action
+  def do(src)
+    #Something like src.gsub('-', '')
+    src
+  end
+  def name
+    'and'
   end
 end
 
@@ -87,6 +107,8 @@ class Renamer
       DowncaseAction.new,
       ReplacePointAction.new
       ReplaceAction.new,
+      AndAction.new,
+      TrimAction.new
     ]
   end
 
