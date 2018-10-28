@@ -1,12 +1,12 @@
-#!/usr/bin/env sh
+#!/bin/sh
 # bak.sh <arc|satashare>
 
 LOG="/tmp/bak.log"
 LCK="/tmp/$1.lck"
 SRC="/home/david/ds-$1/"
-DST="/media/usb-$1/bak/bak-$1"
+DST="/media/usb-$1/bak-$1"
 
-log()
+log() 
 {
   date +"%Y%m%d-%H:%M:%S $*" | tee -a $LOG
 }
@@ -37,10 +37,11 @@ echo "---------- $(date +"%Y%m%d") ----------" | tee -a $LOG
 log "Start $SRC->$DST."
 
 rdiff-backup --print-statistics       \
-             --terminal-verbosity 4   \
-             --preserve-numerical-ids \
-             $SRC $DST \
-             2>&1 | tee -a $LOG
+	     --terminal-verbosity 4   \
+	     --preserve-numerical-ids \
+	     --force \
+	     $SRC $DST \
+	     2>&1 | tee -a $LOG
 
 rm -f $LCK
 
