@@ -1,5 +1,9 @@
-#!/usr/bin/env bash
+#!/usr/local/bin/bash
 # transcode.sh
+
+declare -a AUD=( $(for i in {1..1}; do echo 14; done) )
+declare -a SUB=( $(for i in {1..1}; do echo 4; done) )
+declare -a FIL=( "$@" )
 
 # Calculates duration time for report.
 duration()
@@ -13,17 +17,13 @@ duration()
 
 if [ 0 -eq $# ]; then
   echo "transcode.sh <file name>"
-  exit 0
+  exit 0 
 fi
 
 if [ $1 = "scan" ]; then
   transcode-video --scan $2
-  exit 0
+  exit 0 
 fi
-
-declare -a AUD=( $(for i in {1..88}; do echo 3; done) )
-declare -a SUB=( $(for i in {1..88}; do echo 2; done) )
-declare -a FIL=( "$@" )
 
 if [ ${#AUD[@]} -ne ${#SUB[@]} ]; then
   echo "Audio and subtitles arrays don't have same size."
@@ -62,28 +62,34 @@ do
                   --preset veryslow \
                   --output /home/david/ ${FIL[$i]}
 
-  #transcode-video --no-log \
-  #                --m4v \
-  #                --main-audio ${AUD[$i]} \
-  #                --preset veryslow \
-  #                --output /home/david/ ${FIL[$i]}
+#  transcode-video --no-log \
+#                  --m4v \
+#                  --main-audio ${AUD[$i]} \
+#                  --preset veryslow \
+#                  --output /home/david/ ${FIL[$i]}
 
-  #transcode-video --no-log \
-  #                --m4v \
-  #                --preset veryslow \
-  #                --output /home/david/ ${FIL[$i]}
+#  transcode-video --no-log \
+#                  --m4v \
+#                  --preset veryslow \
+#                  --output /home/david/ ${FIL[$i]}
 
-  #transcode-video --title 3 \
-  #                --no-log \
-  #                --m4v \
-  #                --main-audio $AUD \
-  #                --preset veryslow \
-  #                --output /home/david/ "$file"
+#  transcode-video --title 1 \
+#                  --no-log \
+#                  --m4v \
+#                  --main-audio ${AUD[$i]} \
+#                  --burn-subtitle ${SUB[$i]} \
+#                  --preset veryslow \
+#                  --output /home/david/ ${FIL[$i]}
 
-  #transcode-video --no-log --m4v --main-audio $AUD --add-srt "${file}.srt" --preset veryslow --output /home/david/ "$file"
+#  transcode-video --no-log \
+#                  --m4v \
+#                  --main-audio $AUD \
+#                  --preset veryslow \
+#                  --add-srt \"${FIL[$i]}.srt\"
+#                  --add-srt treme-s02/treme-s02e01.srt \
+#                  --output /home/david/ "${FIL[$i]}"
 done
 
-cp /home/david/*.m4v /home/david/ds-box/ibx/
-rm /home/david/*.m4v
+cp /home/david/*.m4v /home/david/ds-box/ibx/ && rm /home/david/*.m4v
 
 echo "Done in `duration $BEG`."
