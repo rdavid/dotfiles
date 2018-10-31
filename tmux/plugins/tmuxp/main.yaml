@@ -1,22 +1,17 @@
 session_name: main
 start_directory: $HOME
-#shell_command_before: clear
 windows:
   - window_name: mon
     layout: tiled
     panes:
       - glances
-  - window_name: root
+  - window_name: su
     layout: tiled
     panes:
-      - exit
-      - exit
-      - htop
+      - sudo su
       - sudo su
   - window_name: main
     layout: tiled
     panes:
-      - exit
-      - exit
-      -
-      -
+      - pwd
+      - pwd

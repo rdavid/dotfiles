@@ -55,7 +55,7 @@ class DowncaseAction < Action
   end
 end
 
-class ReplacePointAction < Action
+class PointAction < Action
   def do(src)
     dst = ''
     File.basename(src, ".*").each_char { |s| dst << (s == '.' ? '-' : s) }
@@ -63,20 +63,7 @@ class ReplacePointAction < Action
     dst
   end
   def name
-    'replace-point'
-  end
-end
-
-class ReplaceAction < Action
-  def do(src)
-    dst = ''
-    sym = ' (){}.,~\'![]_#@=“”`—’+;·‡&«»$'.chars
-    sym += ['---', '--']
-    src.each_char { |s| dst << (sym.include?(s) ? '-' : s) }
-    dst
-  end
-  def name
-    'replace'
+    'point'
   end
 end
 
@@ -89,13 +76,27 @@ class AndAction < Action
   end
 end
 
+class SingleAction < Action
+  def do(src)
+    dst = ''
+    # All special characters without point (.).
+    sym = ' (){},~\'![]_#@=“”`—’+;·‡&«»$%'.chars
+    sym += ['---', '--']
+    src.each_char { |s| dst << (sym.include?(s) ? '-' : s) }
+    dst
+  end
+  def name
+    'single'
+  end
+end
+
 class TrimAction < Action
   def do(src)
     #Something like src.gsub('-', '')
     src
   end
   def name
-    'and'
+    'trim'
   end
 end
 
@@ -105,9 +106,9 @@ class Renamer
     @act = [
       DummyAction.new,
       DowncaseAction.new,
-      ReplacePointAction.new
-      ReplaceAction.new,
+      PointAction.new,
       AndAction.new,
+      SingleAction.new,
       TrimAction.new
     ]
   end
