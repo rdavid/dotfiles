@@ -23,7 +23,7 @@ class Configuration
     raise 'Directory option is not given' if @options[:dir].nil?
   end
 
-  def dir?
+  def dir
     @options[:dir]
   end
 end
@@ -37,15 +37,6 @@ class Action
   end
 end
 
-class DummyAction < Action
-  def do(src)
-    src
-  end
-  def name
-    'dummy'
-  end
-end
-
 class DowncaseAction < Action
   def do(src)
     src.downcase
@@ -56,10 +47,19 @@ class DowncaseAction < Action
 end
 
 class PointAction < Action
+  def initialize(dir)
+    @dir = dir
+  end
   def do(src)
+    if File.file?(File.join(@dir, src))
+      replace(File.basename(src, ".*")) << File.extname(src)
+    else
+      replace(src)
+    end
+  end
+  def replace(src)
     dst = ''
-    File.basename(src, ".*").each_char { |s| dst << (s == '.' ? '-' : s) }
-    dst << File.extname(src)
+    src.each_char { |s| dst << (s == '.' ? '-' : s) }
     dst
   end
   def name
@@ -67,33 +67,41 @@ class PointAction < Action
   end
 end
 
-class AndAction < Action
+class CharAction < Action
+  def initialize
+    # All special characters without point (.) and and (&).
+    @sym = ' (){},~\'![]_#@=“”`—’+;·‡«»$%'.chars
+  end
   def do(src)
-    src.gsub('-&-', '-and-')
+    dst = src.chars
+    dst.map! { |s| s = (@sym.include?(s) ? '-' : s) }
+    dst.join
   end
   def name
-    'and'
+    'char'
   end
 end
 
-class SingleAction < Action
+class StrAction < Action
+  def initialize
+    @pat = [
+      { src: '&', dst: '-and-'},
+      { src: '---', dst: '-' },
+      { src: '--',  dst: '-' }
+    ]
+  end
   def do(src)
-    dst = ''
-    # All special characters without point (.).
-    sym = ' (){},~\'![]_#@=“”`—’+;·‡&«»$%'.chars
-    sym += ['---', '--']
-    src.each_char { |s| dst << (sym.include?(s) ? '-' : s) }
-    dst
+    @pat.each { |p| src.gsub!(p[:src], p[:dst]) }
+    src
   end
   def name
-    'single'
+    'str'
   end
 end
 
 class TrimAction < Action
   def do(src)
-    #Something like src.gsub('-', '')
-    src
+    src.gsub(/\A[-]+|[-]+\z/, '')
   end
   def name
     'trim'
@@ -102,13 +110,12 @@ end
 
 class Renamer
   def initialize
-    @dir = Configuration.new.dir?
+    @dir = Configuration.new.dir
     @act = [
-      DummyAction.new,
+      PointAction.new(@dir),
       DowncaseAction.new,
-      PointAction.new,
-      AndAction.new,
-      SingleAction.new,
+      CharAction.new,
+      StrAction.new,
       TrimAction.new
     ]
   end
@@ -117,12 +124,12 @@ class Renamer
     str = ''
     @act.each { |a| str << a.name << ', ' }
     str = str[0..-3]
-    puts("Renames files at #{@dir} with #{str}.")
+    puts("Renames files at #{@dir} with #{str}.\n")
     Dir["#{@dir}/*"].each { |f|
       t = File.basename(f)
       @act.each { |a| t = a.do(t) }
-      n = "#{File.dirname(f)}/#{t}"
-      puts("Renames #{f} to #{n}.")
+      n = "#{@dir}/#{t}"
+      puts("mv #{File.basename(f)} to #{File.basename(n)}.")
     }
   end
 end
