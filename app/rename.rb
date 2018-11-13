@@ -8,6 +8,7 @@
 # This script renames files in given directory by specific rules.
 require 'optparse'
 require 'fileutils'
+require 'terminal-table'
 
 # Handles input parameters.
 class Configuration
@@ -18,13 +19,17 @@ class Configuration
       opts.banner = 'Usage: rename.rb [options].'
       opts.on('-d', '--dir dir',
               'Directory with files to rename.') { |o| @options[:dir] = o }
+      opts.on('-a', '--action',
+              'Real renaming.') { |o| @options[:act] = o }
     end.parse!
 
     raise 'Directory option is not given' if @options[:dir].nil?
   end
-
   def dir
     @options[:dir]
+  end
+  def act?
+    @options[:act]
   end
 end
 
@@ -32,17 +37,11 @@ class Action
   def do(_)
     raise 'Undefined method Action.do is called.'
   end
-  def name
-    raise 'Undefined method Action.name is called.'
-  end
 end
 
 class DowncaseAction < Action
   def do(src)
     src.downcase
-  end
-  def name
-    'downcase'
   end
 end
 
@@ -58,12 +57,9 @@ class PointAction < Action
     end
   end
   def replace(src)
-    dst = ''
-    src.each_char { |s| dst << (s == '.' ? '-' : s) }
-    dst
-  end
-  def name
-    'point'
+    dst = src.chars
+    dst.map! { |s| s == '.' ? '-' : s }
+    dst.join
   end
 end
 
@@ -74,63 +70,86 @@ class CharAction < Action
   end
   def do(src)
     dst = src.chars
-    dst.map! { |s| s = (@sym.include?(s) ? '-' : s) }
+    dst.map! { |s| @sym.include?(s) ? '-' : s }
     dst.join
-  end
-  def name
-    'char'
   end
 end
 
-class StrAction < Action
+class RuToEnAction < Action
   def initialize
-    @pat = [
-      { src: '&', dst: '-and-'},
-      { src: '---', dst: '-' },
-      { src: '--',  dst: '-' }
-    ]
+    mu = {
+      ё: 'jo',
+      ж: 'zh',
+      ц: 'tz',
+      ч: 'ch',
+      ш: 'sh',
+      щ: 'szh',
+      ю: 'ju',
+      я: 'ya'
+    }
+    ru = 'абвгдезийклмнопрстуфхъыьэ'.chars
+    en = 'abvgdeziyklmnoprstufh y e'.chars
+    @dic = ru.zip(en).to_h.merge(mu)
   end
   def do(src)
-    @pat.each { |p| src.gsub!(p[:src], p[:dst]) }
-    src
-  end
-  def name
-    'str'
+    dst = ''
+    src.each_char { |c|
+      d = @dic[c]
+      case d
+      when nil
+        dst << c
+      when ' '
+        # no action
+      else
+        dst << d
+      end
+    }
+    dst
   end
 end
 
 class TrimAction < Action
   def do(src)
-    src.gsub(/\A[-]+|[-]+\z/, '')
-  end
-  def name
-    'trim'
+    src.gsub!('&', '-and-')
+    puts src
+    src.gsub!('----', '-')
+    puts src
+    src.gsub!('---', '-')
+    puts src
+    src.gsub!('--', '-')
+    puts src
+    src.gsub!(/\A[-]+|[-]+\z/, '')
+    puts src
+    src
   end
 end
 
 class Renamer
   def initialize
-    @dir = Configuration.new.dir
+    @cfg = Configuration.new
     @act = [
-      PointAction.new(@dir),
+      PointAction.new(@cfg.dir),
       DowncaseAction.new,
       CharAction.new,
-      StrAction.new,
+      RuToEnAction.new,
       TrimAction.new
     ]
   end
 
   def do
-    str = ''
-    @act.each { |a| str << a.name << ', ' }
-    str = str[0..-3]
-    puts("Renames files at #{@dir} with #{str}.\n")
-    Dir["#{@dir}/*"].each { |f|
-      t = File.basename(f)
+    row = []
+    Dir["#{@cfg.dir}/*"].each { |src|
+      t = File.basename(src)
       @act.each { |a| t = a.do(t) }
-      n = "#{@dir}/#{t}"
-      puts("mv #{File.basename(f)} to #{File.basename(n)}.")
+      dst = "#{@cfg.dir}/#{t}"
+      FileUtils.mv(src, dst) if @cfg.act?
+      row << [File.basename(src), File.basename(dst)]
     }
+    puts Terminal::Table.new(
+      title: (@cfg.act? ? 'real' : 'simulation') << ': ' << @cfg.dir,
+      headings: ['source', 'destination'],
+      rows: row
+    )
   end
 end
 

@@ -347,7 +347,10 @@ class Installer
     end
 
     # Installs Ruby packages.
-    %w[video_transcoding].each do |p|
+    %w[
+      video_transcoding
+      terminal-table
+    ].each do |p|
       chk = "gem list -i #{p}"
       next if `#{chk}`.strip.eql? 'true'
       system("gem install #{p}")
