@@ -23,6 +23,8 @@ class Configuration
               'Directory with files to rename.') { |o| @options[:dir] = o }
       opts.on('-a', '--action',
               'Real renaming.') { |o| @options[:act] = o }
+      opts.on('-r', '--recursive',
+              'Passes directories recursively.') { |o| @options[:rec] = o }
     end.parse!
 
     raise 'Directory option is not given.' if @options[:dir].nil?
@@ -33,6 +35,9 @@ class Configuration
   end
   def act?
     @options[:act]
+  end
+  def rec?
+    @options[:rec]
   end
 end
 
@@ -123,6 +128,10 @@ class TrimAction < Action
 end
 
 class Renamer
+  TBL_WIDTH = 79
+  STR_WIDTH = (TBL_WIDTH - 9) / 2
+  NME_LIMIT = 143  # Synology eCryptfs limitation.
+  PTH_LIMIT = 4096 # Linux limitation.
   def initialize
     @cfg = Configuration.new
   end
@@ -137,12 +146,15 @@ class Renamer
     ]
     row = []
     Dir["#{dir}/*"].each { |src|
-      do_dir(src) if File.directory?(src)
+      do_dir(src) if @cfg.rec? && File.directory?(src)
       t = File.basename(src)
       act.each { |a| t = a.do(t) }
       dst = "#{dir}/#{t}"
       FileUtils.mv(src, dst) if @cfg.act?
-      row << [File.basename(src), File.basename(dst)]
+      row << [
+        File.basename(src)[0..STR_WIDTH],
+        File.basename(dst)[0..STR_WIDTH]
+      ]
     }
     puts Terminal::Table.new(
       title: dir,
@@ -151,7 +163,7 @@ class Renamer
         { value: 'dst', alignment: :center }
       ],
       rows: row,
-      style: {width: 80}
+      style: {width: TBL_WIDTH}
     )
   end
   def do
