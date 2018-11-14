@@ -6,6 +6,8 @@
 # Copyright 2018 David Rabkin
 #
 # This script renames files in given directory by specific rules.
+require 'set'
+require 'colorize'
 require 'optparse'
 require 'fileutils'
 require 'terminal-table'
@@ -23,7 +25,8 @@ class Configuration
               'Real renaming.') { |o| @options[:act] = o }
     end.parse!
 
-    raise 'Directory option is not given' if @options[:dir].nil?
+    raise 'Directory option is not given.' if @options[:dir].nil?
+    raise "#{dir} is not a directory." unless File.directory?(dir)
   end
   def dir
     @options[:dir]
@@ -66,7 +69,7 @@ end
 class CharAction < Action
   def initialize
     # All special characters without point (.) and and (&).
-    @sym = ' (){},~\'![]_#@=“”`—’+;·‡«»$%'.chars
+    @sym = ' (){},~\'![]_#@=“”`—’+;·‡«»$%'.chars.to_set
   end
   def do(src)
     dst = src.chars
@@ -78,14 +81,15 @@ end
 class RuToEnAction < Action
   def initialize
     mu = {
-      ё: 'jo',
-      ж: 'zh',
-      ц: 'tz',
-      ч: 'ch',
-      ш: 'sh',
-      щ: 'szh',
-      ю: 'ju',
-      я: 'ya'
+      'ё' => 'jo',
+      'ж' => 'zh',
+      'ц' => 'tz',
+      'ч' => 'ch',
+      'ш' => 'sh',
+      'щ' => 'szh',
+      'ю' => 'ju',
+      'я' => 'ya',
+      '&' => '-and-'
     }
     ru = 'абвгдезийклмнопрстуфхъыьэ'.chars
     en = 'abvgdeziyklmnoprstufh y e'.chars
@@ -110,16 +114,10 @@ end
 
 class TrimAction < Action
   def do(src)
-    src.gsub!('&', '-and-')
-    puts src
-    src.gsub!('----', '-')
-    puts src
-    src.gsub!('---', '-')
-    puts src
-    src.gsub!('--', '-')
-    puts src
-    src.gsub!(/\A[-]+|[-]+\z/, '')
-    puts src
+    src.gsub!(/-+/, '-')
+    src.gsub!(/^-|-$/, '')
+    src.gsub!('-.', '.')
+    src.gsub!('.-', '.')
     src
   end
 end
@@ -127,29 +125,38 @@ end
 class Renamer
   def initialize
     @cfg = Configuration.new
-    @act = [
-      PointAction.new(@cfg.dir),
+  end
+  def do_dir(dir)
+    raise "#{dir} is not a directory." unless File.directory?(dir)
+    act = [
+      PointAction.new(dir),
       DowncaseAction.new,
       CharAction.new,
       RuToEnAction.new,
       TrimAction.new
     ]
-  end
-
-  def do
     row = []
-    Dir["#{@cfg.dir}/*"].each { |src|
+    Dir["#{dir}/*"].each { |src|
+      do_dir(src) if File.directory?(src)
       t = File.basename(src)
-      @act.each { |a| t = a.do(t) }
-      dst = "#{@cfg.dir}/#{t}"
+      act.each { |a| t = a.do(t) }
+      dst = "#{dir}/#{t}"
       FileUtils.mv(src, dst) if @cfg.act?
       row << [File.basename(src), File.basename(dst)]
     }
     puts Terminal::Table.new(
-      title: (@cfg.act? ? 'real' : 'simulation') << ': ' << @cfg.dir,
-      headings: ['source', 'destination'],
-      rows: row
+      title: dir,
+      headings: [
+        { value: 'src', alignment: :center },
+        { value: 'dst', alignment: :center }
+      ],
+      rows: row,
+      style: {width: 80}
     )
+  end
+  def do
+    do_dir(@cfg.dir)
+    puts "Done in #{@cfg.act? ? 'real' : 'simulation'} mode.".red
   end
 end
 
