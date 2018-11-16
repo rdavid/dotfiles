@@ -181,8 +181,7 @@ class Renamer
       CharAction.new,
       RuToEnAction.new,
       TrimAction.new,
-      TruncateAction.new(NME_LIMIT),
-      ExistenceAction.new(dir, NME_LIMIT)
+      TruncateAction.new(NME_LIMIT)
     ]
     row = []
     Dir["#{dir}/*"].each { |src|
@@ -190,8 +189,13 @@ class Renamer
       t = File.basename(src)
       act.each { |a| t = a.do(t) }
       dst = "#{dir}/#{t}"
-      raise "File path exceeds #{PTH_LIMIT}: #{dst}." if dst.length > PTH_LIMIT
-      FileUtils.mv(src, dst) if @cfg.act?
+      if (dst != src)
+        a = ExistenceAction.new(dir, NME_LIMIT)
+        t = a.do(t)
+        dst = "#{dir}/#{t}"
+        raise "File path exceeds #{PTH_LIMIT}: #{dst}." if dst.length > PTH_LIMIT
+        FileUtils.mv(src, dst) if @cfg.act?
+      end
       row << [
         File.basename(src)[0..STR_WIDTH],
         File.basename(dst)[0..STR_WIDTH]
