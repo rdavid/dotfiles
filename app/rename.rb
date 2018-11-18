@@ -168,8 +168,8 @@ class Renamer
   TBL_WIDTH = 79
   STR_WIDTH = (TBL_WIDTH - 9) / 2
   PTH_LIMIT = 4096
-  #NME_LIMIT = 143 # Synology eCryptfs limitation.
-  NME_LIMIT = 9 # Synology eCryptfs limitation.
+  NME_LIMIT = 143 # Synology eCryptfs limitation.
+  #NME_LIMIT = 9 # Synology eCryptfs limitation.
   def initialize
     @cfg = Configuration.new
     @sta = { moved: 0, unaltered: 0 }
