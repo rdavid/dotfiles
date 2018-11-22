@@ -152,9 +152,11 @@ class ExistenceAction < Action
     return src unless File.exist?(File.join(@dir, src))
     if (src.length == @lim)
       ext = File.extname(src)
-      src = src[0..@lim - ext.length - ITERATION.to_s.length + 1] << ext
+      src = src[0..@lim - ext.length - ITERATION.to_s.length + 1]
+      src << ext
     end
     nme = File.basename(src, '.*')
+    nme = '' if (nme.length == 1)
     ext = File.extname(src)
     0..ITERATION.times do |i|
       n = File.join(@dir, "#{nme}#{i}#{ext}")
@@ -169,7 +171,6 @@ class Renamer
   STR_WIDTH = (TBL_WIDTH - 9) / 2
   PTH_LIMIT = 4096
   NME_LIMIT = 143 # Synology eCryptfs limitation.
-  #NME_LIMIT = 9 # Synology eCryptfs limitation.
   def initialize
     @cfg = Configuration.new
     @sta = { moved: 0, unaltered: 0 }
