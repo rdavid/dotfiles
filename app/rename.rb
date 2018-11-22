@@ -1,7 +1,7 @@
 #!/usr/bin/env ruby
 # vim: tabstop=2 shiftwidth=2 expandtab textwidth=80 linebreak wrap
 #
-# make.rb
+# rename.rb
 #
 # Copyright 2018 David Rabkin
 #
@@ -25,6 +25,8 @@ class Configuration
               'Real renaming.') { |o| @options[:act] = o }
       opts.on('-r', '--recursive',
               'Passes directories recursively.') { |o| @options[:rec] = o }
+      opts.on('-l', '--limit',
+              'Limits file name length to eCryptfs.') { |o| @options[:lim] = o }
     end.parse!
 
     raise 'Directory option is not given.' if @options[:dir].nil?
@@ -38,6 +40,9 @@ class Configuration
   end
   def rec?
     @options[:rec]
+  end
+  def lim?
+    @options[:lim]
   end
 end
 
@@ -134,8 +139,11 @@ class TruncateAction < Action
   def do(src)
     return src unless src.length > @lim
     ext = File.extname(src)
-    raise "Extention exceeds #{@lim - 1}: #{src}." if ext.length >= @lim
-    src = src[0..@lim - ext.length - 1] << ext
+    if (ext.length >= @lim)
+      src = ext[0..@lim - 1]
+    else
+      src = src[0..@lim - 1 - ext.length] << ext
+    end
     src.gsub!(/-$/, '')
     src.gsub!('-.', '.')
     src
@@ -166,35 +174,59 @@ class ExistenceAction < Action
   end
 end
 
+class OmitAction < Action
+  def initialize(lim)
+    @lim = lim
+  end
+  def do(src)
+    return nil if src.length > @lim
+    src
+  end
+end
+
 class Renamer
   TBL_WIDTH = 79
   STR_WIDTH = (TBL_WIDTH - 9) / 2
   PTH_LIMIT = 4096
   NME_LIMIT = 143 # Synology eCryptfs limitation.
+  #NME_LIMIT = 10 # Synology eCryptfs limitation.
   def initialize
     @cfg = Configuration.new
     @sta = { moved: 0, unaltered: 0 }
   end
   def do_dir(dir)
     raise "No such directory: #{dir}." unless File.directory?(dir)
-    act = [
-      PointAction.new(dir),
-      DowncaseAction.new,
-      CharAction.new,
-      RuToEnAction.new,
-      TrimAction.new,
-      TruncateAction.new(NME_LIMIT)
-    ]
+    unless @cfg.lim?
+      act = [
+        PointAction.new(dir),
+        DowncaseAction.new,
+        CharAction.new,
+        RuToEnAction.new,
+        TrimAction.new,
+        TruncateAction.new(NME_LIMIT)
+      ]
+    else
+      act = [
+        OmitAction.new(NME_LIMIT),
+        TruncateAction.new(NME_LIMIT)
+      ]
+    end
     row = []
     exi = ExistenceAction.new(dir, NME_LIMIT)
-    Dir["#{dir}/*"].each { |src|
+    Dir.foreach(dir) { |src|
+      next if (src == '.' || src == '..')
+      src = File.join(dir, src)
       do_dir(src) if @cfg.rec? && File.directory?(src)
       t = File.basename(src)
-      act.each { |a| t = a.do(t) }
-      dst = "#{dir}/#{t}"
+      act.each { |a|
+        t = a.do(t)
+        break if t.nil?
+      }
+      next if t.nil?
+      dst = File.join(dir, t)
       if (dst != src)
         t = exi.do(t)
-        dst = "#{dir}/#{t}"
+        dst = File.join(dir, t)
         raise "File path exceeds #{PTH_LIMIT}: #{dst}." if dst.length > PTH_LIMIT
         FileUtils.mv(src, dst) if @cfg.act?
         @sta[:moved] += 1
