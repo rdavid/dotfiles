@@ -30,17 +30,14 @@ plugins=(archlinux battery brew catimg common-aliases compleat debian docker \
          pip python ruby sudo terminator tmux vi-mode web-search yarn z)
 
 # User configuration.
-export PATH="/opt/local/bin/:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/home/linuxbrew/.linuxbrew/bin"
-
+export PATH="/opt/local/bin/:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin"
+export PATH="/home/david/dotfiles/app:$PATH"
 export PATH="/home/linuxbrew/.linuxbrew/bin:$PATH"
 export MANPATH="/home/linuxbrew/.linuxbrew/share/man:$MANPATH"
 export INFOPATH="/home/linuxbrew/.linuxbrew/share/info:$INFOPATH"
 
 # Corrects work of tmuxp.
 export PATH="`python -m site --user-base`/bin":$PATH
-
-# Corrects work of fortune at Win10 Ubuntu.
-export PATH="/usr/games":$PATH
 
 . ~/dotfiles/app/z.sh
 
