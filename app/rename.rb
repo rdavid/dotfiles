@@ -184,7 +184,7 @@ class OmitAction < Action
 end
 
 class Renamer
-  TBL_WIDTH = 80
+  TBL_WIDTH = 79
   STR_WIDTH = (TBL_WIDTH - 9) / 2
   PTH_LIMIT = 4096
   NME_LIMIT = 143 # Synology eCryptfs limitation.
