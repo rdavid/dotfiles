@@ -185,6 +185,7 @@ end
 
 class Renamer
   TBL_WIDTH = 79
+  TTL_WIDTH = TBL_WIDTH - 4
   STR_WIDTH = (TBL_WIDTH - 9) / 2
   PTH_LIMIT = 4096
   NME_LIMIT = 143 # Synology eCryptfs limitation.
@@ -237,9 +238,9 @@ class Renamer
         File.basename(dst)[0..STR_WIDTH]
       ]
     }
-    #File.open('/tmp/1', 'w') { |file| file.write(row) }
+    File.open('/tmp/1', 'w') { |file| file.write(row) }
     puts Terminal::Table.new(
-      title: dir,
+      title: dir[-TTL_WIDTH..-1],
       headings: [
         { value: 'src', alignment: :center },
         { value: 'dst', alignment: :center }
