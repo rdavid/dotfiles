@@ -186,13 +186,18 @@ end
 class Renamer
   TBL_WIDTH = 79
   TTL_WIDTH = TBL_WIDTH - 4
-  STR_WIDTH = (TBL_WIDTH - 9) / 2
+  STR_WIDTH = (TBL_WIDTH - 7) / 2
   PTH_LIMIT = 4096
   NME_LIMIT = 143 # Synology eCryptfs limitation.
-  #NME_LIMIT = 10 # Synology eCryptfs limitation.
   def initialize
     @cfg = Configuration.new
     @sta = { moved: 0, unaltered: 0 }
+  end
+  def trim(src, lim)
+    return src if (src.length <= lim)
+    beg = fin = (lim - 2) / 2
+    beg -= 1 if lim.even?
+    "#{src[0..beg]..src[-fin..-1]}"
   end
   def do_dir(dir)
     raise "No such directory: #{dir}." unless File.directory?(dir)
@@ -217,16 +222,16 @@ class Renamer
       next if (src == '.' || src == '..')
       src = File.join(dir, src)
       do_dir(src) if @cfg.rec? && File.directory?(src)
-      t = File.basename(src)
-      act.each { |a|
-        t = a.do(t)
-        break if t.nil?
+      nme = File.basename(src)
+      act.each { |i|
+        nme = i.do(nme)
+        break if nme.nil?
       }
-      next if t.nil?
-      dst = File.join(dir, t)
+      next if nme.nil?
+      dst = File.join(dir, nme)
       if (dst != src)
-        t = exi.do(t)
-        dst = File.join(dir, t)
+        nme = exi.do(nme)
+        dst = File.join(dir, nme)
         raise "File path exceeds #{PTH_LIMIT}: #{dst}." if dst.length > PTH_LIMIT
         FileUtils.mv(src, dst) if @cfg.act?
         @sta[:moved] += 1
@@ -234,13 +239,12 @@ class Renamer
         @sta[:unaltered] += 1
       end
       row << [
-        File.basename(src)[0..STR_WIDTH],
-        File.basename(dst)[0..STR_WIDTH]
+        trim(File.basename(src), STR_WIDTH),
+        trim(File.basename(dst), STR_WIDTH)
       ]
     }
-    File.open('/tmp/1', 'w') { |file| file.write(row) }
     puts Terminal::Table.new(
-      title: dir[-TTL_WIDTH..-1],
+      title: trim(dir, TTL_WIDTH),
       headings: [
         { value: 'src', alignment: :center },
         { value: 'dst', alignment: :center }
