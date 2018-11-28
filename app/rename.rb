@@ -85,16 +85,14 @@ class PointAction < Action
   end
 
   def replace(src)
-    dst = src.chars
-    dst.map! { |s| s == '.' ? '-' : s }
-    dst.join
+    src.tr('.', '-')
   end
 end
 
 # All special symbols are replaced by minus.
 class CharAction < Action
   def initialize
-    # All special characters without point (.) and and (&).
+    # All special characters without 'point' (.) and 'and' (&).
     @sym = ' (){},~\'![]_#@=“”`—’+;·‡«»$%…'.chars.to_set
   end
 
@@ -144,7 +142,8 @@ end
 # Replaces user patter with minus.
 class PatternAction < Action
   def initialize(pat)
-    @pat = pat
+    # The action works after PointAction. All points are replaces with minus.
+    @pat = pat.tr('.', '-')
   end
 
   def act(src)
@@ -256,8 +255,8 @@ class Renamer
         ]
       else
         [
+          PointAction.new(dir),  # Should be the first.
           PatternAction.new(@cfg.pat),
-          PointAction.new(dir),
           DowncaseAction.new,
           CharAction.new,
           RuToEnAction.new,
