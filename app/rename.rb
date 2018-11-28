@@ -206,7 +206,7 @@ class ExistenceAction < Action
     nme = '' if nme.length == 1
     ext = File.extname(src)
     (0..ITERATION).each do |i|
-      n = File.join(@dir, "#{nme}#{i}#{ext}")
+      n = File.join(@dir, nme + i.to_s + ext)
       return n unless File.exist?(n)
     end
     raise "Unable to compose a new name: #{src}."

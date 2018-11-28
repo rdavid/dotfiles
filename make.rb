@@ -26,7 +26,6 @@ class Configuration
       opts.on('-p', '--pass pass',
               'Password for binary archive.') { |o| @options[:pass] = o }
     end.parse!
-
     raise 'Xorg option is not given' if @options[:xorg].nil?
     raise 'Pass option is not given' if @options[:pass].nil?
   end
@@ -81,7 +80,6 @@ class OS
       done
       fc-cache -vf
     }
-
     configure(cfg)
   end
 
@@ -91,7 +89,6 @@ class OS
     # Runs pre-install for all OSs.
     system("rm -rf ~/dotfiles/bin && unzip -P #{cfg.pass} "\
            '~/dotfiles/bin.zip -d ~/dotfiles')
-
     return unless cfg.xorg?
 
     # Extends with Xorg related packages.
@@ -248,7 +245,6 @@ class CurrentOS
     return Debian  if OS.linux? && File.file?('/etc/debian_version')
     return RedHat  if OS.linux? && File.file?('/etc/redhat-release')
     return Alpine  if OS.linux? && File.file?('/etc/alpine-release')
-
     raise 'Current OS is not supported.'
   end
 end
@@ -290,7 +286,6 @@ class Installer
     @os.dotf.each do |f|
       src = File.join(Dir.home, '.' + f)
       dst = File.join(@odir, '.' + f)
-
       if File.exist?(src) && !File.symlink?(src)
         puts("mv #{src}->#{dst}.")
         FileUtils.mv(src, dst)
@@ -306,15 +301,12 @@ class Installer
     @os.conf.each do |f|
       src = File.join(Dir.home, '.config', f)
       dst = File.join(@odir, '.config', f)
-
       if File.exist?(src) && !File.symlink?(src)
         puts("mv #{src}->#{dst}.")
         FileUtils.mv(src, dst)
       end
-
       FileUtils.ln_s(File.join(@ndir, f), src, force: true)
     end
-
     system('bash', '-c', @os.post) unless @os.post.empty?
 
     # Sets the default shell to zsh if it isn't currently set to zsh.
@@ -342,6 +334,7 @@ class Installer
     %w[s_tui tmuxp].each do |p|
       chk = "python -c \"help('modules');\" | grep #{p} | wc -l | xargs"
       next if `#{chk}`.strip.eql? '1'
+
       system("pip install --user #{p}")
       puts("Unable to install #{p}.") unless $CHILD_STATUS.exitstatus > 0
     end
@@ -353,6 +346,7 @@ class Installer
     ].each do |p|
       chk = "gem list -i #{p}"
       next if `#{chk}`.strip.eql? 'true'
+
       system("gem install #{p}")
       puts("Unable to install #{p}.") unless $CHILD_STATUS.exitstatus > 0
     end
@@ -361,10 +355,10 @@ class Installer
     %w[gtop].each do |p|
       system("npm list -g #{p}")
       next unless $CHILD_STATUS.exitstatus
+
       system("npm install #{p}")
       puts("Unable to install #{p}.") unless $CHILD_STATUS.exitstatus > 0
     end
-
     puts('Bye-bye.')
   end
 end
