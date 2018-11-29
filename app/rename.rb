@@ -143,11 +143,12 @@ end
 class PatternAction < Action
   def initialize(pat)
     # The action works after PointAction. All points are replaces with minus.
-    @pat = pat.tr('.', '-')
+    @pat = pat
+    @pat.tr!('.', '-') unless @pat.nil?
   end
 
   def act(src)
-    src.gsub!(@pat, '-') unless @pat.to_s.empty?
+    src.gsub!(@pat, '-') unless @pat.nil?
     src
   end
 end
