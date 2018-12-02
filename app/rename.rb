@@ -21,13 +21,15 @@ class Configuration
       opts.banner = 'Usage: rename.rb [options].'
       opts.on('-d', '--dir dir',
               'Directory with files to rename.') { |o| @options[:dir] = o }
-      opts.on('-p', '--pattern pat',
-              'String to remove from a name.') { |o| @options[:pat] = o }
-      opts.on('-a', '--action',
+      opts.on('-s', '--src src',
+              'A string to substitute from a name.') { |o| @options[:src] = o }
+      opts.on('-t', '--dst dst',
+              'A string to replace with in a name.') { |o| @options[:dst] = o }
+      opts.on('-a', '--act',
               'Real renaming.') { |o| @options[:act] = o }
-      opts.on('-r', '--recursive',
+      opts.on('-r', '--rec',
               'Passes directories recursively.') { |o| @options[:rec] = o }
-      opts.on('-l', '--limit',
+      opts.on('-l', '--lim',
               'Limits file name length to eCryptfs.') { |o| @options[:lim] = o }
     end.parse!
 
@@ -39,8 +41,12 @@ class Configuration
     @options[:dir]
   end
 
-  def pat
-    @options[:pat]
+  def src
+    @options[:src]
+  end
+
+  def dst
+    @options[:dst]
   end
 
   def act?
@@ -140,15 +146,16 @@ class RuToEnAction < Action
 end
 
 # Replaces user patter with minus.
-class PatternAction < Action
-  def initialize(pat)
+class SubstituteAction < Action
+  def initialize(src, dst)
     # The action works after PointAction. All points are replaces with minus.
-    @pat = pat
-    @pat.tr!('.', '-') unless @pat.nil?
+    @src = src
+    @src.tr!('.', '-') unless @src.nil?
+    @dst = dst.nil? ? '-' : dst.tr('.', '-')
   end
 
   def act(src)
-    src.gsub!(@pat, '-') unless @pat.nil?
+    src.gsub!(@src, @dst) unless @src.nil?
     src
   end
 end
@@ -256,8 +263,8 @@ class Renamer
         ]
       else
         [
-          PointAction.new(dir),  # Should be the first.
-          PatternAction.new(@cfg.pat),
+          PointAction.new(dir), # Should be the first.
+          SubstituteAction.new(@cfg.src, @cfg.dst),
           DowncaseAction.new,
           CharAction.new,
           RuToEnAction.new,
