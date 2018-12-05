@@ -1,4 +1,5 @@
 #!/usr/local/bin/zsh
+# vim: tabstop=2 shiftwidth=2 expandtab textwidth=80 linebreak wrap
 
 #for f in *.m4v
 for f in *.mp4

@@ -6,8 +6,8 @@
 # Copyright 2018 David Rabkin
 #
 # This script preparies ruby environment to run make.rb.
-
 # Installs needfull software.
+
 pkgs="ruby"
 for pkg in $pkgs; do
   # Tests to see if a package is installed.
