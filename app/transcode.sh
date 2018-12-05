@@ -1,4 +1,6 @@
 #!/usr/local/bin/bash
+# vim: tabstop=2 shiftwidth=2 expandtab textwidth=80 linebreak wrap
+#
 # transcode.sh
 #
 # Copyright 2016-2018 David Rabkin

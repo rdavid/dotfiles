@@ -31,6 +31,8 @@ class Configuration
               'Passes directories recursively.') { |o| @options[:rec] = o }
       opts.on('-l', '--lim',
               'Limits file name length to eCryptfs.') { |o| @options[:lim] = o }
+      opts.on('-w', '--wid wid',
+              'Width of the table presentation.') { |o| @options[:wid] = o }
     end.parse!
 
     raise 'Directory option is not given.' if @options[:dir].nil?
@@ -59,6 +61,10 @@ class Configuration
 
   def lim?
     @options[:lim]
+  end
+
+  def wid
+    @options[:wid]
   end
 end
 
@@ -99,7 +105,7 @@ end
 class CharAction < Action
   def initialize
     # All special characters without 'point' (.) and 'and' (&).
-    @sym = ' (){},~\'![]_#@=“”`—’+;·‡«»$%…№„'.chars.to_set
+    @sym = ' (){},~\'![]_#@=“„”`—’+;·‡«»$%…'.chars.to_set
   end
 
   def act(src)
@@ -121,6 +127,7 @@ class RuToEnAction < Action
       'щ' => 'szh',
       'ю' => 'ju',
       'я' => 'ya',
+      '№' => '-num-',
       '&' => '-and-'
     }
     ru = 'абвгдезийклмнопрстуфхъыьэ'.chars
@@ -233,15 +240,15 @@ end
 
 # Renames file by certain rules.
 class Renamer
-  TBL_WIDTH = 79
-  TTL_WIDTH = TBL_WIDTH - 4
-  STR_WIDTH = (TBL_WIDTH - 7) / 2
   PTH_LIMIT = 4096
   NME_LIMIT = 143 # Synology eCryptfs limitation.
 
   def initialize
     @cfg = Configuration.new
     @sta = { moved: 0, unaltered: 0 }
+    @tbl = @cfg.wid.nil? ? 79 : @cfg.wid.to_i
+    @ttl = @tbl - 4
+    @str = (@tbl - 7) / 2
   end
 
   def trim(src, lim)
@@ -298,20 +305,20 @@ class Renamer
         @sta[:unaltered] += 1
       end
       row << [
-        trim(File.basename(src), STR_WIDTH),
-        trim(File.basename(dst), STR_WIDTH)
+        trim(File.basename(src), @str),
+        trim(File.basename(dst), @str)
       ]
     end
     return unless row.any?
 
     puts Terminal::Table.new(
-      title: trim(dir, TTL_WIDTH),
+      title: trim(dir, @ttl),
       headings: [
         { value: 'src', alignment: :center },
         { value: 'dst', alignment: :center }
       ],
       rows: row,
-      style: { width: TBL_WIDTH }
+      style: { width: @tbl }
     )
   end
 
