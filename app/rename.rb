@@ -99,7 +99,7 @@ end
 class CharAction < Action
   def initialize
     # All special characters without 'point' (.) and 'and' (&).
-    @sym = ' (){},~\'![]_#@=“”`—’+;·‡«»$%…№'.chars.to_set
+    @sym = ' (){},~\'![]_#@=“”`—’+;·‡«»$%…№„'.chars.to_set
   end
 
   def act(src)
