@@ -58,6 +58,8 @@ alias c='clear'
 # Changes last directory of mc into shell.
 alias mc='. /usr/lib/mc/mc-wrapper.sh'
 
+export DISABLE_AUTO_TITLE='true'
+
 # Starts X if installed.
 if [[ ! $DISPLAY && $XDG_VTNR -eq 1 ]]; then
   if [[ `which startx` ]]; then
