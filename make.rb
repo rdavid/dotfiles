@@ -93,10 +93,10 @@ class OS
 
     # Extends with Xorg related packages.
     (@pkgs << %w[
-      conky dropbox feh firefox i3 i3blocks i3lock okular terminator
+      conky dropbox feh firefox i3 i3blocks i3lock kitty okular terminator
     ]).flatten!
     (@dotf << %w[i3 xinitrc]).flatten!
-    (@conf << %w[conky terminator]).flatten!
+    (@conf << %w[conky kitty terminator]).flatten!
   end
 
   private :configure
@@ -331,7 +331,10 @@ class Installer
     end
 
     # Installs Python packages.
-    %w[s_tui tmuxp].each do |p|
+    %w[
+      s_tui
+      tmuxp
+    ].each do |p|
       chk = "python -c \"help('modules');\" | grep #{p} | wc -l | xargs"
       next if `#{chk}`.strip.eql? '1'
 
@@ -352,7 +355,9 @@ class Installer
     end
 
     # Installs NoJS packages.
-    %w[gtop].each do |p|
+    %w[
+      gtop
+    ].each do |p|
       system("npm list -g #{p}")
       next unless $CHILD_STATUS.exitstatus
 
