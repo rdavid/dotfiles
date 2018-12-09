@@ -1,5 +1,11 @@
 #!/usr/local/bin/bash
+# vim: tabstop=2 shiftwidth=2 expandtab textwidth=80 linebreak wrap
+#
 # transcode.sh
+#
+# Copyright 2016-2018 David Rabkin
+#
+# Transcodes any video file to m4v format.
 
 declare -a AUD=( $(for i in {1..1}; do echo 14; done) )
 declare -a SUB=( $(for i in {1..1}; do echo 4; done) )
@@ -17,12 +23,12 @@ duration()
 
 if [ 0 -eq $# ]; then
   echo "transcode.sh <file name>"
-  exit 0 
+  exit 0
 fi
 
 if [ $1 = "scan" ]; then
   transcode-video --scan $2
-  exit 0 
+  exit 0
 fi
 
 if [ ${#AUD[@]} -ne ${#SUB[@]} ]; then
