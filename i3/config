@@ -152,7 +152,7 @@ mode "resize" {
 bindsym Mod1+r mode "resize"
 
 # Zenburn colors.
-client.focused              #688060 #688060 #303030 #ffcfaf
+client.focused              #515151 #515151 #303030 #ffcfaf
 client.focused_inactive     #3f3f3f #3F3F3F #7f9f7f #3f3f3f
 client.unfocused            #3f3f3f #3F3F3F #DCDCCC #3f3f3f
 client.urgent               #dca3a3 #dca3a3 #DCDCCC #3f3f3f
