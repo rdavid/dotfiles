@@ -3,10 +3,14 @@
 #
 # make.rb
 #
-# Copyright 2018 David Rabkin
+# Copyright 2017-2018 David Rabkin
 #
 # This script creates symlinks from the home directory to any desired
 # dotfiles in ~/dotfiles. Also it installs needfull packages.
+#
+# For MacOS run without X and with the password for binary:
+#   make --no-xorg -pass pass
+#
 
 require 'os'
 require 'git'
@@ -19,15 +23,15 @@ class Configuration
   def initialize
     ARGV << '-h' if ARGV.empty?
     @options = {}
-    OptionParser.new do |opts|
-      opts.banner = 'Usage: make.rb [options].'
-      opts.on('-g', '--[no-]xorg',
-              'Install X packages or not.') { |o| @options[:xorg] = o }
-      opts.on('-p', '--pass pass',
-              'Password for binary archive.') { |o| @options[:pass] = o }
+    OptionParser.new do |o|
+      o.banner = 'Usage: make.rb [options].'
+      [
+        { f: '-g', p: '--[no-]xorg', d: 'Install X packagest.', k: :xorg },
+        { f: '-p', p: '--pass pass', d: 'Password for binary.', k: :pass }
+      ].each { |i| o.on(i[:f], i[:p], i[:d]) { |j| @options[i[:k]] = j } }
     end.parse!
-    raise 'Xorg option is not given' if @options[:xorg].nil?
-    raise 'Pass option is not given' if @options[:pass].nil?
+    raise 'Xorg option is not given' if xorg?.nil?
+    raise 'Pass option is not given' if xorg? && pass.nil?
   end
 
   def xorg?
@@ -49,15 +53,13 @@ class OS
   attr_reader :pkgs
   attr_reader :dotf
   attr_reader :conf
-  attr_reader :font
 
   def initialize(cfg)
     @type = ''
     @test = ''
     @inst = ''
-    @prec = ''
     @post = ''
-    @font = ''
+    @prec = ''
 
     # Packages without Xorg to install.
     @pkgs = %w[
@@ -71,7 +73,18 @@ class OS
     # List of files/folders to symlink in ~/.config.
     @conf = %w[mc]
 
-    @font = %{
+    # For MacOS run '--no-xorg --pass'.
+    unless cfg.pass.nil?
+      @prec << %{
+        rm -rf ~/dotfiles/bin
+        unzip -P #{cfg.pass} ~/dotfiles/bin.zip -d ~/dotfiles
+      }
+    end
+    xconfigure if cfg.xorg?
+  end
+
+  def xconfigure
+    @prec << %{
       mkdir -p ~/.fonts
       for f in inconsolata-g.otf pragmatapro.ttf; do
         if [[ ! -e ~/.fonts/$f ]]; then
@@ -80,17 +93,6 @@ class OS
       done
       fc-cache -vf
     }
-    configure(cfg)
-  end
-
-  def configure(cfg)
-    return if cfg.pass.nil?
-
-    # Runs pre-install for all OSs.
-    system("rm -rf ~/dotfiles/bin && unzip -P #{cfg.pass} "\
-           '~/dotfiles/bin.zip -d ~/dotfiles')
-    return unless cfg.xorg?
-
     # Extends with Xorg related packages.
     (@pkgs << %w[
       conky dropbox feh firefox i3 i3blocks i3lock kitty okular terminator
@@ -99,7 +101,7 @@ class OS
     (@conf << %w[conky kitty terminator]).flatten!
   end
 
-  private :configure
+  private :xconfigure
 end
 
 # Implements MacOS.
@@ -107,6 +109,12 @@ module MacOS
   def self.extended(mod)
     mod.type << 'MacOS'
     mod.prec << %{
+      for f in inconsolata-g.otf pragmatapro.ttf; do
+        if [[ ! -e ~/Library/Fonts/$f ]]; then
+          cp ~/dotfiles/bin/$f ~/Library/Fonts/
+        fi
+      done
+      sudo easy_install pip
       export HOMEBREW_CASK_OPTS="--appdir=/Applications"
       if hash brew &> /dev/null; then
         echo "Homebrew already installed."
@@ -115,23 +123,16 @@ module MacOS
       fi
       brew cask upgrade
       brew cleanup && brew cask cleanup
-      for f in inconsolata-g.otf pragmatapro.ttf; do
-        if [[ ! -e ~/Library/Fonts/$f ]]; then
-          cp ~/dotfiles/bin/$f ~/Library/Fonts/
-        fi
-      done
     }
     (
       mod.pkgs << %w[
-        docker dropbox fonts-inconsolata firefox fonts-font-awesome fortune
-        glances google-chrome iterm2 keepassxc keepingyouawake lolcat nmap pry
-        speedtest-cli sublime-text telegram tunnelblick virtualbox vox
-        youtube-dl
+        docker dropbox firefox fonts-font-awesome fortune glances google-chrome
+        iterm2 keepassxc keepingyouawake lolcat nmap pry speedtest-cli
+        sublime-text telegram tunnelblick virtualbox vox youtube-dl
       ]
     ).flatten!
     mod.test << 'brew ls --versions %s >/dev/null 2>&1'
     mod.inst << 'brew install %s || brew cask install %s'
-    mod.post << 'sudo easy_install pip'
   end
 end
 
@@ -139,17 +140,17 @@ end
 module FreeBSD
   def self.extended(mod)
     mod.type << 'FreeBSD'
+    mod.prec << %{
+      which glances || (cd /usr/ports/misc/py-glance && sudo make -DBATCH install clean)
+    }
     (
       mod.pkgs << %w[
-        inconsolata-ttf font-awesome fortune-mod-freebsd-classic py27-pip
-        rubygem-pry-rails rubygem-lolcat py27-speedtest-cli youtube_dl
+        font-awesome fortune-mod-freebsd-classic py27-pip rubygem-pry-rails
+        rubygem-lolcat py27-speedtest-cli youtube_dl
       ]
     ).flatten!
     mod.test << 'pkg info %s >/dev/null 2>&1'
     mod.inst << 'sudo pkg install -y %s'
-    mod.post << mod.font << %{
-      which glances || (cd /usr/ports/misc/py-glance && sudo make -DBATCH install clean)
-    }
   end
 end
 
@@ -171,13 +172,12 @@ module Arch
     (
       mod.pkgs << %w[
         alsa-utils fortune-mod fzf glances lolcat python-pip ruby-pry
-        speedtest-cli ttf-inconsolata ttf-inconsolata-g ttf-font-awesome
-        youtube-dl
+        speedtest-cli ttf-font-awesome youtube-dl
       ]
     ).flatten!
     mod.test << 'yaourt -Qs --nameonly %s >/dev/null 2>&1'
     mod.inst << 'yaourt -Sy --noconfirm %s'
-    mod.post << mod.font << %{
+    mod.post << %{
       #sed -i 's/usr\/share/usr\/lib/g' ~/.i3/i3blocks.conf
     }
   end
@@ -194,13 +194,12 @@ module Debian
     }
     (
       mod.pkgs << %w[
-        apcalc byobu fonts-inconsolata fonts-font-awesome fortune glances lolcat
-        pry python-pip speedtest-cli youtube-dl
+        apcalc byobu fonts-font-awesome fortune glances lolcat pry python-pip
+        speedtest-cli youtube-dl
       ]
     ).flatten!
     mod.test << 'dpkg -l %s >/dev/null 2>&1'
     mod.inst << 'sudo apt-get -y install %s'
-    mod.post << mod.font
   end
 end
 
@@ -210,13 +209,11 @@ module RedHat
     mod.type << 'RedHat'
     (
       mod.pkgs << %w[
-        inconsolata-fonts fontawesome-fonts fortune glances lolcat pry
-        speedtest-cli youtube-dl
+        fontawesome-fonts fortune glances lolcat pry speedtest-cli youtube-dl
       ]
     ).flatten!
     mod.test << 'yum list installed %s >/dev/null 2>&1'
     mod.inst << 'sudo yum -y install %s'
-    mod.post << mod.font
   end
 end
 
@@ -226,13 +223,11 @@ module Alpine
     mod.type << 'Alpine'
     (
       mod.pkgs << %w[
-        fonts-inconsolata fonts-font-awesome fortune glances lolcat py-pip
-        pry speedtest-cli youtube-dl
+        fortune glances lolcat py-pip pry speedtest-cli youtube-dl
       ]
     ).flatten!
     mod.test << 'apk info %s >/dev/null 2>&1'
     mod.inst << 'sudo apk add %s'
-    mod.post << mod.font
   end
 end
 
@@ -245,6 +240,7 @@ class CurrentOS
     return Debian  if OS.linux? && File.file?('/etc/debian_version')
     return RedHat  if OS.linux? && File.file?('/etc/redhat-release')
     return Alpine  if OS.linux? && File.file?('/etc/alpine-release')
+
     raise 'Current OS is not supported.'
   end
 end

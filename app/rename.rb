@@ -32,7 +32,7 @@ class Configuration
         { f: '-w', p: '--wid wid', d: 'Width of the table.',     k: :wid }
       ].each { |i| o.on(i[:f], i[:p], i[:d]) { |j| @options[i[:k]] = j } }
     end.parse!
-    raise 'Directory option is not given.' if @options[:dir].nil?
+    raise 'Directory option is not given.' if dir.nil?
     raise "No such directory: #{dir}." unless File.directory?(dir)
   end
 
