@@ -6,6 +6,8 @@
 # Copyright 2018 David Rabkin
 #
 # This script renames files in given directory by specific rules.
+#
+
 require 'set'
 require 'colorize'
 require 'optparse'
@@ -17,24 +19,19 @@ class Configuration
   def initialize
     ARGV << '-h' if ARGV.empty?
     @options = {}
-    OptionParser.new do |opts|
-      opts.banner = 'Usage: rename.rb [options].'
-      opts.on('-d', '--dir dir',
-              'Directory with files to rename.') { |o| @options[:dir] = o }
-      opts.on('-s', '--src src',
-              'A string to substitute from a name.') { |o| @options[:src] = o }
-      opts.on('-t', '--dst dst',
-              'A string to replace with in a name.') { |o| @options[:dst] = o }
-      opts.on('-a', '--act',
-              'Real renaming.') { |o| @options[:act] = o }
-      opts.on('-r', '--rec',
-              'Passes directories recursively.') { |o| @options[:rec] = o }
-      opts.on('-l', '--lim',
-              'Limits file name length to eCryptfs.') { |o| @options[:lim] = o }
-      opts.on('-w', '--wid wid',
-              'Width of the table presentation.') { |o| @options[:wid] = o }
+    OptionParser.new do |o|
+      o.banner = 'Usage: rename.rb [options].'
+      [
+        { f: '-a', p: '--act',     d: 'Real renaming.',          k: :act },
+        { f: '-r', p: '--rec',     d: 'Passes recursively.',     k: :rec },
+        { f: '-l', p: '--lim',     d: 'Limits name length.',     k: :lim },
+        { f: '-d', p: '--dir dir', d: 'Directory to rename.',    k: :dir },
+        { f: '-s', p: '--src src', d: 'A string to substitute.', k: :src },
+        { f: '-t', p: '--dst dst', d: 'A string to replace to.', k: :dst },
+        { f: '-p', p: '--pre pre', d: 'A string to prepend to.', k: :pre },
+        { f: '-w', p: '--wid wid', d: 'Width of the table.',     k: :wid }
+      ].each { |i| o.on(i[:f], i[:p], i[:d]) { |j| @options[i[:k]] = j } }
     end.parse!
-
     raise 'Directory option is not given.' if @options[:dir].nil?
     raise "No such directory: #{dir}." unless File.directory?(dir)
   end
@@ -49,6 +46,10 @@ class Configuration
 
   def dst
     @options[:dst]
+  end
+
+  def pre
+    @options[:pre]
   end
 
   def act?
@@ -85,6 +86,8 @@ end
 # All points besides extention are replaced by minus.
 class PointAction < Action
   def initialize(dir)
+    raise 'dir cannot be nil.' if dir.nil?
+
     @dir = dir
   end
 
@@ -152,18 +155,31 @@ class RuToEnAction < Action
   end
 end
 
-# Replaces user patter with minus.
+# Substitutes a string with a string.
 class SubstituteAction < Action
   def initialize(src, dst)
+    raise 'src cannot be nil.' if src.nil?
+
     # The action works after PointAction. All points are replaces with minus.
-    @src = src
-    @src.tr!('.', '-') unless @src.nil?
+    @src = src.tr('.', '-')
     @dst = dst.nil? ? '-' : dst.tr('.', '-')
   end
 
   def act(src)
-    src.gsub!(@src, @dst) unless @src.nil?
-    src
+    src.gsub(@src, @dst)
+  end
+end
+
+# Prepends user patter.
+class PrependAction < Action
+  def initialize(pat)
+    raise 'pat cannot be nil.' if pat.nil?
+
+    @pat = pat
+  end
+
+  def act(src)
+    src.prepend(@pat)
   end
 end
 
@@ -181,6 +197,8 @@ end
 # Limits file length.
 class TruncateAction < Action
   def initialize(lim)
+    raise 'lim cannot be nil.' if lim.nil?
+
     @lim = lim
   end
 
@@ -203,7 +221,11 @@ end
 # Adds number from 0 to 9 in case of file existence.
 class ExistenceAction < Action
   ITERATION = 10
+
   def initialize(dir, lim)
+    raise 'dir cannot be nil.' if dir.nil?
+    raise 'lim cannot be nil.' if lim.nil?
+
     @dir = dir
     @lim = lim
   end
@@ -230,6 +252,8 @@ end
 # Omits file names shorter than limit.
 class OmitAction < Action
   def initialize(lim)
+    raise 'lim cannot be nil.' if lim.nil?
+
     @lim = lim
   end
 
@@ -271,13 +295,14 @@ class Renamer
       else
         [
           PointAction.new(dir), # Should be the first.
-          SubstituteAction.new(@cfg.src, @cfg.dst),
+          @cfg.src.nil? ? nil : SubstituteAction.new(@cfg.src, @cfg.dst),
           DowncaseAction.new,
           CharAction.new,
           RuToEnAction.new,
+          @cfg.pre.nil? ? nil : PrependAction.new(@cfg.pre),
           TrimAction.new,
           TruncateAction.new(NME_LIMIT)
-        ]
+        ].delete_if(&:nil?)
       end
     row = []
     exi = ExistenceAction.new(dir, NME_LIMIT)
