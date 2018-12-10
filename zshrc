@@ -32,6 +32,7 @@ plugins=(archlinux battery brew catimg common-aliases compleat debian docker \
 # User configuration.
 export PATH="/opt/local/bin/:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin"
 export PATH="/home/david/dotfiles/app:$PATH"
+export PATH="/Users/david/dotfiles/app:$PATH"
 export PATH="/home/linuxbrew/.linuxbrew/bin:$PATH"
 export PATH="/home/david/.gem/ruby/2.5.0/bin:$PATH"
 export MANPATH="/home/linuxbrew/.linuxbrew/share/man:$MANPATH"
