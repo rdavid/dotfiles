@@ -353,7 +353,7 @@ class Renamer
 
     dat = []
     act = @fac.produce(dir)
-    Dir.children(dir).sort.each do |nme|
+    (Dir.entries(dir) - ['.', '..']).sort.each do |nme|
       src = File.join(dir, nme)
       do_dir(src) if @cfg.rec? && File.directory?(src)
       act.each { |a| a.setsrc(nme) }
