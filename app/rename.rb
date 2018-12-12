@@ -289,17 +289,14 @@ class ActionsFactory
   end
 end
 
-# Renames file by certain rules.
-class Renamer
-  PTH_LIMIT = 4096
-
-  def initialize
-    @cfg = Configuration.new
-    @sta = { moved: 0, unaltered: 0, failed: 0 }
-    @tbl = @cfg.wid.nil? ? 79 : @cfg.wid.to_i
+# Formats and prints output data.
+class Reporter
+  def initialize(dir, wid)
+    @dir = dir
+    @tbl = wid.nil? ? 79 : wid.to_i
     @ttl = @tbl - 4
     @str = (@tbl - 7) / 2
-    @fac = ActionsFactory.new(@cfg)
+    @row = []
   end
 
   def trim(src, lim)
@@ -310,42 +307,51 @@ class Renamer
     src[0..beg] + '..' + src[-fin..-1]
   end
 
-  def report(dir, row)
+  def add(lhs, rhs)
+    @row << [trim(lhs, @str), trim(rhs, @str)]
+  end
+
+  def do
     puts Terminal::Table.new(
-      title: trim(dir, @ttl),
+      title: trim(@dir, @ttl),
       headings: [
         { value: 'src', alignment: :center },
         { value: 'dst', alignment: :center }
       ],
-      rows: row,
+      rows: @row,
       style: { width: @tbl }
     )
   end
+end
 
-  def move(dat)
-    row = []
+# Renames file by certain rules.
+class Renamer
+  PTH_LIMIT = 4096
+
+  def initialize
+    @cfg = Configuration.new
+    @sta = { moved: 0, unaltered: 0, failed: 0 }
+    @fac = ActionsFactory.new(@cfg)
+  end
+
+  def move(dir, dat)
+    rep = Reporter.new(dir, @cfg.wid)
     dat.each do |i|
       if i[:src] == i[:dst]
         @sta[:unaltered] += 1
-        row << [trim(File.basename(i[:src]), @str), '']
+        rep.add(File.basename(i[:src]), '')
         next
       end
       begin
         FileUtils.mv(i[:src], i[:dst]) if @cfg.act?
         @sta[:moved] += 1
-        row << [
-          trim(File.basename(i[:src]), @str),
-          trim(File.basename(i[:dst]), @str)
-        ]
-      rescue StandartError => msg
+        rep.add(File.basename(i[:src]), File.basename(i[:dst]))
+      rescue StandardError => msg
         @sta[:failed] += 1
-        row << [
-          trim(File.basename(i[:src]), @str),
-          trim(msg, @str)
-        ]
+        rep.add(File.basename(i[:src]), msg)
       end
     end
-    row
+    rep.do
   end
 
   def do_dir(dir)
@@ -360,15 +366,17 @@ class Renamer
       act.each { |a| break if (nme = a.act(nme)).nil? }
       dat << { src: src, dst: File.join(dir, nme) } unless nme.nil?
     end
-    report(dir, move(dat)) if dat.any?
+    move(dir, dat) if dat.any?
   end
 
   def do
+    sta = Time.now
     do_dir(@cfg.dir)
+    tim = Time.now - sta
     puts "#{@cfg.act? ? 'Real' : 'Simulation'}"\
          " moved #{@sta[:moved]},"\
          " unaltered #{@sta[:unaltered]},"\
-         " failed #{@sta[:failed]}."
+         " failed #{@sta[:failed]} in #{tim.round(2)} seconds."
   end
 end
 
