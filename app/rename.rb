@@ -289,6 +289,33 @@ class ActionsFactory
   end
 end
 
+# All methods ara static.
+class Utils
+  class << self
+    def trim(src, lim)
+      return src if src.length <= lim
+
+      beg = fin = (lim - 2) / 2
+      beg -= 1 if lim.even?
+      src[0..beg] + '..' + src[-fin..-1]
+    end
+
+    def humanize(sec)
+      [
+        [60,   :seconds, :second],
+        [60,   :minutes, :minute],
+        [24,   :hours,   :hour],
+        [1000, :days,    :day]
+      ].map do |cnt, nms, nm1|
+        next if sec <= 0
+
+        sec, n = sec.divmod(cnt)
+        "#{n.to_i} #{n != 1 ? nms : nm1}"
+      end.compact.reverse.join(' ')
+    end
+  end
+end
+
 # Formats and prints output data.
 class Reporter
   def initialize(dir, wid)
@@ -299,21 +326,13 @@ class Reporter
     @row = []
   end
 
-  def trim(src, lim)
-    return src if src.length <= lim
-
-    beg = fin = (lim - 2) / 2
-    beg -= 1 if lim.even?
-    src[0..beg] + '..' + src[-fin..-1]
-  end
-
   def add(lhs, rhs)
-    @row << [trim(lhs, @str), trim(rhs, @str)]
+    @row << [Utils.trim(lhs, @str), Utils.trim(rhs, @str)]
   end
 
   def do
     puts Terminal::Table.new(
-      title: trim(@dir, @ttl),
+      title: Utils.trim(@dir, @ttl),
       headings: [
         { value: 'src', alignment: :center },
         { value: 'dst', alignment: :center }
@@ -372,11 +391,11 @@ class Renamer
   def do
     sta = Time.now
     do_dir(@cfg.dir)
-    tim = Time.now - sta
-    puts "#{@cfg.act? ? 'Real' : 'Simulation'}"\
-         " moved #{@sta[:moved]},"\
-         " unaltered #{@sta[:unaltered]},"\
-         " failed #{@sta[:failed]} in #{tim.round(2)} seconds."
+    puts "#{@cfg.act? ? 'Real' : 'Simulation'}:"\
+         " #{@sta[:moved]} moved,"\
+         " #{@sta[:unaltered]} unaltered,"\
+         " #{@sta[:failed]} failed in "\
+         "#{Utils.humanize(Time.now - sta)}."
   end
 end
 
