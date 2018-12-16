@@ -302,7 +302,7 @@ class Utils
         next if sec <= 0
 
         sec, n = sec.divmod(cnt)
-        "#{n.to_i} #{n != 1 ? nms : nm1}"
+        "#{n.to_i} #{n.to_i != 1 ? nms : nm1}"
       end.compact.reverse.join(' ')
     end
   end
