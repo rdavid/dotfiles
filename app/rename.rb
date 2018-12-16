@@ -67,7 +67,7 @@ class Configuration
   end
 
   def wid
-    @options[:wid]
+    @options[:wid].nil? ? 79 : @options[:wid].to_i
   end
 end
 
@@ -312,7 +312,7 @@ end
 class Reporter
   def initialize(dir, wid)
     @dir = dir
-    @tbl = wid.nil? ? 79 : wid.to_i
+    @tbl = wid
     @ttl = @tbl - 4
     @str = (@tbl - 7) / 2
     @row = []
