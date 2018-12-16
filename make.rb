@@ -20,15 +20,17 @@ require 'English'
 
 # Handles input parameters.
 class Configuration
+  DIC = [
+    ['-g', '--[no-]xorg', 'Install X packagest.', :xorg],
+    ['-p', '--pass pass', 'Password for binary.', :pass]
+  ].freeze
+
   def initialize
     ARGV << '-h' if ARGV.empty?
     @options = {}
     OptionParser.new do |o|
       o.banner = 'Usage: make.rb [options].'
-      [
-        { f: '-g', p: '--[no-]xorg', d: 'Install X packagest.', k: :xorg },
-        { f: '-p', p: '--pass pass', d: 'Password for binary.', k: :pass }
-      ].each { |i| o.on(i[:f], i[:p], i[:d]) { |j| @options[i[:k]] = j } }
+      DIC.each { |f, p, d, k| o.on(f, p, d) { |i| @options[k] = i } }
     end.parse!
     raise 'Xorg option is not given' if xorg?.nil?
     raise 'Pass option is not given' if xorg? && pass.nil?

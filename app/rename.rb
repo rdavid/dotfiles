@@ -16,15 +16,15 @@ require 'terminal-table'
 
 # Handles input parameters.
 class Configuration
-  OPT = [
-    { f: '-a', p: '--act',     d: 'Real renaming.',          k: :act },
-    { f: '-r', p: '--rec',     d: 'Passes recursively.',     k: :rec },
-    { f: '-l', p: '--lim',     d: 'Limits name length.',     k: :lim },
-    { f: '-d', p: '--dir dir', d: 'Directory to rename.',    k: :dir },
-    { f: '-s', p: '--src src', d: 'A string to substitute.', k: :src },
-    { f: '-t', p: '--dst dst', d: 'A string to replace to.', k: :dst },
-    { f: '-p', p: '--pre pre', d: 'A string to prepend to.', k: :pre },
-    { f: '-w', p: '--wid wid', d: 'Width of the table.',     k: :wid }
+  DIC = [
+    ['-a', '--act',     'Real renaming.',          :act],
+    ['-r', '--rec',     'Passes recursively.',     :rec],
+    ['-l', '--lim',     'Limits name length.',     :lim],
+    ['-d', '--dir dir', 'Directory to rename.',    :dir],
+    ['-s', '--src src', 'A string to substitute.', :src],
+    ['-t', '--dst dst', 'A string to replace to.', :dst],
+    ['-p', '--pre pre', 'A string to prepend to.', :pre],
+    ['-w', '--wid wid', 'Width of the table.',     :wid]
   ].freeze
 
   def initialize
@@ -32,7 +32,7 @@ class Configuration
     @options = {}
     OptionParser.new do |o|
       o.banner = 'Usage: rename.rb [options].'
-      OPT.each { |i| o.on(i[:f], i[:p], i[:d]) { |j| @options[i[:k]] = j } }
+      DIC.each { |f, p, d, k| o.on(f, p, d) { |i| @options[k] = i } }
     end.parse!
     raise 'Directory option is not given.' if dir.nil?
     raise "No such directory: #{dir}." unless File.directory?(dir)
@@ -73,16 +73,20 @@ end
 
 # An interface for actions implementation.
 class Action
-  def act(src)
+  def do(src)
     raise "Undefined method Action.do is called with #{src}."
   end
 
-  def setsrc(src) end
+  def set(src) end
+
+  def p2m(src)
+    src.tr('.', '-')
+  end
 end
 
 # All names should be downcased.
 class DowncaseAction < Action
-  def act(src)
+  def do(src)
     src.downcase
   end
 end
@@ -95,36 +99,27 @@ class PointAction < Action
     @dir = dir
   end
 
-  def act(src)
+  def do(src)
     if File.file?(File.join(@dir, src))
-      replace(File.basename(src, '.*')) << File.extname(src)
+      p2m(File.basename(src, '.*')) << File.extname(src)
     else
-      replace(src)
+      p2m(src)
     end
-  end
-
-  def replace(src)
-    src.tr('.', '-')
   end
 end
 
-# All special symbols are replaced by minus.
+# All special symbols besides 'point' (.) and 'and' (&) are replaced by minus.
 class CharAction < Action
-  def initialize
-    # All special characters without 'point' (.) and 'and' (&).
-    @sym = ' (){},~\'![]_#@=“„”`—’+;·‡«»$%…'.chars.to_set
-  end
+  SYM = ' (){},~\'![]_#@=“„”`—’+;·‡«»$%…'.chars.to_set.freeze
 
-  def act(src)
-    dst = src.chars
-    dst.map! { |s| @sym.include?(s) ? '-' : s }
-    dst.join
+  def do(src)
+    src.chars.map { |s| SYM.include?(s) ? '-' : s }.join
   end
 end
 
 # Transliterate from Cyrillic to English.
 class RuToEnAction < Action
-  MU = {
+  MSC = {
     'ё' => 'jo',
     'ж' => 'zh',
     'ц' => 'tz',
@@ -136,17 +131,12 @@ class RuToEnAction < Action
     '№' => '-num-',
     '&' => '-and-'
   }.freeze
-  RU = 'абвгдезийклмнопрстуфхъыьэ'.chars.freeze
-  EN = 'abvgdeziyklmnoprstufh y e'.chars.freeze
+  RUS = 'абвгдезийклмнопрстуфхъыьэ'.chars.freeze
+  ENG = 'abvgdeziyklmnoprstufh y e'.chars.freeze
+  DIC = RUS.zip(ENG).to_h.merge(MSC).freeze
 
-  def initialize
-    @dic = RU.zip(EN).to_h.merge(MU)
-  end
-
-  def act(src)
-    dst = ''
-    src.each_char { |c| dst << (@dic[c].nil? ? c : @dic[c]) if @dic[c] != ' ' }
-    dst
+  def do(src)
+    src.chars.map { |c| DIC[c].nil? ? c : DIC[c] }.collect(&:strip).join
   end
 end
 
@@ -156,11 +146,11 @@ class SubstituteAction < Action
     raise 'src cannot be nil.' if src.nil?
 
     # The action works after PointAction. All points are replaces with minus.
-    @src = src.tr('.', '-')
-    @dst = dst.nil? ? '-' : dst.tr('.', '-')
+    @src = p2m(src)
+    @dst = dst.nil? ? '-' : p2m(dst)
   end
 
-  def act(src)
+  def do(src)
     src.gsub(@src, @dst)
   end
 end
@@ -173,14 +163,14 @@ class PrependAction < Action
     @pat = pat
   end
 
-  def act(src)
+  def do(src)
     src.prepend(@pat)
   end
 end
 
 # Replaces multiple minuses to single. Trims minuses.
 class TrimAction < Action
-  def act(src)
+  def do(src)
     src.gsub!(/-+/, '-')
     src.gsub!('-.', '.')
     src.gsub!('.-', '.')
@@ -197,7 +187,7 @@ class TruncateAction < Action
     @lim = lim
   end
 
-  def act(src)
+  def do(src)
     return src unless src.length > @lim
 
     ext = File.extname(src)
@@ -221,7 +211,7 @@ class ExistenceAction < Action
     @lim = lim
   end
 
-  def act(src)
+  def do(src)
     raise 'ExistenceAction needs original file name.' if @src.nil?
     return src if src == @src
     return src unless File.exist?(File.join(@dir, src))
@@ -241,7 +231,7 @@ class ExistenceAction < Action
     raise "Unable to compose a new name: #{src}."
   end
 
-  def setsrc(src)
+  def set(src)
     @src = src
   end
 end
@@ -254,14 +244,14 @@ class OmitAction < Action
     @lim = lim
   end
 
-  def act(src)
+  def do(src)
     src.length < @lim ? nil : src
   end
 end
 
 # Produces actions for certain directories.
 class ActionsFactory
-  NME_LIMIT = 143 # Synology eCryptfs limitation.
+  LIMIT = 143 # Synology eCryptfs limitation.
 
   def initialize(cfg)
     @cfg = cfg
@@ -270,8 +260,8 @@ class ActionsFactory
   def produce(dir)
     if @cfg.lim?
       [
-        OmitAction.new(NME_LIMIT),
-        TruncateAction.new(NME_LIMIT)
+        OmitAction.new(LIMIT),
+        TruncateAction.new(LIMIT)
       ]
     else
       [
@@ -282,15 +272,22 @@ class ActionsFactory
         RuToEnAction.new,
         @cfg.pre.nil? ? nil : PrependAction.new(@cfg.pre),
         TrimAction.new,
-        TruncateAction.new(NME_LIMIT),
-        ExistenceAction.new(dir, NME_LIMIT)
-      ].delete_if(&:nil?)
+        TruncateAction.new(LIMIT),
+        ExistenceAction.new(dir, LIMIT)
+      ].compact
     end
   end
 end
 
 # All methods ara static.
 class Utils
+  DIC = [
+    [60,   :seconds, :second],
+    [60,   :minutes, :minute],
+    [24,   :hours,   :hour],
+    [1000, :days,    :day]
+  ].freeze
+
   class << self
     def trim(src, lim)
       return src if src.length <= lim
@@ -301,12 +298,7 @@ class Utils
     end
 
     def humanize(sec)
-      [
-        [60,   :seconds, :second],
-        [60,   :minutes, :minute],
-        [24,   :hours,   :hour],
-        [1000, :days,    :day]
-      ].map do |cnt, nms, nm1|
+      DIC.map do |cnt, nms, nm1|
         next if sec <= 0
 
         sec, n = sec.divmod(cnt)
@@ -345,29 +337,27 @@ end
 
 # Renames file by certain rules.
 class Renamer
-  PTH_LIMIT = 4096
-
   def initialize
     @cfg = Configuration.new
-    @sta = { moved: 0, unaltered: 0, failed: 0 }
     @fac = ActionsFactory.new(@cfg)
+    @sta = { moved: 0, unaltered: 0, failed: 0 }
   end
 
   def move(dir, dat)
     rep = Reporter.new(dir, @cfg.wid)
-    dat.each do |i|
-      if i[:src] == i[:dst]
+    dat.each do |src, dst|
+      if src == dst
         @sta[:unaltered] += 1
-        rep.add(File.basename(i[:src]), '')
+        rep.add(File.basename(src), '')
         next
       end
       begin
-        FileUtils.mv(i[:src], i[:dst]) if @cfg.act?
+        FileUtils.mv(src, dst) if @cfg.act?
         @sta[:moved] += 1
-        rep.add(File.basename(i[:src]), File.basename(i[:dst]))
+        rep.add(File.basename(src), File.basename(dst))
       rescue StandardError => msg
         @sta[:failed] += 1
-        rep.add(File.basename(i[:src]), msg)
+        rep.add(File.basename(src), msg)
       end
     end
     rep.do
@@ -381,9 +371,9 @@ class Renamer
     (Dir.entries(dir) - ['.', '..']).sort.each do |nme|
       src = File.join(dir, nme)
       do_dir(src) if @cfg.rec? && File.directory?(src)
-      act.each { |a| a.setsrc(nme) }
-      act.each { |a| break if (nme = a.act(nme)).nil? }
-      dat << { src: src, dst: File.join(dir, nme) } unless nme.nil?
+      act.each { |a| a.set(nme) }
+      act.each { |a| break if (nme = a.do(nme)).nil? }
+      dat << [src, File.join(dir, nme)] unless nme.nil?
     end
     move(dir, dat) if dat.any?
   end
