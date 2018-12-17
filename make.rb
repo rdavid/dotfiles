@@ -65,7 +65,7 @@ class OS
 
     # Packages without Xorg to install.
     @pkgs = %w[
-      atop bat cmatrix cmus cowsay curl ffmpeg figlet handbrake-cli htop
+      atop bat cmatrix cmus cowsay curl ffmpeg figlet handbrake htop
       imagemagick mc most ncdu npm nnn python scrot tmux vim wget zsh
       zsh-syntax-highlighting
     ]
@@ -174,8 +174,8 @@ module Arch
     }
     (
       mod.pkgs << %w[
-        alsa-utils fortune-mod fzf glances lolcat python-pip ruby-pry
-        speedtest-cli ttf-font-awesome youtube-dl
+        alsa-utils fortune-mod fzf glances handbrake-cli lolcat python-pip
+        ruby-pry speedtest-cli ttf-font-awesome youtube-dl
       ]
     ).flatten!
     mod.test << 'yaourt -Qs --nameonly %s >/dev/null 2>&1'
