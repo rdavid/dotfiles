@@ -13,6 +13,7 @@ require 'colorize'
 require 'optparse'
 require 'fileutils'
 require 'terminal-table'
+require_relative 'utils'
 
 # Handles input parameters.
 class Configuration
@@ -61,35 +62,6 @@ class Configuration
   end
 end
 
-# All methods ara static.
-class Utils
-  DIC = [
-    [60,   :seconds, :second],
-    [60,   :minutes, :minute],
-    [24,   :hours,   :hour],
-    [1000, :days,    :day]
-  ].freeze
-
-  class << self
-    def trim(src, lim)
-      return src if src.length <= lim
-
-      beg = fin = (lim - 2) / 2
-      beg -= 1 if lim.even?
-      src[0..beg] + '..' + src[-fin..-1]
-    end
-
-    def humanize(sec)
-      DIC.map do |cnt, nms, nm1|
-        next if sec <= 0
-
-        sec, n = sec.divmod(cnt)
-        "#{n.to_i} #{n != 1 ? nms : nm1}"
-      end.compact.reverse.join(' ')
-    end
-  end
-end
-
 # Formats and prints output data.
 class Reporter
   def initialize(tit, wid)
@@ -124,22 +96,23 @@ class Transcoder
     @cfg = Configuration.new
     @sta = { converted: 0, failed: 0 }
     @rep = Reporter.new(@cfg.dir, @cfg.wid)
+    @tim = Timer.new
   end
 
   def do
-    sta = Time.now
     Dir[@cfg.dir + "/*.{#{EXT}}"].sort.each do |nme|
       @rep.add(nme)
       if @cfg.sca?
         v = `transcode-video --scan #{nme}`
+        puts v
         break
       end
     end
     @rep.do
     puts "#{@cfg.act? ? 'Real' : 'Simulation'}:"\
          " #{@sta[:converted]} converted,"\
-         " #{@sta[:failed]} failed in "\
-         "#{Utils.humanize(Time.now - sta)}."
+         " #{@sta[:failed]} failed in"\
+         " #{@tim.read}."
   end
 end
 
