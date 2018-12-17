@@ -13,6 +13,7 @@ require 'colorize'
 require 'optparse'
 require 'fileutils'
 require 'terminal-table'
+require_relative 'utils'
 
 # Handles input parameters.
 class Configuration
@@ -279,35 +280,6 @@ class ActionsFactory
   end
 end
 
-# All methods ara static.
-class Utils
-  DIC = [
-    [60,   :seconds, :second],
-    [60,   :minutes, :minute],
-    [24,   :hours,   :hour],
-    [1000, :days,    :day]
-  ].freeze
-
-  class << self
-    def trim(src, lim)
-      return src if src.length <= lim
-
-      beg = fin = (lim - 2) / 2
-      beg -= 1 if lim.even?
-      src[0..beg] + '..' + src[-fin..-1]
-    end
-
-    def humanize(sec)
-      DIC.map do |cnt, nms, nm1|
-        next if sec <= 0
-
-        sec, n = sec.divmod(cnt)
-        "#{n.to_i} #{n.to_i != 1 ? nms : nm1}"
-      end.compact.reverse.join(' ')
-    end
-  end
-end
-
 # Formats and prints output data.
 class Reporter
   def initialize(dir, wid)
@@ -379,13 +351,13 @@ class Renamer
   end
 
   def do
-    sta = Time.now
+    tim = Timer.new
     do_dir(@cfg.dir)
     puts "#{@cfg.act? ? 'Real' : 'Simulation'}:"\
          " #{@sta[:moved]} moved,"\
          " #{@sta[:unaltered]} unaltered,"\
          " #{@sta[:failed]} failed in "\
-         "#{Utils.humanize(Time.now - sta)}."
+         "#{tim.read}."
   end
 end
 
