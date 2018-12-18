@@ -65,9 +65,9 @@ class OS
 
     # Packages without Xorg to install.
     @pkgs = %w[
-      atop bat cmatrix cmus cowsay curl ffmpeg figlet handbrake htop
-      imagemagick mc most ncdu npm nnn python scrot tmux vim wget zsh
-      zsh-syntax-highlighting
+      atop bat cmatrix cmus cowsay curl ffmpeg figlet fortune glances handbrake
+      htop imagemagick mc most ncdu npm nnn python scrot speedtest-cli tmux vim
+      wget youtube-dl zsh zsh-syntax-highlighting
     ]
 
     # List of files/folders to symlink in homedir.
@@ -98,7 +98,8 @@ class OS
     }
     # Extends with Xorg related packages.
     (@pkgs << %w[
-      conky dropbox feh firefox i3 i3blocks i3lock kitty okular terminator
+      conky dropbox feh firefox font-awesome i3 i3blocks i3lock kitty okular
+      terminator
     ]).flatten!
     (@dotf << %w[i3 xinitrc]).flatten!
     (@conf << %w[conky kitty terminator]).flatten!
@@ -129,9 +130,9 @@ module MacOS
     }
     (
       mod.pkgs << %w[
-        docker dropbox firefox fonts-font-awesome fortune glances google-chrome
-        iterm2 keepassxc keepingyouawake lolcat nmap pry speedtest-cli
-        sublime-text telegram tunnelblick virtualbox vox youtube-dl
+        docker dropbox firefox fonts-font-awesome google-chrome iterm2 keepassxc
+        keepingyouawake lolcat nmap pry sublime-text telegram tunnelblick
+        virtualbox vox
       ]
     ).flatten!
     mod.test << 'brew ls --versions %s >/dev/null 2>&1'
@@ -141,17 +142,20 @@ end
 
 # Implements FreeBSD.
 module FreeBSD
+  DIC = {
+    glances:         'py27-glances',
+    fortune:         'fortune-mod-freebsd-classic',
+    'speedtest-cli': 'py27-speedtest-cli',
+    'youtube-dl':    'youtube_dl'
+  }
+
   def self.extended(mod)
     mod.type << 'FreeBSD'
-    mod.prec << %{
-      which glances || (cd /usr/ports/misc/py-glance && sudo make -DBATCH install clean)
-    }
     (
       mod.pkgs << %w[
-        font-awesome fortune-mod-freebsd-classic py27-pip rubygem-pry-rails
-        rubygem-lolcat py27-speedtest-cli youtube_dl
+        py27-pip rubygem-pry-rails rubygem-lolcat
       ]
-    ).flatten!
+    ).flatten!.map! { |i| DIC[i.to_sym].nil? ? i : DIC[i.to_sym] }
     mod.test << 'pkg info %s >/dev/null 2>&1'
     mod.inst << 'sudo pkg install -y %s'
   end
@@ -159,6 +163,11 @@ end
 
 # Implements Arch Linux.
 module Arch
+  DIC = {
+    fortune:        'fortune-mod',
+    'font-awesome': 'ttf-font-awesome'
+  }
+
   def self.extended(mod)
     mod.type << 'Arch'
     mod.prec << %{
@@ -174,10 +183,9 @@ module Arch
     }
     (
       mod.pkgs << %w[
-        alsa-utils fortune-mod fzf glances handbrake-cli lolcat python-pip
-        ruby-pry speedtest-cli ttf-font-awesome youtube-dl
+        alsa-utils fzf handbrake-cli lolcat python-pip ruby-pry
       ]
-    ).flatten!
+    ).flatten!.map! { |i| DIC[i.to_sym].nil? ? i : DIC[i.to_sym] }
     mod.test << 'yaourt -Qs --nameonly %s >/dev/null 2>&1'
     mod.inst << 'yaourt -Sy --noconfirm %s'
     mod.post << %{
@@ -188,6 +196,10 @@ end
 
 # Implements Debian Linux.
 module Debian
+  DIC = {
+    'font-awesome': 'fonts-font-awesome'
+  }
+
   def self.extended(mod)
     mod.type << 'Debian'
     mod.prec << %{
@@ -197,10 +209,9 @@ module Debian
     }
     (
       mod.pkgs << %w[
-        apcalc byobu fonts-font-awesome fortune glances lolcat pry python-pip
-        speedtest-cli youtube-dl
+        apcalc byobu lolcat pry python-pip
       ]
-    ).flatten!
+    ).flatten!.map! { |i| DIC[i.to_sym].nil? ? i : DIC[i.to_sym] }
     mod.test << 'dpkg -l %s >/dev/null 2>&1'
     mod.inst << 'sudo apt-get -y install %s'
   end
@@ -208,13 +219,17 @@ end
 
 # Implements RedHat Linux.
 module RedHat
+  DIC = {
+    'font-awesome': 'fontawesome-fonts'
+  }
+
   def self.extended(mod)
     mod.type << 'RedHat'
     (
       mod.pkgs << %w[
-        fontawesome-fonts fortune glances lolcat pry speedtest-cli youtube-dl
+        lolcat pry
       ]
-    ).flatten!
+    ).flatten!.map! { |i| DIC[i.to_sym].nil? ? i : DIC[i.to_sym] }
     mod.test << 'yum list installed %s >/dev/null 2>&1'
     mod.inst << 'sudo yum -y install %s'
   end
@@ -226,7 +241,7 @@ module Alpine
     mod.type << 'Alpine'
     (
       mod.pkgs << %w[
-        fortune glances lolcat py-pip pry speedtest-cli youtube-dl
+        lolcat py-pip pry
       ]
     ).flatten!
     mod.test << 'apk info %s >/dev/null 2>&1'
@@ -236,7 +251,7 @@ end
 
 # Defines current OS.
 class CurrentOS
-  def get
+  def self.get
     return MacOS   if OS.mac?
     return FreeBSD if OS.freebsd?
     return Arch    if OS.linux? && File.file?('/etc/arch-release')
@@ -251,12 +266,13 @@ end
 # Actually does the job.
 class Installer
   def initialize
-    @os = OS.new(Configuration.new).extend(CurrentOS.new.get)
+    @os = OS.new(Configuration.new).extend(CurrentOS.get)
     @ndir = File.join(Dir.home, 'dotfiles')
     @odir = File.join(Dir.home, 'dotfiles-old')
   end
 
   def do
+    @os.pkgs.sort!
     puts("Hello #{@os.type}: #{@os.pkgs}: #{@os.dotf}: #{@os.conf}.")
 
     # Runs pre-install commands.
