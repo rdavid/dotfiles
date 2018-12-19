@@ -9,7 +9,7 @@ show_help()
   echo "\
 SYNOPSIS
   $0 [OPTIONS] [OPTION PARAM] [PATH]
-        
+
 OPTIONS
   -h --help Shows this help.
   -s --sha  Computes hash values of files in the path.
@@ -17,7 +17,6 @@ OPTIONS
   -d --dup  Finds duplicates files in current hash values.
   -b --bak  Makes backup copy to following directory, e.g.:
             dic.sh -s -b /tmp /path-to-analyse"
-
   return 0
 }
 
