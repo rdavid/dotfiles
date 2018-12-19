@@ -1,6 +1,10 @@
 " This must be first, because it changes other options as side effect.
 set nocompatible
 
+" Allows utf-8 symbols in the file.
+scriptencoding utf-8
+set encoding=utf-8
+
 " General.
 set hidden                      " Hides buffers instead of closing them.
 set nowrap                      " Don't wrap lines.
@@ -36,7 +40,8 @@ set lazyredraw                  " Redraw only when we need to.
 set nocompatible                " We're running Vim, not Vi!
 
 set listchars=tab:»\ ,extends:›,precedes:‹,nbsp:·,trail:·
-set showbreak=↪\
+"set showbreak=↪\
+set showbreak="\u21aa "
 set list
 
 " Colors.
