@@ -9,7 +9,6 @@
 #
 
 require 'set'
-require 'colorize'
 require 'optparse'
 require 'fileutils'
 require 'terminal-table'
@@ -18,14 +17,15 @@ require_relative 'utils'
 # Handles input parameters.
 class Configuration
   DIC = [
-    ['-a', '--act',     'Real renaming.',          :act],
-    ['-r', '--rec',     'Passes recursively.',     :rec],
-    ['-l', '--lim',     'Limits name length.',     :lim],
-    ['-d', '--dir dir', 'Directory to rename.',    :dir],
-    ['-s', '--src src', 'A string to substitute.', :src],
-    ['-t', '--dst dst', 'A string to replace to.', :dst],
-    ['-p', '--pre pre', 'A string to prepend to.', :pre],
-    ['-w', '--wid wid', 'Width of the table.',     :wid]
+    ['-a', '--act',     'Real renaming.',              :act],
+    ['-r', '--rec',     'Passes recursively.',         :rec],
+    ['-l', '--lim',     'Limits name length.',         :lim],
+    ['-m', '--mod',     'Prepends modification time.', :mod],
+    ['-d', '--dir dir', 'Directory to rename.',        :dir],
+    ['-s', '--src src', 'A string to substitute.',     :src],
+    ['-t', '--dst dst', 'A string to replace to.',     :dst],
+    ['-p', '--pre pre', 'A string to prepend to.',     :pre],
+    ['-w', '--wid wid', 'Width of the table.',         :wid]
   ].freeze
 
   def initialize
@@ -37,6 +37,23 @@ class Configuration
     end.parse!
     raise 'Directory option is not given.' if dir.nil?
     raise "No such directory: #{dir}." unless File.directory?(dir)
+    raise "Width of the table should exeeds 14 symbols: #{wid}." if wid < 15
+  end
+
+  def act?
+    @options[:act]
+  end
+
+  def rec?
+    @options[:rec]
+  end
+
+  def lim?
+    @options[:lim]
+  end
+
+  def mod?
+    @options[:mod]
   end
 
   def dir
@@ -53,18 +70,6 @@ class Configuration
 
   def pre
     @options[:pre]
-  end
-
-  def act?
-    @options[:act]
-  end
-
-  def rec?
-    @options[:rec]
-  end
-
-  def lim?
-    @options[:lim]
   end
 
   def wid
@@ -109,9 +114,9 @@ class PointAction < Action
   end
 end
 
-# All special symbols besides 'point' (.) and 'and' (&) are replaced by minus.
+# All special symbols besides some (., &, $) are replaced by minus.
 class CharAction < Action
-  SYM = ' (){},~\'![]_#@=“„”`—’+;·‡«»$%…'.chars.to_set.freeze
+  SYM = ' (){},~\'![]_#@=“„”`—’+;·‡«»%…'.chars.to_set.freeze
 
   def do(src)
     src.chars.map { |s| SYM.include?(s) ? '-' : s }.join
@@ -129,6 +134,7 @@ class RuToEnAction < Action
     'щ' => 'szh',
     'ю' => 'ju',
     'я' => 'ya',
+    '$' => '-usd-',
     '№' => '-num-',
     '&' => '-and-'
   }.freeze
@@ -166,6 +172,21 @@ class PrependAction < Action
 
   def do(src)
     src.prepend(@pat)
+  end
+end
+
+# Prepends file modification datestamp.
+class PrependDateAction < Action
+  def initialize(dir)
+    @dir = dir
+  end
+
+  def do(src)
+    src.prepend(File.mtime(File.join(@dir, @src)).strftime('%Y%m%d-'))
+  end
+
+  def set(src)
+    @src = src
   end
 end
 
@@ -271,6 +292,7 @@ class ActionsFactory
         DowncaseAction.new,
         CharAction.new,
         RuToEnAction.new,
+        @cfg.mod? ? PrependDateAction.new(dir) : nil,
         @cfg.pre.nil? ? nil : PrependAction.new(@cfg.pre),
         TrimAction.new,
         TruncateAction.new(LIMIT),
@@ -282,28 +304,55 @@ end
 
 # Formats and prints output data.
 class Reporter
-  def initialize(dir, wid)
+  def self.init(act, wid)
+    @@act = act
+    @@tbl = wid
+    @@ttl = wid - 4
+    @@str = (wid - 7) / 2
+    @@tim = Timer.new
+    @@sta = { moved: 0, unaltered: 0, failed: 0 }
+  end
+
+  def initialize(dir)
     @dir = dir
-    @tbl = wid
-    @ttl = @tbl - 4
-    @str = (@tbl - 7) / 2
     @row = []
   end
 
   def add(lhs, rhs)
-    @row << [Utils.trim(lhs, @str), Utils.trim(rhs, @str)]
+    if rhs.is_a?(StandardError)
+      tag = :failed
+      rhs = "#{rhs.message} (#{rhs.class})"
+    elsif rhs == ''
+      tag = :unaltered
+    else
+      tag = :moved
+    end
+    @@sta[tag] += 1
+    @row << [Utils.trim(lhs, @@str), Utils.trim(rhs, @@str)]
   end
 
   def do
     puts Terminal::Table.new(
-      title: Utils.trim(@dir, @ttl),
+      title: Utils.trim(@dir, @@ttl),
       headings: [
         { value: 'src', alignment: :center },
         { value: 'dst', alignment: :center }
       ],
       rows: @row,
-      style: { width: @tbl }
+      style: { width: @@tbl }
     )
+  end
+
+  def self.stat_out
+    out = ''
+    @@sta.each { |k, v| out += ' ' + v.to_s + ' ' + k.to_s + ',' if v > 0 }
+    out.chop
+  end
+
+  def self.final
+    msg = "#{@@act ? 'Real' : 'Test'}:#{stat_out} in #{@@tim.read}."
+    msg = Utils.trim(msg, @@ttl)
+    puts "| #{msg}#{' ' * (@@ttl - msg.length)} |\n+-#{'-' * @@ttl}-+"
   end
 end
 
@@ -312,24 +361,22 @@ class Renamer
   def initialize
     @cfg = Configuration.new
     @fac = ActionsFactory.new(@cfg)
-    @sta = { moved: 0, unaltered: 0, failed: 0 }
   end
 
   def move(dir, dat)
-    rep = Reporter.new(dir, @cfg.wid)
+    rep = Reporter.new(dir)
     dat.each do |src, dst|
       if src == dst
-        @sta[:unaltered] += 1
         rep.add(File.basename(src), '')
         next
       end
       begin
         FileUtils.mv(src, dst) if @cfg.act?
-        @sta[:moved] += 1
         rep.add(File.basename(src), File.basename(dst))
-      rescue StandardError => msg
-        @sta[:failed] += 1
-        rep.add(File.basename(src), msg)
+      rescue StandardError => e
+        rep.add(File.basename(src), e)
+        puts e.backtrace.join("\n\t")
+              .sub("\n\t", ": #{e}#{e.class ? " (#{e.class})" : ''}\n\t")
       end
     end
     rep.do
@@ -351,13 +398,9 @@ class Renamer
   end
 
   def do
-    tim = Timer.new
+    Reporter.init(@cfg.act?, @cfg.wid)
     do_dir(@cfg.dir)
-    puts "#{@cfg.act? ? 'Real' : 'Simulation'}:"\
-         " #{@sta[:moved]} moved,"\
-         " #{@sta[:unaltered]} unaltered,"\
-         " #{@sta[:failed]} failed in "\
-         "#{tim.read}."
+    Reporter.final
   end
 end
 
