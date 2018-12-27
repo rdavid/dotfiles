@@ -36,6 +36,8 @@ class Timer
   end
 
   def humanize(sec)
+    return 'less than a second' if sec < 1
+
     DIC.map do |cnt, nms, nm1|
       next if sec <= 0
 
