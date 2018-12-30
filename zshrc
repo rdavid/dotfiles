@@ -1,5 +1,9 @@
-# zshrc
 # vim: tabstop=2 shiftwidth=2 expandtab textwidth=80 linebreak wrap
+#
+# zshrc
+#
+# Copyright 2016-2018 David Rabkin
+#
 
 # Cool man pager, viewer and editor.
 export PAGER=most
@@ -89,4 +93,14 @@ fi
 # fh - repeat history
 fh() {
   print -z $( ([ -n "$ZSH_NAME" ] && fc -l 1 || history) | fzf +s --tac | sed 's/ *[0-9]* *//')
+}
+
+mp3only() {
+  find . ! \( -name "*.mp3" -o -name "*.m4a" \) -type f
+  read -q "?Are you sure `pwd`? "
+  if [[ $REPLY =~ ^[Yy]$ ]]; then
+    find . ! \( -name "*.mp3" -o -name "*.m4a" \) -type f -exec rm -f {} +
+    find . -type d -empty -delete
+    echo "\nRemoved."
+  fi
 }
