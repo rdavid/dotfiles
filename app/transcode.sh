@@ -7,8 +7,8 @@
 #
 # Transcodes any video file to m4v format.
 
-declare -a AUD=( $(for i in {1..1}; do echo 14; done) )
-declare -a SUB=( $(for i in {1..1}; do echo 4; done) )
+declare -a AUD=( $(for i in {1..1}; do echo 8; done) )
+declare -a SUB=( $(for i in {1..1}; do echo 2; done) )
 declare -a FIL=( "$@" )
 
 # Calculates duration time for report.

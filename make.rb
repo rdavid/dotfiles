@@ -65,9 +65,9 @@ class OS
 
     # Packages without Xorg to install.
     @pkgs = %w[
-      atop bat cmatrix cmus cowsay curl ffmpeg figlet fortune glances handbrake
-      htop imagemagick mc most ncdu npm nnn python scrot speedtest-cli tmux vim
-      wget youtube-dl zsh zsh-syntax-highlighting
+      atop bat cmatrix cmus cowsay curl f3 ffmpeg figlet fortune glances
+      handbrake htop imagemagick mc most ncdu npm nnn python scrot speedtest-cli
+      tmux vim wget youtube-dl zsh zsh-syntax-highlighting
     ]
 
     # List of files/folders to symlink in homedir.
