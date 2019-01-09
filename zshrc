@@ -61,7 +61,14 @@ alias ipi='ipconfig getifaddr en0'
 alias c='clear'
 
 # Changes last directory of mc into shell.
-alias mc='. /usr/lib/mc/mc-wrapper.sh'
+case "$OSTYPE" in
+  darwin*)  pp='/usr/local/Cellar/midnight-commander/4.8.22/libexec/mc/mc-wrapper.sh' ;;
+  linux*)   pp='/usr/lib/mc/mc-wrapper.sh' ;;
+  freebsd*) pp='/usr/local/libexec/mc/mc-wrapper.sh' ;;
+  msys*)    pp='/usr/lib/mc/mc-wrapper.sh';;
+  *)        echo "unknown: $OSTYPE" ;;
+esac
+alias mc=". $pp"
 
 export DISABLE_AUTO_TITLE='true'
 
