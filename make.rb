@@ -129,10 +129,11 @@ module MacOS
       brew cleanup && brew cask cleanup
     }
     (
+      # feh has to be after xquartz.
       mod.pkgs << %w[
         docker dropbox firefox fonts-font-awesome google-chrome iterm2 keepassxc
         keepingyouawake lolcat nmap pry sublime-text telegram tunnelblick
-        virtualbox vox
+        virtualbox vox xquartz feh
       ]
     ).flatten!
     mod.test << 'brew ls --versions %s >/dev/null 2>&1'
