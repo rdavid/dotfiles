@@ -413,8 +413,7 @@ type/^GIF
 	Include=image
 
 type/^JPEG
-#	View=%view{ascii} /usr/lib/mc/ext.d/image.sh view jpeg
-	Open=%view{ascii} /usr/bin/feh --scale-down --auto-zoom
+	Open=%view{ascii} feh --scale-down --auto-zoom
 	Include=image
 
 type/^PC\ bitmap
