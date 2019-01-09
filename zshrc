@@ -35,12 +35,8 @@ plugins=(archlinux battery brew catimg common-aliases compleat debian docker \
 
 # User configuration.
 export PATH="/opt/local/bin/:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin"
-export PATH="/home/david/dotfiles/app:$PATH"
-export PATH="/Users/david/dotfiles/app:$PATH"
-export PATH="/home/linuxbrew/.linuxbrew/bin:$PATH"
-export PATH="/home/david/.gem/ruby/2.5.0/bin:$PATH"
-export MANPATH="/home/linuxbrew/.linuxbrew/share/man:$MANPATH"
-export INFOPATH="/home/linuxbrew/.linuxbrew/share/info:$INFOPATH"
+export PATH="~/dotfiles/app:$PATH"
+export PATH="~/.gem/ruby/2.5.0/bin:$PATH"
 
 # Corrects work of tmuxp.
 export PATH="`python -m site --user-base`/bin":$PATH
@@ -62,17 +58,22 @@ alias c='clear'
 
 case "$OSTYPE" in
   darwin*)
-    pp='/usr/local/Cellar/midnight-commander/4.8.22/libexec/mc/mc-wrapper.sh'
-    DISPLAY=:0
+    MC='/usr/local/Cellar/midnight-commander/4.8.22/libexec/mc/mc-wrapper.sh'
+    export DISPLAY=:0
+    export LC_ALL=en_US.UTF-8
+    export LANG=en_US.UTF-8
     ;;
   linux*)
-    pp='/usr/lib/mc/mc-wrapper.sh'
+    MC='/usr/lib/mc/mc-wrapper.sh'
+    export PATH="/home/linuxbrew/.linuxbrew/bin:$PATH"
+    export MANPATH="/home/linuxbrew/.linuxbrew/share/man:$MANPATH"
+    export INFOPATH="/home/linuxbrew/.linuxbrew/share/info:$INFOPATH"
     ;;
   freebsd*)
-    pp='/usr/local/libexec/mc/mc-wrapper.sh'
+    MC='/usr/local/libexec/mc/mc-wrapper.sh'
     ;;
   msys*)
-    pp='/usr/lib/mc/mc-wrapper.sh'
+    MC='/usr/lib/mc/mc-wrapper.sh'
     ;;
   *)
     echo "unknown: $OSTYPE"
@@ -80,7 +81,7 @@ case "$OSTYPE" in
 esac
 
 # Changes last directory of mc into shell.
-alias mc=". $pp"
+alias mc=". $MC"
 
 export DISABLE_AUTO_TITLE='true'
 
