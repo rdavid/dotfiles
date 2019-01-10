@@ -123,8 +123,8 @@ class CharAction < Action
   end
 end
 
-# Transliterate from Cyrillic to English.
-class RuToEnAction < Action
+# Transliterate to English.
+class ToEnAction < Action
   MSC = {
     'ё' => 'jo',
     'ж' => 'zh',
@@ -138,9 +138,9 @@ class RuToEnAction < Action
     '№' => '-num-',
     '&' => '-and-'
   }.freeze
-  RUS = 'абвгдезийклмнопрстуфхъыьэ'.chars.freeze
-  ENG = 'abvgdeziyklmnoprstufh y e'.chars.freeze
-  DIC = RUS.zip(ENG).to_h.merge(MSC).freeze
+  SRC = 'абвгдезийклмнопрстуфхъыьэĭöü'.chars.freeze
+  DST = 'abvgdeziyklmnoprstufh y eiou'.chars.freeze
+  DIC = SRC.zip(DST).to_h.merge(MSC).freeze
 
   def do(src)
     src.chars.map { |c| DIC[c].nil? ? c : DIC[c] }.collect(&:strip).join
@@ -291,7 +291,7 @@ class ActionsFactory
         @cfg.src.nil? ? nil : SubstituteAction.new(@cfg.src, @cfg.dst),
         DowncaseAction.new,
         CharAction.new,
-        RuToEnAction.new,
+        ToEnAction.new,
         @cfg.mod? ? PrependDateAction.new(dir) : nil,
         @cfg.pre.nil? ? nil : PrependAction.new(@cfg.pre),
         TrimAction.new,
