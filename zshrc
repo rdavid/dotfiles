@@ -11,7 +11,7 @@ export VISUAL=vim
 export EDITOR=vim
 
 # Path to your oh-my-zsh installation.
-export ZSH=~/.oh-my-zsh
+export ZSH="$HOME/.oh-my-zsh"
 
 ZSH_THEME="wezm"
 
@@ -35,8 +35,8 @@ plugins=(archlinux battery brew catimg common-aliases compleat debian docker \
 
 # User configuration.
 export PATH="/opt/local/bin/:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin"
-export PATH="~/dotfiles/app:$PATH"
-export PATH="~/.gem/ruby/2.5.0/bin:$PATH"
+export PATH="$HOME/dotfiles/app:$PATH"
+export PATH="$HOME/.gem/ruby/2.5.0/bin:$PATH"
 
 # Corrects work of tmuxp.
 export PATH="`python -m site --user-base`/bin":$PATH
@@ -45,11 +45,11 @@ export PATH="`python -m site --user-base`/bin":$PATH
 
 source $ZSH/oh-my-zsh.sh
 
-alias src='source ~/.zshrc'
-alias src-tmux='tmux source-file ~/.tmux.conf'
+alias src="source $HOME/.zshrc"
+alias src-tmux="tmux source-file $HOME/.tmux.conf"
 alias vi='vim'
 alias h='history'
-alias vpn='sudo openvpn --config ~/app/dat/David_Rabkin@vpn.safe-t.com.ovpn'
+alias vpn="sudo openvpn --config $HOME/app/dat/David_Rabkin@vpn.safe-t.com.ovpn"
 alias untar='tar -zxvf'
 alias speed='speedtest-cli --server 2406 --simple'
 alias ipe='curl ipinfo.io/ip'
