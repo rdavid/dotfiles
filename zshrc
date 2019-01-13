@@ -56,29 +56,35 @@ alias ipe='curl ipinfo.io/ip'
 alias ipi='ipconfig getifaddr en0'
 alias c='clear'
 
-case "$OSTYPE" in
-  darwin*)
-    MC='/usr/local/Cellar/midnight-commander/4.8.22/libexec/mc/mc-wrapper.sh'
-    export DISPLAY=:0
-    export LC_ALL=en_US.UTF-8
-    export LANG=en_US.UTF-8
-    ;;
-  linux*)
-    MC='/usr/lib/mc/mc-wrapper.sh'
-    export PATH="/home/linuxbrew/.linuxbrew/bin:$PATH"
-    export MANPATH="/home/linuxbrew/.linuxbrew/share/man:$MANPATH"
-    export INFOPATH="/home/linuxbrew/.linuxbrew/share/info:$INFOPATH"
-    ;;
-  freebsd*)
-    MC='/usr/local/libexec/mc/mc-wrapper.sh'
-    ;;
-  msys*)
-    MC='/usr/lib/mc/mc-wrapper.sh'
+case $(uname -a) in
+  *Microsoft*)
     unsetopt BG_NICE
+    MC='/usr/lib/mc/mc-wrapper.sh'
     ;;
   *)
-    echo "unknown: $OSTYPE"
-    ;;
+    case "$OSTYPE" in
+      darwin*)
+        MC='/usr/local/Cellar/midnight-commander/4.8.22/libexec/mc/mc-wrapper.sh'
+        export DISPLAY=:0
+        export LC_ALL=en_US.UTF-8
+        export LANG=en_US.UTF-8
+        ;;
+      linux*)
+        MC='/usr/lib/mc/mc-wrapper.sh'
+        export PATH="/home/linuxbrew/.linuxbrew/bin:$PATH"
+        export MANPATH="/home/linuxbrew/.linuxbrew/share/man:$MANPATH"
+        export INFOPATH="/home/linuxbrew/.linuxbrew/share/info:$INFOPATH"
+        ;;
+      freebsd*)
+        MC='/usr/local/libexec/mc/mc-wrapper.sh'
+        ;;
+      msys*)
+        MC='/usr/lib/mc/mc-wrapper.sh'
+        ;;
+      *)
+        echo "unknown: $OSTYPE"
+        ;;
+    esac
 esac
 
 # Changes last directory of mc into shell.
