@@ -74,6 +74,7 @@ case "$OSTYPE" in
     ;;
   msys*)
     MC='/usr/lib/mc/mc-wrapper.sh'
+    unsetopt BG_NICE
     ;;
   *)
     echo "unknown: $OSTYPE"
