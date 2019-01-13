@@ -65,9 +65,9 @@ class OS
 
     # Packages without Xorg to install.
     @pkgs = %w[
-      atop bat cmatrix cmus cowsay curl f3 ffmpeg figlet fortune glances
-      handbrake htop imagemagick mc most ncdu npm nnn python scrot speedtest-cli
-      tmux vim wget youtube-dl zsh zsh-syntax-highlighting
+      atop bat cmatrix cmus cowsay curl f3 ffmpeg figlet fortune handbrake htop
+      imagemagick mc most ncdu npm nnn python scrot tmux vim wget zsh
+      zsh-syntax-highlighting
     ]
 
     # List of files/folders to symlink in homedir.
@@ -144,10 +144,7 @@ end
 # Implements FreeBSD.
 module FreeBSD
   DIC = {
-    glances:         'py27-glances',
-    fortune:         'fortune-mod-freebsd-classic',
-    'speedtest-cli': 'py27-speedtest-cli',
-    'youtube-dl':    'youtube_dl'
+    fortune: 'fortune-mod-freebsd-classic'
   }
 
   def self.extended(mod)
@@ -159,6 +156,20 @@ module FreeBSD
     ).flatten!.map! { |i| DIC[i.to_sym].nil? ? i : DIC[i.to_sym] }
     mod.test << 'pkg info %s >/dev/null 2>&1'
     mod.inst << 'sudo pkg install -y %s'
+  end
+end
+
+# Implements OpenBSD.
+module OpenBSD
+  def self.extended(mod)
+    mod.type << 'OpenBSD'
+    (
+      mod.pkgs << %w[
+        py27-pip rubygem-pry-rails rubygem-lolcat
+      ]
+    ).flatten!.map! { |i| DIC[i.to_sym].nil? ? i : DIC[i.to_sym] }
+    mod.test << 'pkg_info %s >/dev/null 2>&1'
+    mod.inst << 'doas pkg_add %s'
   end
 end
 
@@ -255,6 +266,7 @@ class CurrentOS
   def self.get
     return MacOS   if OS.mac?
     return FreeBSD if OS.freebsd?
+    return OpenBSD if OS.host_os=~/openbsd/
     return Arch    if OS.linux? && File.file?('/etc/arch-release')
     return Debian  if OS.linux? && File.file?('/etc/debian_version')
     return RedHat  if OS.linux? && File.file?('/etc/redhat-release')
@@ -348,8 +360,7 @@ class Installer
 
     # Installs Python packages.
     %w[
-      s_tui
-      tmuxp
+      glances s_tui speedtest-cli tmuxp youtube_dl
     ].each do |p|
       chk = "python -c \"help('modules');\" | grep #{p} | wc -l | xargs"
       next if `#{chk}`.strip.eql? '1'
@@ -360,8 +371,7 @@ class Installer
 
     # Installs Ruby packages.
     %w[
-      video_transcoding
-      terminal-table
+      video_transcoding terminal-table
     ].each do |p|
       chk = "gem list -i #{p}"
       next if `#{chk}`.strip.eql? 'true'
