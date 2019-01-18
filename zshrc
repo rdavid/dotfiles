@@ -131,3 +131,7 @@ mp3only() {
     echo "\nRemoved."
   fi
 }
+
+cheat() {
+  curl cht.sh/$1
+}
