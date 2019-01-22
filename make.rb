@@ -98,8 +98,8 @@ class OS
     }
     # Extends with Xorg related packages.
     (@pkgs << %w[
-      conky dropbox feh firefox font-awesome i3 i3blocks i3lock kitty okular
-      terminator
+      conky dropbox feh firefox font-awesome google-chrome i3 i3blocks i3lock
+      keepassxc kitty okular sublime-text terminator visual-studio-code
     ]).flatten!
     (@dotf << %w[i3 xinitrc]).flatten!
     (@conf << %w[conky kitty terminator]).flatten!
@@ -133,7 +133,7 @@ module MacOS
       mod.pkgs << %w[
         docker dropbox firefox fonts-font-awesome google-chrome iterm2 keepassxc
         keepingyouawake lolcat nmap pry sublime-text telegram tunnelblick
-        virtualbox vox xquartz feh
+        virtualbox visual-studio-code vox xquartz feh
       ]
     ).flatten!
     mod.test << 'brew ls --versions %s >/dev/null 2>&1'
