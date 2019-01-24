@@ -116,7 +116,7 @@ end
 
 # All special symbols besides some (., &, $) are replaced by minus.
 class CharAction < Action
-  SYM = ' (){},~\'![]_#@=“„”`—’+;·‡«»%…'.chars.to_set.freeze
+  SYM = ' (){},~\'![]_#@=„“”`—+‘’;·‡«»%…'.chars.to_set.freeze
 
   def do(src)
     src.chars.map { |s| SYM.include?(s) ? '-' : s }.join
