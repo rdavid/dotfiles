@@ -1,3 +1,10 @@
+" vim: tabstop=2 shiftwidth=2 expandtab textwidth=80 linebreak wrap
+"
+" vimrc
+"
+" Copyright 2016-2019 David Rabkin
+"
+
 " This must be first, because it changes other options as side effect.
 set nocompatible
 
@@ -10,7 +17,7 @@ set hidden                      " Hides buffers instead of closing them.
 set nowrap                      " Don't wrap lines.
 set linebreak                   " Break lines at word (requires Wrap lines).
 set showbreak=+++               " Wrap-broken line prefix.
-set textwidth=79                " Line wrap (number of cols).
+set textwidth=80                " Line wrap (number of cols).
 set showmatch                   " Highlight matching brace.
 set visualbell                  " Use visual bell (no beeping).
 
@@ -40,16 +47,15 @@ set lazyredraw                  " Redraw only when we need to.
 set nocompatible                " We're running Vim, not Vi!
 
 set listchars=tab:»\ ,extends:›,precedes:‹,nbsp:·,trail:·
-"set showbreak=↪\
 set showbreak="\u21aa "
 set list
 
 " Colors.
+syntax on                      " Enables syntax processing.
+filetype on                    " Enable filetype detection.
+filetype indent on             " Enable filetype-specific indenting.
+filetype plugin on             " Enable filetype-specific plugins.
 colorscheme zenburn
-syntax enable                  " Enables syntax processing.
-filetype on                    " Enable filetype detection
-filetype indent on             " Enable filetype-specific indenting
-filetype plugin on             " Enable filetype-specific plugins
 
 " Highlights for text that goes over the 80 column limit.
 highlight OverLength ctermbg=black ctermfg=white guibg=#592929
@@ -61,7 +67,7 @@ set pastetoggle=<F2>            " Enables clear paste.
 set runtimepath^=~/.vim/bundle/ctrlp.vim
 set runtimepath^=~/.vim/bundle/ag
 
-let mapleader=","       " leader is comma.
+let mapleader=","       " Leader is comma.
 
 " Edit vimrc/zshrc and load vimrc bindings.
 nnoremap <leader>ev :vsp $MYVIMRC<CR>
@@ -71,11 +77,12 @@ nnoremap <leader>sv :source $MYVIMRC<CR>
 " Turns off search highlight.
 nnoremap <leader><space> :nohlsearch<CR>
 
-set backup
-set backupdir=~/.vim-tmp,~/.tmp,~/tmp,/var/tmp,/tmp
-set backupskip=/tmp/*,/private/tmp/*
-set directory=~/.vim-tmp,~/.tmp,~/tmp,/var/tmp,/tmp
-set writebackup
+" Don't pollute directories with swap files, keep them in one place.
+silent !mkdir -p ~/.vim/{backup,swp}/
+set backupdir=~/.vim/backup//
+set directory=~/.vim/swp//
+" Except crontab, which will complain that it can't see any changes.
+au FileType crontab setlocal bkc=yes
 
 " Allows saving of files as sudo when I forgot to start vim using sudo.
 cmap w!! w !sudo tee > /dev/null %
