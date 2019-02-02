@@ -167,7 +167,8 @@ module OpenBSD
     bat: '',
     dropbox: '',
     f3: '',
-    google-chrome: 'chromium',
+    i3block: '',
+    'google-chrome': 'chromium',
     handbrake: '',
     imagemagic: 'ImageMagick',
     kitty: '',
@@ -182,7 +183,9 @@ module OpenBSD
       mod.pkgs << %w[
         py27-pip
       ]
-    ).flatten!.map! { |i| DIC[i.to_sym].nil? ? i : DIC[i.to_sym] }
+    ).flatten!
+     .map! { |i| DIC[i.to_sym].nil? ? i : DIC[i.to_sym] }
+     .reject! { |i| i.empty? }
     mod.test << 'which %s >/dev/null 2>&1'
     mod.inst << 'doas pkg_add %s'
   end
