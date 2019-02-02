@@ -154,7 +154,7 @@ module FreeBSD
         py27-pip rubygem-pry-rails rubygem-lolcat
       ]
     ).flatten!.map! { |i| DIC[i.to_sym].nil? ? i : DIC[i.to_sym] }
-    mod.test << 'pkg info %s >/dev/null 2>&1'
+    mod.test << 'pkg info -Ix %s >/dev/null 2>&1'
     mod.inst << 'sudo pkg install -y %s'
   end
 end
@@ -172,7 +172,7 @@ module OpenBSD
         py27-pip rubygem-pry-rails rubygem-lolcat
       ]
     ).flatten!.map! { |i| DIC[i.to_sym].nil? ? i : DIC[i.to_sym] }
-    mod.test << 'pkg_info %s >/dev/null 2>&1'
+    mod.test << 'pkg_info -I %s >/dev/null 2>&1'
     mod.inst << 'doas pkg_add %s'
   end
 end
