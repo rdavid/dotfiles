@@ -144,7 +144,7 @@ end
 # Implements FreeBSD.
 module FreeBSD
   DIC = {
-    atop: ''
+    atop: '',
     fortune: 'fortune-mod-freebsd-classic'
   }
 
@@ -163,16 +163,16 @@ end
 # Implements OpenBSD.
 module OpenBSD
   DIC = {
-    atop: ''
-    bat: ''
-    dropbox: ''
-    f3: ''
-    google-chrome: 'chromium'
-    handbrake: ''
-    imagemagic: 'ImageMagick'
-    kitty: ''
-    npm: 'node'
-    'sublime-text': ''
+    atop: '',
+    bat: '',
+    dropbox: '',
+    f3: '',
+    google-chrome: 'chromium',
+    handbrake: '',
+    imagemagic: 'ImageMagick',
+    kitty: '',
+    npm: 'node',
+    'sublime-text': '',
     'zsh-syntax-highlighting': ''
   }
 
