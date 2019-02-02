@@ -161,6 +161,10 @@ end
 
 # Implements OpenBSD.
 module OpenBSD
+  DIC = {
+    fortune: 'fortune-mod-freebsd-classic'
+  }
+
   def self.extended(mod)
     mod.type << 'OpenBSD'
     (
