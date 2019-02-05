@@ -123,10 +123,10 @@ fh() {
 }
 
 mp3only() {
-  find . ! \( -name "*.mp3" -o -name "*.m4a" \) -type f
+  find . ! \( -name '*.[Mm][Pp]3' -o -name '*.[Mm]4[Aa]' \) -type f
   read -q "?Are you sure `pwd`? "
   if [[ $REPLY =~ ^[Yy]$ ]]; then
-    find . ! \( -name "*.mp3" -o -name "*.m4a" \) -type f -exec rm -f {} +
+    find . ! \( -name '*.[Mm][Pp]3' -o -name '*.[Mm]4[Aa]' \) -type f -exec rm -f {} +
     find . -type d -empty -delete
     echo "\nRemoved."
   fi
