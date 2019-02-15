@@ -167,13 +167,15 @@ module OpenBSD
     bat: '',
     dropbox: '',
     f3: '',
-    i3block: '',
+    fortune: '',
+    i3blocks: '',
     'google-chrome': 'chromium',
     handbrake: '',
-    imagemagic: 'ImageMagick',
+    imagemagick: 'ImageMagick',
     kitty: '',
     npm: 'node',
     'sublime-text': '',
+    'visual-studio-code': '',
     'zsh-syntax-highlighting': ''
   }
 
@@ -185,6 +187,7 @@ module OpenBSD
     }
     (
       mod.pkgs << %w[
+        py-pip
       ]
     ).flatten!
      .map! { |i| DIC[i.to_sym].nil? ? i : DIC[i.to_sym] }
