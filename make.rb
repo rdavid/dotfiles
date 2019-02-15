@@ -179,9 +179,11 @@ module OpenBSD
 
   def self.extended(mod)
     mod.type << 'OpenBSD'
+    mod.prec << %{
+      ln -sf ~/.xinitrc ~/.xsession
+    }
     (
       mod.pkgs << %w[
-        py27-pip
       ]
     ).flatten!
      .map! { |i| DIC[i.to_sym].nil? ? i : DIC[i.to_sym] }
