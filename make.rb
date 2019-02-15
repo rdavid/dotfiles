@@ -181,6 +181,7 @@ module OpenBSD
     mod.type << 'OpenBSD'
     mod.prec << %{
       ln -sf ~/.xinitrc ~/.xsession
+      doas rcctl enable xenodm
     }
     (
       mod.pkgs << %w[
