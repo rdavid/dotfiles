@@ -3,7 +3,7 @@
 #
 # rename.rb
 #
-# Copyright 2018 David Rabkin
+# Copyright 2018-present David Rabkin
 #
 # This script renames files in given directory by specific rules.
 #
