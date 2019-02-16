@@ -19,6 +19,7 @@ if [ "$1" = "hardcopy" ]; then
 fi
 
 if [ "$1" = "nas" ]; then
+  LOG="/tmp/bak-nas.log"
   LCK="/tmp/nas.lck"
   SRC="/home/david/ds-satashare"
   DST="/home/david/nas-sata"
