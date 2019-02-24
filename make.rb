@@ -184,6 +184,14 @@ module OpenBSD
     mod.prec << %{
       ln -sf ~/.xinitrc ~/.xsession
       doas rcctl enable xenodm
+      cd ~
+      git clone git://github.com/tghelew/i3blocks
+      cd i3blocks
+      doas pkg_add gmake
+      gmake clean all
+      doas gmake install
+      cd ..
+      rm -rf ~/3blocks
     }
     (
       mod.pkgs << %w[
