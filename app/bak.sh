@@ -1,12 +1,31 @@
 #!/bin/sh
-# bak.sh <arc|satashare>
+# vim: tabstop=2 shiftwidth=2 expandtab textwidth=80 linebreak wrap
+#
+# bak.sh
+#
+# Copyright 2016-present David Rabkin
+#
+# bak.sh <arc|satashare|hardcopy|nas>
+#
 
 LOG="/tmp/bak.log"
 LCK="/tmp/$1.lck"
 SRC="/home/david/ds-$1/"
 DST="/media/usb-$1/bak-$1"
 
-log() 
+if [ "$1" = "hardcopy" ]; then
+  LCK="/tmp/hardcopy.lck"
+  SRC="/home/david/ds-arc/apv/"
+fi
+
+if [ "$1" = "nas" ]; then
+  LOG="/tmp/bak-nas.log"
+  LCK="/tmp/nas.lck"
+  SRC="/home/david/ds-satashare"
+  DST="/home/david/nas-sata"
+fi
+
+log()
 {
   date +"%Y%m%d-%H:%M:%S $*" | tee -a $LOG
 }
@@ -37,11 +56,11 @@ echo "---------- $(date +"%Y%m%d") ----------" | tee -a $LOG
 log "Start $SRC->$DST."
 
 rdiff-backup --print-statistics       \
-	     --terminal-verbosity 4   \
-	     --preserve-numerical-ids \
-	     --force \
-	     $SRC $DST \
-	     2>&1 | tee -a $LOG
+             --terminal-verbosity 4   \
+             --preserve-numerical-ids \
+             --force \
+             $SRC $DST \
+             2>&1 | tee -a $LOG
 
 rm -f $LCK
 
