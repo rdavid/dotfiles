@@ -66,7 +66,7 @@ class OS
     # Packages without Xorg to install.
     @pkgs = %w[
       atop bat cmatrix cmus cowsay curl f3 ffmpeg figlet fortune handbrake htop
-      imagemagick mc most ncdu npm nnn python scrot tmux vim wget zsh
+      imagemagick mc most ncdu npm nnn python scrot syncthing tmux vim wget zsh
       zsh-syntax-highlighting
     ]
 
@@ -110,6 +110,9 @@ end
 
 # Implements MacOS.
 module MacOS
+  DIC = {
+    syncthing: 'syncthing-app'
+  }
   def self.extended(mod)
     mod.type << 'MacOS'
     mod.prec << %{
@@ -136,6 +139,9 @@ module MacOS
         tunnelblick virtualbox visual-studio-code vox xquartz feh
       ]
     ).flatten!
+     .map! { |i| DIC[i.to_sym].nil? ? i : DIC[i.to_sym] }
+     .reject! { |i| i.empty? }
+    mod.test << 'which %s >/dev/null 2>&1'
     mod.test << 'brew ls --versions %s >/dev/null 2>&1'
     mod.inst << 'brew install %s || brew cask install %s'
   end
@@ -229,7 +235,8 @@ module Arch
       mod.pkgs << %w[
         alsa-utils fzf handbrake-cli lolcat python-pip ruby-pry
       ]
-    ).flatten!.map! { |i| DIC[i.to_sym].nil? ? i : DIC[i.to_sym] }
+    ).flatten!
+     .map! { |i| DIC[i.to_sym].nil? ? i : DIC[i.to_sym] }
     mod.test << 'yaourt -Qs --nameonly %s >/dev/null 2>&1'
     mod.inst << 'yaourt -Sy --noconfirm %s'
     mod.post << %{
@@ -255,7 +262,8 @@ module Debian
       mod.pkgs << %w[
         apcalc byobu lolcat pry python-pip
       ]
-    ).flatten!.map! { |i| DIC[i.to_sym].nil? ? i : DIC[i.to_sym] }
+    ).flatten!
+     .map! { |i| DIC[i.to_sym].nil? ? i : DIC[i.to_sym] }
     mod.test << 'dpkg -l %s >/dev/null 2>&1'
     mod.inst << 'sudo apt-get -y install %s'
   end
@@ -273,7 +281,8 @@ module RedHat
       mod.pkgs << %w[
         lolcat pry
       ]
-    ).flatten!.map! { |i| DIC[i.to_sym].nil? ? i : DIC[i.to_sym] }
+    ).flatten!
+     .map! { |i| DIC[i.to_sym].nil? ? i : DIC[i.to_sym] }
     mod.test << 'yum list installed %s >/dev/null 2>&1'
     mod.inst << 'sudo yum -y install %s'
   end
