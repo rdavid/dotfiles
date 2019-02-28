@@ -1,4 +1,4 @@
-#!/usr/local/bin/bash
+#!/usr/bin/env bash
 # transcode.sh
 
 #declare -a AUD=( $(for i in {1..20}; do echo 1; done) )
