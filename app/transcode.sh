@@ -1,10 +1,10 @@
 #!/usr/bin/env bash
 # transcode.sh
 
-#declare -a AUD=( $(for i in {1..20}; do echo 1; done) )
-#declare -a SUB=( $(for i in {1..20}; do echo 1; done) )
-declare -a AUD=( 1 1 1 )
-declare -a SUB=( 7 1 1 )
+declare -a AUD=( $(for i in {1..13}; do echo 7; done) )
+declare -a SUB=( $(for i in {1..13}; do echo 3; done) )
+#declare -a AUD=( 1 1 1 )
+#declare -a SUB=( 7 1 1 )
 declare -a FIL=( "$@" )
 
 # Calculates duration time for report.
@@ -57,16 +57,8 @@ BEG="$(date +%s)"
 
 for (( i=0; i < ${#FIL[@]}; i++ ))
 do
-#  transcode-video --no-log \
-#                  --m4v \
-#                  --main-audio ${AUD[$i]} \
-#                  --burn-subtitle ${SUB[$i]} \
-#                  --preset veryslow \
-#                  --output /home/david/ ${FIL[$i]}
-
   transcode-video --no-log \
                   --m4v \
-                  --encoder x264_10bit \
                   --main-audio ${AUD[$i]} \
                   --burn-subtitle ${SUB[$i]} \
                   --preset veryslow \
@@ -74,6 +66,14 @@ do
 
 #  transcode-video --no-log \
 #                  --m4v \
+#                  --encoder x264_10bit \
+#                  --main-audio ${AUD[$i]} \
+#                  --burn-subtitle ${SUB[$i]} \
+#                  --preset veryslow \
+#                  --output /home/david/ ${FIL[$i]}
+
+#  transcode-video --no-log \
+#                  --m4v \
 #                  --main-audio ${AUD[$i]} \
 #                  --preset veryslow \
 #                  --output /home/david/ ${FIL[$i]}
@@ -83,7 +83,7 @@ do
 #                  --preset veryslow \
 #                  --output /home/david/ ${FIL[$i]}
 
-  cp /home/david/*.m4v /home/david/ds-box/ibx/ && rm /home/david/*.m4v
+  cp /home/david/*.m4v /mnt/nas-box/tmp/ && rm /home/david/*.m4v
   echo "${FIL[$i]} done."
 done
 
