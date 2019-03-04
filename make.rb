@@ -290,13 +290,25 @@ end
 
 # Implements Alpine Linux.
 module Alpine
+  DIC = {
+    cowsay: '',
+    f3: '',
+    handbrake: '',
+    golang: 'go',
+    most: '',
+    npm: 'nodejs nodejs-npm',
+    nnn: '',
+    'zsh-syntax-highlighting': ''
+  }
+
   def self.extended(mod)
     mod.type << 'Alpine'
     (
       mod.pkgs << %w[
-        lolcat py-pip pry
+        py-pip
       ]
     ).flatten!
+     .map! { |i| DIC[i.to_sym].nil? ? i : DIC[i.to_sym] }
     mod.test << 'apk info %s >/dev/null 2>&1'
     mod.inst << 'sudo apk add %s'
   end
