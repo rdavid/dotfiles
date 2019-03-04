@@ -291,6 +291,8 @@ end
 # Implements Alpine Linux.
 module Alpine
   DIC = {
+    bat: '',
+    cmatrix: '',
     cowsay: '',
     f3: '',
     handbrake: '',
