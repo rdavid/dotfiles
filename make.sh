@@ -45,7 +45,7 @@ for pkg in $pkgs; do
 done
 
 # Installs needful packages.
-gems="colorize git os terminal-table"
+gems="colorize git os"
 for g in $gems; do
   if ! `gem list -i $g`; then
     platform=$(uname);
