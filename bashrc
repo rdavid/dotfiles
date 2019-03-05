@@ -24,13 +24,13 @@ else # OS X `ls`
 fi
 
 # Lists all files colorized in long format.
-alias l="ls -lF ${colorflag}"
+alias l="ls -lFh ${colorflag}"
 
 # Lists all files colorized in long format, including dot files.
-alias ll="ls -laF ${colorflag}"
+alias ll="ls -laFh ${colorflag}"
 
 # Lists only directories.
-alias lsd="ls -lF ${colorflag} | grep --color=never '^d'"
+alias lsd="ls -lFh ${colorflag} | grep --color=never '^d'"
 
 # Always uses color output for `ls`.
 alias ls="command ls ${colorflag}"
