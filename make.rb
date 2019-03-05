@@ -140,7 +140,6 @@ module MacOS
       ]
     ).flatten!
      .map! { |i| DIC[i.to_sym].nil? ? i : DIC[i.to_sym] }
-     .reject! { |i| i.empty? }
     mod.test << 'which %s >/dev/null 2>&1'
     mod.test << 'brew ls --versions %s >/dev/null 2>&1'
     mod.inst << 'brew install %s || brew cask install %s'
@@ -205,7 +204,6 @@ module OpenBSD
       ]
     ).flatten!
      .map! { |i| DIC[i.to_sym].nil? ? i : DIC[i.to_sym] }
-     .reject! { |i| i.empty? }
     mod.test << 'which %s >/dev/null 2>&1'
     mod.inst << 'doas pkg_add %s'
   end
@@ -340,11 +338,11 @@ class Installer
   end
 
   def do
-    @os.pkgs.sort!
+    @os.pkgs.reject!(&:empty?).sort!
     puts("Hello #{@os.type}: #{@os.pkgs}: #{@os.dotf}: #{@os.conf}.")
 
     # Runs pre-install commands.
-    system('bash', '-c', @os.prec) unless @os.prec.empty?
+    system(@os.prec) unless @os.prec.empty?
 
     # Install packages.
     @os.pkgs.each do |p|
@@ -390,12 +388,12 @@ class Installer
       end
       FileUtils.ln_s(File.join(@ndir, f), src, force: true)
     end
-    system('bash', '-c', @os.post) unless @os.post.empty?
+    system(@os.post) unless @os.post.empty?
 
     # Sets the default shell to zsh if it isn't currently set to zsh.
     sh = ENV['SHELL']
     unless sh.eql? `which zsh`.strip
-      system('bash', '-c', 'chsh -s $(which zsh)')
+      system('chsh -s $(which zsh)')
       puts("Unable to switch #{sh} to zsh.") unless $CHILD_STATUS.exitstatus > 0
     end
 
