@@ -305,7 +305,7 @@ module Alpine
     mod.type << 'Alpine'
     (
       mod.pkgs << %w[
-        python py-pip
+        py-pip
       ]
     ).flatten!
      .map! { |i| DIC[i.to_sym].nil? ? i : DIC[i.to_sym] }
