@@ -303,13 +303,16 @@ module Alpine
 
   def self.extended(mod)
     mod.type << 'Alpine'
+    mod.prec << %{
+      sudo apk update && sudo apk upgrade
+    }
     (
       mod.pkgs << %w[
         linux-headers musl-dev python-dev py-pip
       ]
     ).flatten!
      .map! { |i| DIC[i.to_sym].nil? ? i : DIC[i.to_sym] }
-    mod.test << 'apk info %s >/dev/null 2>&1'
+    mod.test << 'apk -e info %s >/dev/null 2>&1'
     mod.inst << 'sudo apk add %s'
   end
 end
