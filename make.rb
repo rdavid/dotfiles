@@ -134,13 +134,12 @@ module MacOS
     (
       # feh has to be after xquartz.
       mod.pkgs << %w[
-        docker dropbox firefox fonts-font-awesome google-chrome iterm2 keepassxc
-        keepingyouawake lolcat nmap pry sublime-text syncthing-app telegram
-        tunnelblick virtualbox visual-studio-code vox xquartz feh
+        aerial docker dropbox firefox fonts-font-awesome google-chrome iterm2
+        keepassxc keepingyouawake lolcat nmap pry sublime-text syncthing-app
+        telegram tunnelblick virtualbox visual-studio-code vox xquartz feh
       ]
     ).flatten!
      .map! { |i| DIC[i.to_sym].nil? ? i : DIC[i.to_sym] }
-    mod.test << 'which %s >/dev/null 2>&1'
     mod.test << 'brew ls --versions %s >/dev/null 2>&1'
     mod.inst << 'brew install %s || brew cask install %s'
   end
@@ -341,7 +340,8 @@ class Installer
   end
 
   def do
-    @os.pkgs.reject!(&:empty?).sort!
+    # Sort should be first, reject! returns nil if there is no empty.
+    @os.pkgs.sort!.reject!(&:empty?)
     puts("Hello #{@os.type}: #{@os.pkgs}: #{@os.dotf}: #{@os.conf}.")
 
     # Runs pre-install commands.
