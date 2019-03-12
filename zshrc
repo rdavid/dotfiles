@@ -41,20 +41,12 @@ export PATH="$HOME/.gem/ruby/2.5.0/bin:$PATH"
 # Corrects work of tmuxp.
 export PATH="`python -m site --user-base`/bin":$PATH
 
-. ~/dotfiles/app/z.sh
-
-source $ZSH/oh-my-zsh.sh
+source "$HOME/dotfiles/app/z.sh"
+source "$ZSH/oh-my-zsh.sh"
+source "$HOME/dotfiles/aliases"
+source "$HOME/dotfiles/functions"
 
 alias src="source $HOME/.zshrc"
-alias src-tmux="tmux source-file $HOME/.tmux.conf"
-alias vi='vim'
-alias h='history'
-alias vpn="sudo openvpn --config $HOME/app/dat/David_Rabkin@vpn.safe-t.com.ovpn"
-alias untar='tar -zxvf'
-alias speed='speedtest-cli --server 2406 --simple'
-alias ipe='curl ipinfo.io/ip'
-alias ipi='ipconfig getifaddr en0'
-alias c='clear'
 
 case $(uname -a) in
   *Microsoft*)
@@ -96,9 +88,6 @@ case $(uname -a) in
     esac
 esac
 
-# Changes last directory of mc into shell.
-alias mc=". $MC"
-
 export DISABLE_AUTO_TITLE='true'
 
 # Starts X if installed.
@@ -126,21 +115,3 @@ else
   fi
 fi
 
-# fh - repeat history
-fh() {
-  print -z $( ([ -n "$ZSH_NAME" ] && fc -l 1 || history) | fzf +s --tac | sed 's/ *[0-9]* *//')
-}
-
-mp3only() {
-  find . ! \( -name '*.[Mm][Pp]3' -o -name '*.[Mm]4[Aa]' \) -type f
-  read -q "?Are you sure `pwd`? "
-  if [[ $REPLY =~ ^[Yy]$ ]]; then
-    find . ! \( -name '*.[Mm][Pp]3' -o -name '*.[Mm]4[Aa]' \) -type f -exec rm -f {} +
-    find . -type d -empty -delete
-    echo "\nRemoved."
-  fi
-}
-
-cheat() {
-  curl cht.sh/$1
-}
