@@ -1,0 +1,61 @@
+# vim: tabstop=2 shiftwidth=2 expandtab textwidth=80 linebreak wrap
+#
+# functions
+#
+# Copyright 2019-present David Rabkin
+#
+
+# Simple calculator.
+function calc() {
+  local result="";
+  result="$(printf "scale=10;$*\n" | bc --mathlib | tr -d '\\\n')";
+  if [[ "$result" == *.* ]]; then
+    printf "$result" |
+    sed -e 's/^\./0./'        `# add "0" for cases like ".5"` \
+        -e 's/^-\./-0./'      `# add "0" for cases like "-.5"`\
+        -e 's/0*$//;s/\.$//';  # remove trailing zeros
+  else
+    printf "$result";
+  fi;
+
+  printf "\n";
+}
+
+# Creates a new directory and enter it.
+function mkd() {
+  mkdir -p "$@" && cd "$_";
+}
+
+# Determines size of a file or total size of a directory.
+function fs() {
+  if du -b /dev/null > /dev/null 2>&1; then
+    local arg=-sbh;
+  else
+    local arg=-sh;
+  fi
+  if [[ -n "$@" ]]; then
+    du $arg -- "$@";
+  else
+    du $arg .[^.]* ./*;
+  fi;
+}
+
+# Repeats history.
+fh() {
+  print -z $( ([ -n "$ZSH_NAME" ] && fc -l 1 || history) | fzf +s --tac | sed 's/ *[0-9]* *//')
+}
+
+# Removes any file besides mp[3,4]. Removes empty directories.
+mp3only() {
+  find . ! \( -name '*.[Mm][Pp]3' -o -name '*.[Mm]4[Aa]' \) -type f
+  read -q "?Are you sure `pwd`? "
+  if [[ $REPLY =~ ^[Yy]$ ]]; then
+    find . ! \( -name '*.[Mm][Pp]3' -o -name '*.[Mm]4[Aa]' \) -type f -exec rm -f {} +
+    find . -type d -empty -delete
+    echo "\nRemoved."
+  fi
+}
+
+cheat() {
+  curl cht.sh/$1
+}
