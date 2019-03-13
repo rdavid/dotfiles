@@ -88,6 +88,9 @@ case $(uname -a) in
     esac
 esac
 
+# Changes last directory of mc into shell.
+alias mc=". $MC"
+
 export DISABLE_AUTO_TITLE='true'
 
 # Starts X if installed.
