@@ -16,3 +16,7 @@ windows:
       -
       -
       - sleep 0.2 && exit
+  - window_name: mc
+    layout: tiled
+    panes:
+      - mc
