@@ -257,7 +257,7 @@ module Debian
     }
     (
       mod.pkgs << %w[
-        apcalc byobu lolcat pry python-pip
+        apcalc byobu lolcat pry python-pip net-tools
       ]
     ).flatten!
      .map! { |i| DIC[i.to_sym].nil? ? i : DIC[i.to_sym] }
