@@ -128,15 +128,16 @@ module MacOS
       else
         ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
       fi
-      brew cask upgrade
+      brew update && brew upgrade && brew cask upgrade
       brew cleanup && brew cask cleanup
     }
     (
       # feh has to be after xquartz.
       mod.pkgs << %w[
         aerial docker dropbox firefox fonts-font-awesome google-chrome iterm2
-        keepassxc keepingyouawake lolcat nmap pry sublime-text syncthing-app
-        telegram tunnelblick virtualbox visual-studio-code vox watch xquartz feh
+        keepassxc keepingyouawake lolcat nmap pry spectacle sublime-text
+        syncthing-app telegram tunnelblick virtualbox visual-studio-code vox
+        watch xquartz feh
       ]
     ).flatten!
      .map! { |i| DIC[i.to_sym].nil? ? i : DIC[i.to_sym] }
