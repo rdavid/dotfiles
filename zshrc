@@ -117,4 +117,3 @@ else
     $MOTD
   fi
 fi
-
