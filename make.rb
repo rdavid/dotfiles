@@ -124,7 +124,7 @@ module MacOS
       sudo easy_install pip
       export HOMEBREW_CASK_OPTS="--appdir=/Applications"
       if hash brew &> /dev/null; then
-        echo "Homebrew already installed."
+        echo 'Homebrew already installed.'
       else
         ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
       fi
@@ -134,13 +134,14 @@ module MacOS
     (
       # feh has to be after xquartz.
       mod.pkgs << %w[
-        aerial docker dropbox firefox fonts-font-awesome google-chrome iterm2
-        keepassxc keepingyouawake lolcat nmap pry spectacle sublime-text
+        aerial docker dropbox firefox fonts-font-awesome google-chrome hyper
+        iterm2 keepassxc keepingyouawake lolcat nmap pry spectacle sublime-text
         syncthing-app telegram tunnelblick virtualbox visual-studio-code vox
         watch xquartz feh
       ]
     ).flatten!
      .map! { |i| DIC[i.to_sym].nil? ? i : DIC[i.to_sym] }
+    mod.dotf << 'hyper.js'
     mod.test << 'brew ls --versions %s >/dev/null 2>&1'
     mod.inst << 'brew install %s || brew cask install %s'
   end
