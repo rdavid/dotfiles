@@ -136,9 +136,9 @@ module MacOS
       # feh has to be after xquartz.
       mod.pkgs << %w[
         aerial docker dropbox firefox fonts-font-awesome google-chrome hyper
-        iterm2 keepassxc keepingyouawake lolcat nmap pry spectacle sublime-text
-        syncthing-app telegram tunnelblick virtualbox visual-studio-code vox
-        watch xquartz feh
+        iterm2 keepassxc keepingyouawake kitty lolcat nmap pry spectacle
+        sublime-text syncthing-app telegram tunnelblick virtualbox
+        visual-studio-code vox watch xquartz feh
       ]
     ).flatten!
      .map! { |i| DIC[i.to_sym].nil? ? i : DIC[i.to_sym] }
