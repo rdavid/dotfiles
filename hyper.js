@@ -144,8 +144,7 @@ module.exports = {
   plugins: [
     'hyper-font-ligatures',
     'hyper-font-smoothing',
-    'hyper-zenburn',
-//    "hyper-hide-title"
+    'hyper-zenburn'
   ],
 
   // in development, you can create a directory under

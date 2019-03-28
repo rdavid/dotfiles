@@ -37,20 +37,18 @@ plugins=( \
 )
 
 # User configuration.
-export PATH="/opt/local/bin/:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin"
-export PATH="$HOME/dotfiles/app:$PATH"
+export PATH='/opt/local/bin/:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin'
 export PATH="$HOME/.gem/ruby/2.5.0/bin:$PATH"
-
+export PATH="/usr/local/go/bin:$PATH"
+export PATH="$HOME/dotfiles/app:$PATH"
 # Corrects work of tmuxp.
 export PATH="`python -m site --user-base`/bin":$PATH
-
+export GOPATH="$HOME/src/go"
 source "$HOME/dotfiles/app/z.sh"
 source "$ZSH/oh-my-zsh.sh"
 source "$HOME/dotfiles/aliases"
 source "$HOME/dotfiles/functions"
-
 alias src="source $HOME/.zshrc"
-
 case $(uname -a) in
   *Microsoft*)
     unsetopt BG_NICE
@@ -93,7 +91,6 @@ esac
 
 # Changes last directory of mc into shell.
 alias mc=". $MC"
-
 export DISABLE_AUTO_TITLE='true'
 
 # Starts X if installed.
@@ -107,13 +104,8 @@ fi
 if [[ "$TERM" != "screen" ]] &&
    [[ -z "$TMUX" ]] &&
    ! test tmux has-session -t main 2>/dev/null; then
-
   tmuxp load ~/dotfiles/tmux/plugins/tmuxp/main.yaml
 else
-  # One might want to do other things in this case, 
-  # here I print my motd, but only on servers where 
-  # one exists.
-
   # If inside tmux session then print MOTD.
   MOTD=/etc/motd.tcl
   if [ -f $MOTD ]; then
