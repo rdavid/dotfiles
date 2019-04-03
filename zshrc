@@ -9,6 +9,7 @@
 export PAGER=most
 export VISUAL=vim
 export EDITOR=vim
+export HISTCONTROL=ignorespace
 
 # Path to your oh-my-zsh installation.
 export ZSH="$HOME/.oh-my-zsh"
