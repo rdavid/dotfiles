@@ -25,7 +25,7 @@ if [ 0 -eq $# ]; then
   echo 'transcode.sh <file name>'
   exit 0
 fi
-if [ $1 = 'scan' ]; then
+if [ "$1" = 'scan' ]; then
   transcode-video --scan $2
   exit 0
 fi
