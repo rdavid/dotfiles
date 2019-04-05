@@ -33,7 +33,7 @@ HIST_STAMPS="yyyy-mm-dd"
 plugins=( \
   archlinux battery brew catimg colored-man-pages colorize common-aliases \
   compleat debian docker docker-compose gem git git-extras git-flow github \
-  golang history lol osx pip python rsync ruby sudo terminator tmux vi-mode \
+  golang history lol osx pip python rsync ruby sudo tmux vi-mode \
   web-search yarn z \
 )
 
