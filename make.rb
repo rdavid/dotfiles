@@ -204,7 +204,7 @@ module OpenBSD
     }
     (
       mod.pkgs << %w[
-        py-pip
+        coreutils py-pip
       ]
     ).flatten!
      .map! { |i| DIC[i.to_sym].nil? ? i : DIC[i.to_sym] }
