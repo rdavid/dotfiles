@@ -80,6 +80,7 @@ case $(uname -a) in
         export DISPLAY=:0
         export LC_ALL=en_US.UTF-8
         export LANG=en_US.UTF-8
+        alias ls='gls --color'
         ;;
       msys*)
         MC='/usr/lib/mc/mc-wrapper.sh'
