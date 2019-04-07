@@ -2,7 +2,7 @@
 "
 " vimrc
 "
-" Copyright 2016-2019 David Rabkin
+" Copyright 2016-present David Rabkin
 "
 
 " This must be first, because it changes other options as side effect.
@@ -33,6 +33,7 @@ set expandtab                   " Use spaces instead of tabs.
 set shiftwidth=2                " Number of auto-indent spaces.
 set smartindent                 " Enable smart-indent.
 set smarttab                    " Enable smart-tabs.
+set tabstop=2                   " Number of spaces per Tab.
 set softtabstop=2               " Number of spaces per Tab.
 set ruler                       " Show row and column ruler information.
 
