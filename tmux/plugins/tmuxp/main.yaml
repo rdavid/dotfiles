@@ -1,16 +1,16 @@
 session_name: main
 start_directory: $HOME
 windows:
-  - window_name: disp
+  - window_name: mon
     panes:
       - glances
-  - window_name: root
+  - window_name: sup
     layout: tiled
     panes:
       - sudo su
       - sudo su
       - sleep 0.2 && exit
-  - window_name: main
+  - window_name: wrk
     layout: tiled
     panes:
       -
