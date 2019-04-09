@@ -5,25 +5,13 @@
 #
 # Copyright 2016-present David Rabkin
 #
-# bak.sh <arc|satashare|hardcopy|nas>
+# bak.sh <arc|box>
 #
 
 LOG="/tmp/bak.log"
 LCK="/tmp/$1.lck"
-SRC="/home/david/ds-$1/"
-DST="/media/usb-$1/bak-$1"
-
-if [ "$1" = "hardcopy" ]; then
-  LCK="/tmp/hardcopy.lck"
-  SRC="/home/david/ds-arc/apv/"
-fi
-
-if [ "$1" = "nas" ]; then
-  LOG="/tmp/bak-nas.log"
-  LCK="/tmp/nas.lck"
-  SRC="/home/david/ds-satashare"
-  DST="/home/david/nas-sata"
-fi
+SRC="/home/david/nas-$1/"
+DST="/media/usb-bak/bak-$1"
 
 log()
 {

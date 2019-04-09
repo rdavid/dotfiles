@@ -67,14 +67,14 @@ class OS
     @pkgs = %w[
       atop bat cmatrix cmus cowsay curl f3 ffmpeg figlet fortune golang govendor
       handbrake htop imagemagick mc most ncdu npm nnn python scrot syncthing
-      tmux vim wget zsh zsh-syntax-highlighting
+      tmux vifm vim wget zsh zsh-syntax-highlighting
     ]
 
     # List of files/folders to symlink in homedir.
     @dotf = %w[bash_profile bashrc oh-my-zsh tmux.conf tmux vim vimrc zshrc]
 
     # List of files/folders to symlink in ~/.config.
-    @conf = %w[mc]
+    @conf = %w[mc vifm]
 
     # For MacOS run '--no-xorg --pass'.
     unless cfg.pass.nil?

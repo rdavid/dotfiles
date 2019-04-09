@@ -1,0 +1,117 @@
+# You can edit this file by hand, but it's recommended not to do that.
+
+# Marks:
+'H
+	/home/david/
+	..
+1554813412
+'b
+	/home/david/bin/
+	..
+1554813412
+'h
+	/home/david/
+	..
+1554813412
+'z
+	/home/david/.config/vifm
+	..
+1554813412
+
+# Bookmarks:
+
+# TUI:
+al
+q0
+v2
+ov
+m-1
+l2
+r2
+
+# Left window history (oldest to newest):
+d/usr/home/david/nas-box/ibx/wrk
+	..
+0
+d/usr/home/david/nas-box/ibx
+	..
+0
+d/usr/home/david/nas-box
+	..
+0
+d/usr/home/david
+	nas-box
+10
+d/usr/home/david/nas-box
+	ibx
+2
+d/usr/home/david/nas-box/ibx
+	20190408-mob-mus
+1
+d/usr/home/david/nas-box/ibx/20190408-mob-mus
+	..
+0
+d/usr/home/david/nas-box/ibx
+	20190408-mob-mus
+1
+d/usr/home/david/nas-box/ibx/20190408-mob-mus
+	..
+0
+d/usr/home/david/nas-box/ibx
+	20190408-mob-mus
+1
+d/usr/home/david/nas-box/ibx/20190408-mob-mus
+	..
+0
+d/usr/home/david/nas-box/ibx
+	..
+0
+d/usr/home/david/nas-box
+	ibx
+2
+d/usr/home/david/nas-box/ibx
+	20190408-mob-mus
+1
+d/usr/home/david/nas-box/ibx/20190408-mob-mus
+	..
+0
+d/usr/home/david/nas-box/ibx
+	..
+0
+d/usr/home/david/nas-box
+	bak
+1
+d
+
+# Right window history (oldest to newest):
+D/usr/home/david/nas-box/ibx/wrk
+	..
+0
+D
+
+# Command line history (oldest to newest):
+:help
+:q
+
+# Search history (oldest to newest):
+
+# Prompt history (oldest to newest):
+
+# Local filter history (oldest to newest):
+
+# Registers:
+
+# Directory stack (oldest to newest):
+
+# Trash content:
+
+# State:
+f
+i1
+[.1
+[F
+F
+I1
+].1
+]F
+s0
