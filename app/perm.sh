@@ -37,7 +37,7 @@ case "$res" in
 esac
 
 BEG="$(date +%s)"
-chown -R foobar:users "$DIR"
+chown -R david "$DIR"
 find "$DIR" -type d -exec chmod 755 {} \;
 find "$DIR" -type f -exec chmod 644 {} \;
 echo "Done in `duration $BEG`."
