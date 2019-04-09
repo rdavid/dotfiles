@@ -6,22 +6,18 @@
 	..
 1554813412
 'b
-	/home/david/bin/
+	/Users/david/bin/
 	..
-1554813412
+1554819716
 'h
-	/home/david/
+	/Users/david/
 	..
-1554813412
-'z
-	/home/david/.config/vifm
-	..
-1554813412
+1554819716
 
 # Bookmarks:
 
 # TUI:
-al
+ar
 q0
 v2
 ov
@@ -81,12 +77,54 @@ d/usr/home/david/nas-box/ibx
 d/usr/home/david/nas-box
 	bak
 1
+d/usr
+	lib
+4
 d
 
 # Right window history (oldest to newest):
 D/usr/home/david/nas-box/ibx/wrk
 	..
 0
+D/usr
+	..
+0
+D/
+	home
+10
+D/home
+	..
+0
+D/
+	Users
+4
+D/Users
+	david
+3
+D/Users/david
+	dotfiles
+15
+D/Users/david/dotfiles
+	tmux
+11
+D/Users/david/dotfiles/tmux
+	plugins
+1
+D/Users/david/dotfiles/tmux/plugins
+	tmuxp
+1
+D/Users/david/dotfiles/tmux/plugins/tmuxp
+	..
+0
+D/Users/david/dotfiles/tmux/plugins
+	..
+0
+D/Users/david/dotfiles/tmux
+	..
+0
+D/Users/david/dotfiles
+	oh-my-zsh
+8
 D
 
 # Command line history (oldest to newest):
