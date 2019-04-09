@@ -16,7 +16,7 @@ windows:
       -
       -
       - sleep 0.2 && exit
-  - window_name: file
+  - window_name: fm
     layout: tiled
     panes:
       - vifm
