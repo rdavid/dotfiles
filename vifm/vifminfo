@@ -26,6 +26,9 @@ l2
 r2
 
 # Left window history (oldest to newest):
+d/Volumes/arc/dat/soft/img
+	apple-service-diagnostics-mbp2010
+2
 d/usr/home/david/nas-box/ibx/wrk
 	..
 0
@@ -78,11 +81,56 @@ d/usr/home/david/nas-box
 	bak
 1
 d/usr
-	lib
+	..
+0
+d/
+	mnt
+11
+d/mnt
+	..
+0
+d/
+	Volumes
+5
+d/Volumes
+	box
+4
+d/Volumes/box
+	ibx
+2
+d/Volumes/box/ibx
+	..
+0
+d/Volumes/box
+	..
+0
+d/Volumes
+	arc
+2
+d/Volumes/arc
+	dat
+2
+d/Volumes/arc/dat
+	soft
+4
+d/Volumes/arc/dat/soft
+	img
+3
+d/Volumes/arc/dat/soft/img
+	apple-service-diagnostics-mm2011
+3
+d/Volumes/arc/dat/soft/img/apple-service-diagnostics-mm2011
+	..
+0
+d/Volumes/arc/dat/soft/img
+	spinrite-6
 4
 d
 
 # Right window history (oldest to newest):
+D/Users/david/dotfiles/vifm
+	vifmrc
+6
 D/usr/home/david/nas-box/ibx/wrk
 	..
 0
@@ -123,12 +171,24 @@ D/Users/david/dotfiles/tmux
 	..
 0
 D/Users/david/dotfiles
-	oh-my-zsh
-8
+	vifm
+12
+D/Users/david/dotfiles/vifm
+	..
+0
+D/Users/david/dotfiles
+	vifm
+12
+D/Users/david/dotfiles/vifm
+	vifm-help.txt
+4
 D
 
 # Command line history (oldest to newest):
 :help
+:Hello, a link to download is sent to drkinsman@sbcglobal.net. Thank you, David
+:!Hello, a link to download is sent to drkinsman@sbcglobal.net. Thank you, David
+:wq
 :q
 
 # Search history (oldest to newest):

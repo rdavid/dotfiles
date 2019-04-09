@@ -419,7 +419,15 @@ nnoremap gb :file &<cr>l
 nnoremap yd :!echo %d | xclip %i<cr>
 
 " Yank current file path into the clipboard
-nnoremap yf :!echo %c:p | xclip %i<cr>
+" if has('linux')
+"   nnoremap yf :!echo %c:p | xclip %i<cr>
+" elseif has('mac')
+  nnoremap yf :!echo -n %c:p | pbcopy %i<cr>
+" endif
+" let os = substitute(system('uname'), '\n', '', '')
+" if os == 'Darwin'
+"   nnoremap yf :!echo -n %c:p | pbcopy %i<cr>
+" endif
 
 " Mappings for faster renaming
 nnoremap I cw<c-a>
