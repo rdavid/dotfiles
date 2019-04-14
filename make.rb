@@ -98,7 +98,7 @@ class OS
     }
     # Extends with Xorg related packages.
     (@pkgs << %w[
-      conky dropbox feh firefox font-awesome google-chrome i3 i3blocks i3lock
+      conky feh firefox font-awesome google-chrome i3 i3blocks i3lock
       keepassxc kitty okular sublime-text terminator visual-studio-code
     ]).flatten!
     (@dotf << %w[i3 xinitrc]).flatten!
@@ -216,8 +216,11 @@ end
 # Implements Arch Linux.
 module Arch
   DIC = {
-    fortune:        'fortune-mod',
-    'font-awesome': 'ttf-font-awesome'
+    fortune: 'fortune-mod',
+    golang: 'go',
+    'font-awesome': 'ttf-font-awesome',
+    'sublime-text': 'sublime-text-dev',
+    'visual-studio-code': 'visual-studio-code-bin'
   }
 
   def self.extended(mod)
