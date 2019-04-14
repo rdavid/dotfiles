@@ -46,7 +46,8 @@ set noerrorbells                " Don't beep.
 set lazyredraw                  " Redraw only when we need to.
 set nocompatible                " We're running Vim, not Vi!
 
-set listchars=tab:>\ ,extends:›,precedes:‹,nbsp:·,trail:·
+"set listchars=tab:>\ ,extends:›,precedes:‹,nbsp:·,trail:·
+set listchars=tab:░\ ,extends:»,precedes:«,nbsp:⣿,trail:·
 set showbreak="\u21aa "
 set list
 
