@@ -10,7 +10,6 @@
 #
 # For MacOS run without X and with the password for binary:
 #   make --no-xorg -pass pass
-#
 
 require 'os'
 require 'git'
@@ -99,10 +98,10 @@ class OS
     # Extends with Xorg related packages.
     (@pkgs << %w[
       conky feh firefox font-awesome google-chrome i3 i3blocks i3lock
-      keepassxc kitty okular sublime-text terminator visual-studio-code
+      keepassxc kitty okular sublime-text visual-studio-code
     ]).flatten!
     (@dotf << %w[i3 xinitrc]).flatten!
-    (@conf << %w[conky kitty terminator]).flatten!
+    (@conf << %w[conky kitty]).flatten!
   end
 
   private :xconfigure
@@ -135,10 +134,10 @@ module MacOS
     (
       # feh has to be after xquartz.
       mod.pkgs << %w[
-        aerial docker dropbox firefox fonts-font-awesome google-chrome hyper
-        iterm2 keepassxc keepingyouawake kitty lolcat nmap pry spectacle
-        sublime-text syncthing-app telegram tunnelblick virtualbox
-        visual-studio-code vox watch xquartz feh
+        aerial docker firefox fonts-font-awesome google-chrome iterm2 keepassxc
+        keepingyouawake kitty lolcat nmap pry spectacle sublime-text
+        syncthing-app telegram virtualbox visual-studio-code vox watch xquartz
+        feh
       ]
     ).flatten!
      .map! { |i| DIC[i.to_sym].nil? ? i : DIC[i.to_sym] }
@@ -174,7 +173,6 @@ module OpenBSD
   DIC = {
     atop: '',
     bat: '',
-    dropbox: '',
     f3: '',
     fortune: '',
     i3blocks: '',
@@ -204,10 +202,11 @@ module OpenBSD
     }
     (
       mod.pkgs << %w[
-        coreutils py-pip
+        coreutils py-pip terminator
       ]
     ).flatten!
      .map! { |i| DIC[i.to_sym].nil? ? i : DIC[i.to_sym] }
+    (@conf << %w[terminator]).flatten!
     mod.test << 'which %s >/dev/null 2>&1'
     mod.inst << 'doas pkg_add %s'
   end
