@@ -6,13 +6,13 @@
 	..
 1554813412
 'b
-	/Users/david/bin/
+	/home/david/bin/
 	..
-1554819716
+1555241271
 'h
-	/Users/david/
+	/home/david/
 	..
-1554819716
+1555241271
 
 # Bookmarks:
 
@@ -125,6 +125,9 @@ d/Volumes/arc/dat/soft/img/apple-service-diagnostics-mm2011
 d/Volumes/arc/dat/soft/img
 	spinrite-6
 4
+d/
+	bin
+0
 d
 
 # Right window history (oldest to newest):
@@ -182,6 +185,9 @@ D/Users/david/dotfiles
 D/Users/david/dotfiles/vifm
 	vifm-help.txt
 4
+D/
+	bin
+0
 D
 
 # Command line history (oldest to newest):
