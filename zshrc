@@ -3,7 +3,6 @@
 # zshrc
 #
 # Copyright 2016-present David Rabkin
-#
 
 # Cool man pager, viewer and editor.
 export PAGER=most
@@ -13,8 +12,7 @@ export HISTCONTROL=ignorespace
 
 # Path to your oh-my-zsh installation.
 export ZSH="$HOME/.oh-my-zsh"
-
-ZSH_THEME="wezm"
+export ZSH_THEME="wezm"
 
 # Uncomment the following line to change how often to auto-update (in days).
 export UPDATE_ZSH_DAYS=30
@@ -42,6 +40,7 @@ export PATH='/opt/local/bin/:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin'
 export PATH="$HOME/.gem/ruby/2.5.0/bin:$PATH"
 export PATH="/usr/local/go/bin:$PATH"
 export PATH="$HOME/dotfiles/app:$PATH"
+
 # Corrects work of tmuxp.
 export PATH="`python -m site --user-base`/bin":$PATH
 export GOPATH="$HOME/src/go"
