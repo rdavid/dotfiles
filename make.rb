@@ -142,7 +142,6 @@ module MacOS
     ).flatten!
      .map! { |i| DIC[i.to_sym].nil? ? i : DIC[i.to_sym] }
     # MacOS is installed without Xorg, so some graphic settings are duplicated.
-    mod.dotf << 'hyper.js'
     mod.conf << 'kitty'
     mod.test << 'brew ls --versions %s >/dev/null 2>&1'
     mod.inst << 'brew install %s || brew cask install %s'
