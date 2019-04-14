@@ -5,9 +5,9 @@
 #
 # Copyright 2016-present David Rabkin
 
-# Sets DPI if external monitor is connected.
-if [ "$(xrandr --query | grep 'connected 1920x1200')" != "" ]; then
+if [ "$(xrandr --query | grep 'connected')" != "" ]; then
   echo "Xft.dpi: 100" | xrdb -merge
+  xrandr -s 1920x1080
 fi
 
 exec i3
