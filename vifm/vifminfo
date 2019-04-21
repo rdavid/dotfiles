@@ -6,13 +6,13 @@
 	..
 1554813412
 'b
-	/home/david/bin/
+	/Users/david/bin/
 	..
-1555241271
+1555325506
 'h
-	/home/david/
+	/Users/david/
 	..
-1555241271
+1555325506
 
 # Bookmarks:
 
@@ -125,8 +125,8 @@ d/Volumes/arc/dat/soft/img/apple-service-diagnostics-mm2011
 d/Volumes/arc/dat/soft/img
 	spinrite-6
 4
-d/
-	bin
+d/Volumes
+	..
 0
 d
 
@@ -183,10 +183,40 @@ D/Users/david/dotfiles
 	vifm
 12
 D/Users/david/dotfiles/vifm
-	vifm-help.txt
-4
-D/
-	bin
+	..
+0
+D/Users/david/dotfiles
+	..
+0
+D/Users/david
+	src
+15
+D/Users/david/src
+	go
+1
+D/Users/david/src/go
+	src
+2
+D/Users/david/src/go/src
+	..
+0
+D/Users/david/src/go
+	..
+0
+D/Users/david/src
+	go
+1
+D/Users/david/src/go
+	src
+2
+D/Users/david/src/go/src
+	sigmadots
+3
+D/Users/david/src/go/src/sigmadots
+	Simulation
+3
+D/Users/david/src/go/src/sigmadots/Simulation
+	..
 0
 D
 

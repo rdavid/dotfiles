@@ -64,7 +64,7 @@ class OS
 
     # Packages without Xorg to install.
     @pkgs = %w[
-      atop bat cmatrix cmus cowsay curl f3 ffmpeg figlet fortune golang govendor
+      bat cmatrix cmus cowsay curl f3 ffmpeg figlet fortune golang govendor
       handbrake htop imagemagick mc most ncdu npm nnn python scrot syncthing
       tmux vifm vim wget zsh zsh-syntax-highlighting
     ]
@@ -151,7 +151,6 @@ end
 # Implements FreeBSD.
 module FreeBSD
   DIC = {
-    atop: '',
     fortune: 'fortune-mod-freebsd-classic'
   }
 
@@ -170,7 +169,6 @@ end
 # Implements OpenBSD.
 module OpenBSD
   DIC = {
-    atop: '',
     bat: '',
     f3: '',
     fortune: '',
@@ -236,7 +234,7 @@ module Arch
     }
     (
       mod.pkgs << %w[
-        alsa-utils fzf handbrake-cli lolcat python-pip ruby-pry
+        alsa-utils atop fzf handbrake-cli lolcat python-pip ruby-pry
       ]
     ).flatten!
      .map! { |i| DIC[i.to_sym].nil? ? i : DIC[i.to_sym] }
@@ -263,7 +261,7 @@ module Debian
     }
     (
       mod.pkgs << %w[
-        apcalc byobu lolcat pry python-pip net-tools
+        apcalc atop byobu lolcat pry python-pip net-tools
       ]
     ).flatten!
      .map! { |i| DIC[i.to_sym].nil? ? i : DIC[i.to_sym] }
@@ -313,7 +311,7 @@ module Alpine
     }
     (
       mod.pkgs << %w[
-        linux-headers musl-dev python-dev py-pip
+        atop linux-headers musl-dev python-dev py-pip
       ]
     ).flatten!
      .map! { |i| DIC[i.to_sym].nil? ? i : DIC[i.to_sym] }
