@@ -120,7 +120,6 @@ module MacOS
           cp ~/dotfiles/bin/$f ~/Library/Fonts/
         fi
       done
-      sudo easy_install pip
       export HOMEBREW_CASK_OPTS="--appdir=/Applications"
       if hash brew &> /dev/null; then
         echo 'Homebrew already installed.'
