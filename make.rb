@@ -65,8 +65,8 @@ class OS
     # Packages without Xorg to install.
     @pkgs = %w[
       bat cmatrix cmus cowsay curl f3 ffmpeg figlet fortune golang govendor
-      handbrake htop imagemagick mc most ncdu npm nnn python scrot syncthing
-      tmux vifm vim wget zsh zsh-syntax-highlighting
+      handbrake htop imagemagick mc most ncdu npm nnn python syncthing tmux
+      vifm vim wget zsh zsh-syntax-highlighting
     ]
 
     # List of files/folders to symlink in homedir.
@@ -134,10 +134,9 @@ module MacOS
     (
       # feh has to be after xquartz.
       mod.pkgs << %w[
-        aerial docker firefox fonts-font-awesome google-chrome iterm2 keepassxc
-        keepingyouawake kitty lolcat nmap pry spectacle sublime-text
-        syncthing-app telegram virtualbox visual-studio-code vox watch xquartz
-        feh
+        aerial docker firefox google-chrome iterm2 keepassxc keepingyouawake
+        kitty lolcat nmap spectacle sublime-text syncthing-app telegram
+        virtualbox visual-studio-code vox watch xquartz feh
       ]
     ).flatten!
      .map! { |i| DIC[i.to_sym].nil? ? i : DIC[i.to_sym] }
@@ -158,7 +157,7 @@ module FreeBSD
     mod.type << 'FreeBSD'
     (
       mod.pkgs << %w[
-        py27-pip rubygem-pry-rails rubygem-lolcat
+        py27-pip rubygem-lolcat
       ]
     ).flatten!.map! { |i| DIC[i.to_sym].nil? ? i : DIC[i.to_sym] }
     mod.test << 'pkg info %s >/dev/null 2>&1'
@@ -234,7 +233,7 @@ module Arch
     }
     (
       mod.pkgs << %w[
-        alsa-utils atop fzf handbrake-cli lolcat python-pip ruby-pry
+        alsa-utils atop fzf handbrake-cli lolcat python-pip
       ]
     ).flatten!
      .map! { |i| DIC[i.to_sym].nil? ? i : DIC[i.to_sym] }
@@ -261,7 +260,7 @@ module Debian
     }
     (
       mod.pkgs << %w[
-        apcalc atop byobu lolcat pry python-pip net-tools
+        apcalc atop byobu lolcat python-pip net-tools
       ]
     ).flatten!
      .map! { |i| DIC[i.to_sym].nil? ? i : DIC[i.to_sym] }
@@ -280,7 +279,7 @@ module RedHat
     mod.type << 'RedHat'
     (
       mod.pkgs << %w[
-        lolcat pry
+        lolcat
       ]
     ).flatten!
      .map! { |i| DIC[i.to_sym].nil? ? i : DIC[i.to_sym] }
@@ -431,7 +430,7 @@ class Installer
 
     # Installs Ruby packages.
     %w[
-      video_transcoding terminal-table
+      pry pry-doc video_transcoding terminal-table
     ].each do |p|
       chk = "gem list -i #{p}"
       next if `#{chk}`.strip.eql? 'true'
