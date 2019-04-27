@@ -6,11 +6,10 @@
 # Copyright 2018-present David Rabkin
 #
 # This script renames files in given directory by specific rules.
-#
 
-require 'set'
-require 'optparse'
 require 'fileutils'
+require 'optparse'
+require 'set'
 require 'terminal-table'
 require_relative 'utils'
 
