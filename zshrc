@@ -39,6 +39,7 @@ plugins=( \
 export PATH='/opt/local/bin/:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin'
 export PATH="$HOME/.gem/ruby/2.5.0/bin:$PATH"
 export PATH="/usr/local/go/bin:$PATH"
+export PATH="/usr/local/opt/ruby/bin:$PATH"
 export PATH="$HOME/dotfiles/app:$PATH"
 
 # Corrects work of tmuxp.
