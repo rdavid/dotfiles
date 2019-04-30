@@ -126,8 +126,8 @@ d/Volumes/arc/dat/soft/img
 	spinrite-6
 4
 d/Volumes
-	..
-0
+	Macintosh HD
+1
 d
 
 # Right window history (oldest to newest):
@@ -218,6 +218,84 @@ D/Users/david/src/go/src/sigmadots
 D/Users/david/src/go/src/sigmadots/Simulation
 	..
 0
+D/Users/david/src/go/src/sigmadots
+	..
+0
+D/Users/david/src/go/src
+	..
+0
+D/Users/david/src/go
+	..
+0
+D/Users/david/src
+	..
+0
+D/Users/david
+	Sync
+12
+D/Users/david/Sync
+	app
+1
+D/Users/david/Sync/app
+	..
+0
+D/Users/david/Sync
+	app
+1
+D/Users/david/Sync/app
+	box
+1
+D/Users/david/Sync/app/box
+	..
+0
+D/Users/david/Sync/app
+	pwd
+2
+D/Users/david/Sync/app/pwd
+	..
+0
+D/Users/david/Sync/app
+	..
+0
+D/Users/david/Sync
+	..
+0
+D/Users/david
+	Sync
+12
+D/Users/david/Sync
+	..
+0
+D/Users/david
+	Movies
+8
+D/Users
+	david
+3
+D/Users/david
+	Downloads
+4
+D/Users/david/Downloads
+	..
+0
+D/Users/david
+	Movies
+8
+D/Users/david/Movies
+	..
+0
+D/Users/david
+	Movies
+8
+D/Users/david/Movies
+	..
+0
+D/Users/david
+	Downloads
+4
+D/Users/david/Downloads
+	container (1).log
+2
 D
 
 # Command line history (oldest to newest):
@@ -226,6 +304,8 @@ D
 :!Hello, a link to download is sent to drkinsman@sbcglobal.net. Thank you, David
 :wq
 :q
+:tabn
+:tabnew
 
 # Search history (oldest to newest):
 
@@ -234,10 +314,22 @@ D
 # Local filter history (oldest to newest):
 
 # Registers:
+""/Users/david/.local/share/vifm/Trash/000_20190424-ubuntu-telit.ova
+""/Users/david/.local/share/vifm/Trash/000_container.log
 
 # Directory stack (oldest to newest):
 
 # Trash content:
+t/Users/david/.local/share/vifm/Trash/000_get-pip.py
+	/Users/david/get-pip.py
+t/Users/david/.local/share/vifm/Trash/000_fw.sh
+	/Users/david/fw.sh
+t/Users/david/.local/share/vifm/Trash/000_package-lock.json
+	/Users/david/package-lock.json
+t/Users/david/.local/share/vifm/Trash/000_20190424-ubuntu-telit.ova
+	/Users/david/Downloads/20190424-ubuntu-telit.ova
+t/Users/david/.local/share/vifm/Trash/000_container.log
+	/Users/david/Downloads/container.log
 
 # State:
 f

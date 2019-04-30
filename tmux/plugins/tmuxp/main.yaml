@@ -10,13 +10,15 @@ windows:
       - sudo su
       - sudo su
       - sleep 0.2 && exit
+  - window_name: mng
+    layout: tiled
+    panes:
+      -
+      - vifm
+      - sleep 0.2 && exit
   - window_name: wrk
     layout: tiled
     panes:
       -
       -
       - sleep 0.2 && exit
-  - window_name: fm
-    layout: tiled
-    panes:
-      - vifm
