@@ -6,18 +6,18 @@
 	..
 1554813412
 'b
-	/Users/david/bin/
+	/home/david/bin/
 	..
-1555325506
+1556728413
 'h
-	/Users/david/
+	/home/david/
 	..
-1555325506
+1556728413
 
 # Bookmarks:
 
 # TUI:
-ar
+al
 q0
 v2
 ov
@@ -125,9 +125,9 @@ d/Volumes/arc/dat/soft/img/apple-service-diagnostics-mm2011
 d/Volumes/arc/dat/soft/img
 	spinrite-6
 4
-d/Volumes
-	Macintosh HD
-1
+d/
+	home
+4
 d
 
 # Right window history (oldest to newest):
@@ -183,129 +183,96 @@ D/Users/david/dotfiles
 	vifm
 12
 D/Users/david/dotfiles/vifm
-	..
-0
-D/Users/david/dotfiles
-	..
-0
-D/Users/david
-	src
-15
-D/Users/david/src
-	go
-1
-D/Users/david/src/go
-	src
-2
-D/Users/david/src/go/src
-	..
-0
-D/Users/david/src/go
-	..
-0
-D/Users/david/src
-	go
-1
-D/Users/david/src/go
-	src
-2
-D/Users/david/src/go/src
-	sigmadots
-3
-D/Users/david/src/go/src/sigmadots
-	Simulation
-3
-D/Users/david/src/go/src/sigmadots/Simulation
-	..
-0
-D/Users/david/src/go/src/sigmadots
-	..
-0
-D/Users/david/src/go/src
-	..
-0
-D/Users/david/src/go
-	..
-0
-D/Users/david/src
-	..
-0
-D/Users/david
-	Sync
-12
-D/Users/david/Sync
-	app
-1
-D/Users/david/Sync/app
-	..
-0
-D/Users/david/Sync
-	app
-1
-D/Users/david/Sync/app
-	box
-1
-D/Users/david/Sync/app/box
-	..
-0
-D/Users/david/Sync/app
-	pwd
-2
-D/Users/david/Sync/app/pwd
-	..
-0
-D/Users/david/Sync/app
-	..
-0
-D/Users/david/Sync
-	..
-0
-D/Users/david
-	Sync
-12
-D/Users/david/Sync
-	..
-0
-D/Users/david
-	Movies
-8
-D/Users
-	david
-3
-D/Users/david
-	Downloads
+	vifm-help.txt
 4
-D/Users/david/Downloads
-	..
-0
-D/Users/david
-	Movies
+D/
+	media
 8
-D/Users/david/Movies
+D/media
+	sf_vm-shared
+1
+D/media/sf_vm-shared
 	..
 0
-D/Users/david
-	Movies
+D/media
+	..
+0
+D/
+	media
 8
-D/Users/david/Movies
+D/media
 	..
 0
-D/Users/david
-	Downloads
-4
-D/Users/david/Downloads
-	container (1).log
-2
+D/
+	media
+8
+D/media
+	sf_vm-shared
+1
+D/media/sf_vm-shared
+	..
+0
+D/media
+	..
+0
+D/
+	media
+8
+D/media
+	sf_vm-shared
+1
+D/media/sf_vm-shared
+	..
+0
+D/media
+	sf_vm-shared
+1
+D/media/sf_vm-shared
+	..
+0
+D/media
+	sf_vm-shared
+1
+D/media/sf_vm-shared
+	..
+0
+D/media
+	sf_vm-shared
+1
+D/media/sf_vm-shared
+	..
+0
+D/media
+	..
+0
+D/
+	media
+8
+D/media
+	sf_vm-shared
+1
+D/media/sf_vm-shared
+	..
+0
+D/media
+	sf_vm-shared
+1
+D/
+	media
+8
+D/media
+	sf_vm-shared
+1
 D
 
 # Command line history (oldest to newest):
+:tabn
+:tabnew
 :help
 :Hello, a link to download is sent to drkinsman@sbcglobal.net. Thank you, David
 :!Hello, a link to download is sent to drkinsman@sbcglobal.net. Thank you, David
 :wq
 :q
-:tabn
-:tabnew
 
 # Search history (oldest to newest):
 
@@ -314,12 +281,13 @@ D
 # Local filter history (oldest to newest):
 
 # Registers:
-""/Users/david/.local/share/vifm/Trash/000_20190424-ubuntu-telit.ova
-""/Users/david/.local/share/vifm/Trash/000_container.log
+""/home/david/.local/share/vifm/Trash/000_printit.pdf
 
 # Directory stack (oldest to newest):
 
 # Trash content:
+t/home/david/.local/share/vifm/Trash/000_printit.pdf
+	/media/sf_vm-shared/printit.pdf
 t/Users/david/.local/share/vifm/Trash/000_get-pip.py
 	/Users/david/get-pip.py
 t/Users/david/.local/share/vifm/Trash/000_fw.sh
