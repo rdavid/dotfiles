@@ -185,15 +185,15 @@ bar {
 bindsym Mod1+Shift+x exec ~/dotfiles/app/lock.sh
 
 # Startup programs.
-exec --no-startup-id xset dpms 600
-#exec --no-startup-id xautolock -time 15 -locker '~/dotfiles/app/lock.sh' &
+exec --no-startup-id conky
 exec --no-startup-id nm-applet
 exec --no-startup-id feh --bg-fill ~/dotfiles/pic/bg.jpg
-exec --no-startup-id conky
-#exec --no-startup-id xscreensaver -no-splash
 
-# Do not turn off display on station.
-exec --no-startup-id xset -dpms
+# Disables DPMS and prevent screen from blanking.
+exec --no-startup-id xset s off -dpms
+
+#exec --no-startup-id xautolock -time 15 -locker '~/dotfiles/app/lock.sh' &
+#exec --no-startup-id xscreensaver -no-splash
 
 # Language switcher.
 exec "setxkbmap -layout us,il,ru"
