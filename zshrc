@@ -12,7 +12,8 @@ export HISTCONTROL=ignorespace
 
 # Path to your oh-my-zsh installation.
 export ZSH="$HOME/.oh-my-zsh"
-export ZSH_THEME="wezm"
+#export ZSH_THEME="wezm"
+export ZSH_THEME="minimal"
 
 # Uncomment the following line to change how often to auto-update (in days).
 export UPDATE_ZSH_DAYS=30
