@@ -131,11 +131,10 @@ module MacOS
       brew cleanup && brew cask cleanup
     }
     (
-      # feh has to be after xquartz.
       mod.pkgs << %w[
-        aerial docker firefox google-chrome iterm2 keepassxc keepingyouawake
+        aerial docker feh firefox google-chrome iterm2 keepassxc keepingyouawake
         kitty lolcat nmap spectacle sublime-text syncthing-app telegram
-        virtualbox visual-studio-code vox watch xquartz feh
+        typora virtualbox visual-studio-code vox watch xquartz
       ]
     ).flatten!
      .map! { |i| DIC[i.to_sym].nil? ? i : DIC[i.to_sym] }
