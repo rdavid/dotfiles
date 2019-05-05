@@ -294,8 +294,71 @@ D/Users/david
 	Downloads
 4
 D/Users/david/Downloads
-	container (1).log
+	..
+0
+D/Users/david
+	vm-shared
+18
+D/Users/david/vm-shared
+	..
+0
+D/Users/david
+	vm
+17
+D/Users/david/vm
+	..
+0
+D/Users/david
+	vm-shared
+18
+D/Users/david/vm-shared
+	..
+0
+D/Users/david
+	src
+16
+D/Users/david/src
+	telit_skeleton_app
 2
+D/Users/david/src/telit_skeleton_app
+	..
+0
+D/Users/david/src
+	go
+1
+D/Users/david/src/go
+	src
+2
+D/Users/david/src/go/src
+	sigmadots
+3
+D/Users/david/src/go/src/sigmadots
+	Simulation
+3
+D/Users/david/src/go/src/sigmadots/Simulation
+	profiles-generator
+4
+D/Users/david/src/go/src/sigmadots/Simulation/profiles-generator
+	..
+0
+D/Users/david/src/go/src/sigmadots/Simulation
+	configGenerator
+2
+D/Users/david/src/go/src/sigmadots/Simulation/configGenerator
+	..
+0
+D/Users/david/src/go/src/sigmadots/Simulation
+	profiles-generator
+4
+D/Users/david/src/go/src/sigmadots/Simulation/profiles-generator
+	..
+0
+D/Users/david/src/go/src/sigmadots/Simulation
+	configGenerator
+2
+D/Users/david/src/go/src/sigmadots/Simulation/configGenerator
+	ProfileInitDockerfile
+18
 D
 
 # Command line history (oldest to newest):
