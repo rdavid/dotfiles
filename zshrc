@@ -37,6 +37,7 @@ plugins=( \
 
 # User configuration.
 export PATH='/opt/local/bin/:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin'
+export PATH="/usr/local/sbin:$PATH"
 export PATH="$HOME/.gem/ruby/2.5.0/bin:$PATH"
 export PATH="/usr/local/go/bin:$PATH"
 export PATH="/usr/local/opt/ruby/bin:$PATH"
