@@ -1,12 +1,9 @@
 # vim: tabstop=2 shiftwidth=2 expandtab textwidth=80 linebreak wrap
 #
-# functions
-#
 # Copyright 2019-present David Rabkin
-#
 
 # Simple calculator.
-function calc() {
+calc() {
   local result="";
   result="$(printf "scale=10;$*\n" | bc --mathlib | tr -d '\\\n')";
   if [[ "$result" == *.* ]]; then
@@ -17,17 +14,16 @@ function calc() {
   else
     printf "$result";
   fi;
-
   printf "\n";
 }
 
 # Creates a new directory and enter it.
-function mkd() {
+mkd() {
   mkdir -p "$@" && cd "$_";
 }
 
 # Determines size of a file or total size of a directory.
-function fs() {
+fs() {
   if du -b /dev/null > /dev/null 2>&1; then
     local arg=-sbh;
   else
