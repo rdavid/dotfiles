@@ -169,6 +169,8 @@ end
 module OpenBSD
   DIC = {
     bat: '',
+    golang: 'go',
+    govendor: '',
     f3: '',
     fortune: '',
     i3blocks: '',
@@ -202,7 +204,7 @@ module OpenBSD
       ]
     ).flatten!
      .map! { |i| DIC[i.to_sym].nil? ? i : DIC[i.to_sym] }
-    (@conf << %w[terminator]).flatten!
+    mod.conf << 'terminator'
     mod.test << 'which %s >/dev/null 2>&1'
     mod.inst << 'doas pkg_add %s'
   end
