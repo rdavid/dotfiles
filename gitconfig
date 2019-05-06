@@ -1,0 +1,24 @@
+# This is Git's per-user configuration file.
+[user]
+  name = David
+  email = david@rabkin.co.il
+[alias]
+  # list files which have changed since master
+  files = !git diff --name-only $(git merge-base HEAD \"master\")
+
+  # Same as above, but with a diff stat instead of just names
+  # (better for interactive use)
+  stat = !git diff --stat $(git merge-base HEAD \"master\")
+
+  # NOTE: These aliases depend on the `git files` alias from
+  # a few sections ago!
+
+  # Open all files changed since master in Vim tabs
+  # Then, run fugitive's :Gdiff in each tab, and finally
+  # tell vim-gitgutter to show +/- for changes since master
+  reviewall = !vim -p $(git files) +\"tabdo Gdiff master\" +\"let g:gitgutter_diff_base = 'master'\"
+
+  # Same as the above, except specify names of files as arguments,
+  # instead of opening all files:
+  # git reviewone foo.js bar.js
+  reviewone = !vim -p +\"tabdo Gdiff master\" +\"let g:gitgutter_diff_base = 'master'\"

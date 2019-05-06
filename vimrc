@@ -51,6 +51,9 @@ set listchars=tab:░\ ,extends:»,precedes:«,nbsp:⣿,trail:·
 set showbreak="\u21aa "
 set list
 
+" Configures Pathogen before Colors.
+execute pathogen#infect()
+
 " Colors.
 syntax on                      " Enables syntax processing.
 filetype on                    " Enable filetype detection.

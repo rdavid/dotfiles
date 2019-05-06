@@ -70,7 +70,9 @@ class OS
     ]
 
     # List of files/folders to symlink in homedir.
-    @dotf = %w[bash_profile bashrc oh-my-zsh tmux.conf tmux vim vimrc zshrc]
+    @dotf = %w[
+      bash_profile bashrc gitconfig oh-my-zsh tmux.conf tmux vim vimrc zshrc
+    ]
 
     # List of files/folders to symlink in ~/.config.
     @conf = %w[mc vifm]
