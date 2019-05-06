@@ -1,0 +1,10 @@
+.DS_Store
+bin/
+kitty/kitty
+mc/mc
+node_modules/
+oh-my-zsh/
+package-lock.json
+tmux/plugins/tpm/
+tmux/tmux
+vim/autoload/
