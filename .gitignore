@@ -7,4 +7,3 @@ oh-my-zsh/
 package-lock.json
 tmux/plugins/tpm/
 tmux/tmux
-vim/autoload/
