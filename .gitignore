@@ -1,9 +1,12 @@
 .DS_Store
 bin/
+conky/conky
+i3/i3
 kitty/kitty
 mc/mc
 node_modules/
 oh-my-zsh/
 package-lock.json
+terminator/terminator
 tmux/plugins/tpm/
 tmux/tmux
