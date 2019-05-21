@@ -6,13 +6,13 @@
 	..
 1554813412
 'b
-	/home/david/bin/
+	/Users/david/bin/
 	..
-1556728413
+1558423588
 'h
-	/home/david/
+	/Users/david/
 	..
-1556728413
+1558423588
 
 # Bookmarks:
 
@@ -127,7 +127,7 @@ d/Volumes/arc/dat/soft/img
 4
 d/
 	home
-4
+10
 d
 
 # Right window history (oldest to newest):
@@ -260,7 +260,6 @@ D/media
 D/
 	media
 8
-<<<<<<< HEAD
 D/Users/david/Movies
 	..
 0
@@ -333,11 +332,12 @@ D/Users/david/src/go/src/sigmadots/Simulation
 D/Users/david/src/go/src/sigmadots/Simulation/configGenerator
 	ProfileInitDockerfile
 18
-=======
 D/media
 	sf_vm-shared
 1
->>>>>>> e7a644490730c8ea411056d659c9e788418ed55d
+D/
+	Applications
+0
 D
 
 # Command line history (oldest to newest):
