@@ -6,13 +6,13 @@
 	..
 1554813412
 'b
-	/Users/david/bin/
+	/home/david/bin/
 	..
-1558423588
+1558544508
 'h
-	/Users/david/
+	/home/david/
 	..
-1558423588
+1558544508
 
 # Bookmarks:
 
@@ -126,8 +126,152 @@ d/Volumes/arc/dat/soft/img
 	spinrite-6
 4
 d/
-	home
-10
+	media
+8
+d/media
+	sf_vm-shared
+1
+d/media/sf_vm-shared
+	..
+0
+d/media
+	..
+0
+d/
+	media
+8
+d/media
+	sf_vm-shared
+1
+d/media/sf_vm-shared
+	..
+0
+d/media
+	sf_vm-shared
+1
+d/media/sf_vm-shared
+	..
+0
+d/media
+	..
+0
+d/
+	media
+8
+d/media
+	..
+0
+d/
+	media
+8
+d/media
+	..
+0
+d/
+	media
+8
+d/media
+	sf_vm-shared
+1
+d/media/sf_vm-shared
+	..
+0
+d/media
+	sf_vm-shared
+1
+d/media/sf_vm-shared
+	..
+0
+d/media
+	..
+0
+d/
+	media
+8
+d/media
+	sf_vm-shared
+1
+d/media/sf_vm-shared
+	..
+0
+d/media
+	..
+0
+d/
+	media
+8
+d/media
+	sf_vm-shared
+1
+d/media/sf_vm-shared
+	..
+0
+d/media
+	sf_vm-shared
+1
+d/media/sf_vm-shared
+	..
+0
+d/media
+	sf_vm-shared-arch
+2
+d/media/sf_vm-shared-arch
+	..
+0
+d/media
+	sf_vm-shared
+1
+d/media/sf_vm-shared
+	..
+0
+d/media
+	sf_vm-shared-arch
+1
+d/
+	media
+8
+d/media
+	sf_vm-shared-arch
+1
+d/media/sf_vm-shared-arch
+	..
+0
+d/media
+	sf_vm-shared-arch
+1
+d/media/sf_vm-shared-arch
+	..
+0
+d/media
+	sf_vm-shared-arch
+1
+d/media/sf_vm-shared-arch
+	..
+0
+d/media
+	sf_vm-shared-arch
+1
+d/media/sf_vm-shared-arch
+	1
+1
+d/media
+	sf_vm-shared-arch
+1
+d/media/sf_vm-shared-arch
+	..
+0
+d/media
+	sf_vm-shared-arch
+1
+d/media/sf_vm-shared-arch
+	..
+0
+d/media
+	sf_vm-shared-arch
+1
+d/media/sf_vm-shared-arch
+	..
+0
 d
 
 # Right window history (oldest to newest):
@@ -260,83 +404,8 @@ D/media
 D/
 	media
 8
-D/Users/david/Movies
-	..
-0
-D/Users/david
-	Downloads
-4
-D/Users/david/Downloads
-	..
-0
-D/Users/david
-	vm-shared
-18
-D/Users/david/vm-shared
-	..
-0
-D/Users/david
-	vm
-17
-D/Users/david/vm
-	..
-0
-D/Users/david
-	vm-shared
-18
-D/Users/david/vm-shared
-	..
-0
-D/Users/david
-	src
-16
-D/Users/david/src
-	telit_skeleton_app
-2
-D/Users/david/src/telit_skeleton_app
-	..
-0
-D/Users/david/src
-	go
-1
-D/Users/david/src/go
-	src
-2
-D/Users/david/src/go/src
-	sigmadots
-3
-D/Users/david/src/go/src/sigmadots
-	Simulation
-3
-D/Users/david/src/go/src/sigmadots/Simulation
-	profiles-generator
-4
-D/Users/david/src/go/src/sigmadots/Simulation/profiles-generator
-	..
-0
-D/Users/david/src/go/src/sigmadots/Simulation
-	configGenerator
-2
-D/Users/david/src/go/src/sigmadots/Simulation/configGenerator
-	..
-0
-D/Users/david/src/go/src/sigmadots/Simulation
-	profiles-generator
-4
-D/Users/david/src/go/src/sigmadots/Simulation/profiles-generator
-	..
-0
-D/Users/david/src/go/src/sigmadots/Simulation
-	configGenerator
-2
-D/Users/david/src/go/src/sigmadots/Simulation/configGenerator
-	ProfileInitDockerfile
-18
 D/media
-	sf_vm-shared
-1
-D/
-	Applications
+	..
 0
 D
 
