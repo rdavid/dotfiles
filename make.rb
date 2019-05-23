@@ -136,7 +136,7 @@ module MacOS
       mod.pkgs << %w[
         aerial docker feh firefox google-chrome iterm2 keepassxc keepingyouawake
         kitty lolcat nmap spectacle sublime-text syncthing-app telegram
-        typora virtualbox visual-studio-code vox watch xquartz
+        typora vanilla virtualbox visual-studio-code vox watch xquartz
       ]
     ).flatten!
      .map! { |i| DIC[i.to_sym].nil? ? i : DIC[i.to_sym] }
