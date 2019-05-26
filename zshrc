@@ -1,7 +1,5 @@
 # vim: tabstop=2 shiftwidth=2 expandtab textwidth=80 linebreak wrap
 #
-# zshrc
-#
 # Copyright 2016-present David Rabkin
 
 # Cool man pager, viewer and editor.
@@ -116,3 +114,5 @@ else
     $MOTD
   fi
 fi
+
+[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh

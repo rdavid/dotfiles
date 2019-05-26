@@ -1,7 +1,5 @@
 " vim: tabstop=2 shiftwidth=2 expandtab textwidth=80 linebreak wrap
 "
-" vimrc
-"
 " Copyright 2016-present David Rabkin
 
 " This must be first, because it changes other options as side effect.
@@ -91,6 +89,9 @@ au FileType crontab setlocal bkc=yes
 " Allows saving of files as sudo when I forgot to start vim using sudo.
 cmap w!! w !sudo tee > /dev/null %
 
-" Allows saving remote file in case of vim scp://name@host:port/filename.ext
+" Allows saving remote file in case of vim scp://name@host:port/filename.ext.
 autocmd BufRead scp://* :set bt=acwrite
 autocmd BufWritePost scp://* :set bt=acwrite
+
+" If installed using Homebrew.
+set rtp+=/usr/local/opt/fzf

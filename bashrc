@@ -1,10 +1,6 @@
-#!/bin/bash
 # vim: tabstop=2 shiftwidth=2 expandtab textwidth=80 linebreak wrap
 #
-# bashrc
-#
 # Copyright 2016-present David Rabkin
-#
 
 # Launches zsh.
 if [ -t 1 ]; then
@@ -32,3 +28,5 @@ export HISTCONTROL='ignoreboth';
 # Highlights section titles in manual pages.
 export LESS_TERMCAP_md="${yellow}";
 
+
+[ -f ~/.fzf.bash ] && source ~/.fzf.bash

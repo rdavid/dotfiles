@@ -17,7 +17,7 @@
 # Bookmarks:
 
 # TUI:
-al
+ar
 q0
 v2
 ov
@@ -126,152 +126,8 @@ d/Volumes/arc/dat/soft/img
 	spinrite-6
 4
 d/
-	media
-8
-d/media
-	sf_vm-shared
-1
-d/media/sf_vm-shared
-	..
-0
-d/media
-	..
-0
-d/
-	media
-8
-d/media
-	sf_vm-shared
-1
-d/media/sf_vm-shared
-	..
-0
-d/media
-	sf_vm-shared
-1
-d/media/sf_vm-shared
-	..
-0
-d/media
-	..
-0
-d/
-	media
-8
-d/media
-	..
-0
-d/
-	media
-8
-d/media
-	..
-0
-d/
-	media
-8
-d/media
-	sf_vm-shared
-1
-d/media/sf_vm-shared
-	..
-0
-d/media
-	sf_vm-shared
-1
-d/media/sf_vm-shared
-	..
-0
-d/media
-	..
-0
-d/
-	media
-8
-d/media
-	sf_vm-shared
-1
-d/media/sf_vm-shared
-	..
-0
-d/media
-	..
-0
-d/
-	media
-8
-d/media
-	sf_vm-shared
-1
-d/media/sf_vm-shared
-	..
-0
-d/media
-	sf_vm-shared
-1
-d/media/sf_vm-shared
-	..
-0
-d/media
-	sf_vm-shared-arch
-2
-d/media/sf_vm-shared-arch
-	..
-0
-d/media
-	sf_vm-shared
-1
-d/media/sf_vm-shared
-	..
-0
-d/media
-	sf_vm-shared-arch
-1
-d/
-	media
-8
-d/media
-	sf_vm-shared-arch
-1
-d/media/sf_vm-shared-arch
-	..
-0
-d/media
-	sf_vm-shared-arch
-1
-d/media/sf_vm-shared-arch
-	..
-0
-d/media
-	sf_vm-shared-arch
-1
-d/media/sf_vm-shared-arch
-	..
-0
-d/media
-	sf_vm-shared-arch
-1
-d/media/sf_vm-shared-arch
-	1
-1
-d/media
-	sf_vm-shared-arch
-1
-d/media/sf_vm-shared-arch
-	..
-0
-d/media
-	sf_vm-shared-arch
-1
-d/media/sf_vm-shared-arch
-	..
-0
-d/media
-	sf_vm-shared-arch
-1
-d/media/sf_vm-shared-arch
-	..
-0
+	home
+10
 d
 
 # Right window history (oldest to newest):
@@ -404,9 +260,105 @@ D/media
 D/
 	media
 8
-D/media
+D/Users/david/Movies
 	..
 0
+D/Users/david
+	Downloads
+4
+D/Users/david/Downloads
+	..
+0
+D/Users/david
+	vm-shared
+18
+D/Users/david/vm-shared
+	..
+0
+D/Users/david
+	vm
+17
+D/Users/david/vm
+	..
+0
+D/Users/david
+	vm-shared
+18
+D/Users/david/vm-shared
+	..
+0
+D/Users/david
+	src
+16
+D/Users/david/src
+	telit_skeleton_app
+2
+D/Users/david/src/telit_skeleton_app
+	..
+0
+D/Users/david/src
+	go
+1
+D/Users/david/src/go
+	src
+2
+D/Users/david/src/go/src
+	sigmadots
+3
+D/Users/david/src/go/src/sigmadots
+	Simulation
+3
+D/Users/david/src/go/src/sigmadots/Simulation
+	profiles-generator
+4
+D/Users/david/src/go/src/sigmadots/Simulation/profiles-generator
+	..
+0
+D/Users/david/src/go/src/sigmadots/Simulation
+	configGenerator
+2
+D/Users/david/src/go/src/sigmadots/Simulation/configGenerator
+	..
+0
+D/Users/david/src/go/src/sigmadots/Simulation
+	profiles-generator
+4
+D/Users/david/src/go/src/sigmadots/Simulation/profiles-generator
+	..
+0
+D/Users/david/src/go/src/sigmadots/Simulation
+	configGenerator
+2
+D/Users/david/src/go/src/sigmadots/Simulation/configGenerator
+	ProfileInitDockerfile
+18
+D/media
+	sf_vm-shared
+1
+D/
+	Users
+4
+D/Users
+	david
+3
+D/Users/david
+	Dropbox
+5
+D/Users/david/Dropbox
+	app
+4
+D/Users/david/Dropbox/app
+	dat
+2
+D/Users/david/Dropbox/app/dat
+	..
+0
+D/Users/david/Dropbox/app
+	pwd
+3
+D/Users/david/Dropbox/app/pwd
+	pwd.kdbx
+15
 D
 
 # Command line history (oldest to newest):

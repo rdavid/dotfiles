@@ -41,6 +41,66 @@ fh() {
   print -z $( ([ -n "$ZSH_NAME" ] && fc -l 1 || history) | fzf +s --tac | sed 's/ *[0-9]* *//')
 }
 
+# fkill - kill processes - list only the ones you can kill.
+fkill() {
+  local pid
+  if [ "$UID" != "0" ]; then
+    pid=$(ps -f -u $UID | sed 1d | fzf -m | awk '{print $2}')
+  else
+    pid=$(ps -ef | sed 1d | fzf -m | awk '{print $2}')
+  fi
+  if [ "x$pid" != "x" ]
+  then
+    echo $pid | xargs kill -${1:-9}
+  fi
+}
+
+# fshow - git commit browser.
+fshow() {
+  git log --graph --color=always \
+      --format="%C(auto)%h%d %s %C(black)%C(bold)%cr" "$@" |
+  fzf --ansi --no-sort --reverse --tiebreak=index --bind=ctrl-s:toggle-sort \
+      --bind "ctrl-m:execute:
+        (grep -o '[a-f0-9]\{7\}' | head -1 |
+        xargs -I % sh -c 'git show --color=always % | less -R') << 'FZF-EOF'
+        {}
+FZF-EOF"
+}
+
+cd() {
+  if [[ "$#" != 0 ]]; then
+    builtin cd "$@";
+    return
+  fi
+  while true; do
+    local lsd=$(echo ".." && ls -p | grep '/$' | sed 's;/$;;')
+    local dir="$(printf '%s\n' "${lsd[@]}" |
+      fzf --reverse --preview '
+          __cd_nxt="$(echo {})";
+          __cd_path="$(echo $(pwd)/${__cd_nxt} | sed "s;//;/;")";
+          echo $__cd_path;
+          echo;
+          ls -p --color=always "${__cd_path}";
+        ')"
+    [[ ${#dir} != 0 ]] || return 0
+    builtin cd "$dir" &> /dev/null
+  done
+}
+
+# Select a docker container to start and attach to
+da() {
+  local cid
+  cid=$(docker ps -a | sed 1d | fzf -1 -q "$1" | awk '{print $1}')
+  [ -n "$cid" ] && docker start "$cid" && docker attach "$cid"
+}
+
+# Select a running docker container to stop
+ds() {
+  local cid
+  cid=$(docker ps | sed 1d | fzf -q "$1" | awk '{print $1}')
+  [ -n "$cid" ] && docker stop "$cid"
+}
+
 # Removes any file besides mp[3,4]. Removes empty directories.
 mp3only() {
   find . ! \( -name '*.[Mm][Pp]3' -o -name '*.[Mm]4[Aa]' \) -type f

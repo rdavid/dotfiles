@@ -1,8 +1,6 @@
 #!/usr/bin/env ruby
 # vim: tabstop=2 shiftwidth=2 expandtab textwidth=80 linebreak wrap
 #
-# make.rb
-#
 # Copyright 2017-present David Rabkin
 #
 # This script creates symlinks from the home directory to any desired
@@ -64,7 +62,7 @@ class OS
 
     # Packages without Xorg to install.
     @pkgs = %w[
-      bat cmatrix cmus cowsay curl f3 ffmpeg figlet fortune golang govendor
+      bat cmatrix cmus cowsay curl f3 ffmpeg figlet fortune fzf golang govendor
       handbrake htop imagemagick mc most ncdu npm nnn python syncthing tmux
       vifm vim wget zsh zsh-syntax-highlighting
     ]
@@ -235,7 +233,7 @@ module Arch
     }
     (
       mod.pkgs << %w[
-        alsa-utils atop fzf handbrake-cli lolcat python-pip
+        alsa-utils atop handbrake-cli lolcat python-pip
       ]
     ).flatten!
      .map! { |i| DIC[i.to_sym].nil? ? i : DIC[i.to_sym] }
