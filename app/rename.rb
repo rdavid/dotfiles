@@ -1,8 +1,6 @@
 #!/usr/bin/env ruby
 # vim: tabstop=2 shiftwidth=2 expandtab textwidth=80 linebreak wrap
 #
-# rename.rb
-#
 # Copyright 2018-present David Rabkin
 #
 # This script renames files in given directory by specific rules.
@@ -72,7 +70,13 @@ class Configuration
   end
 
   def wid
-    @options[:wid].nil? ? 79 : @options[:wid].to_i
+    if @options[:wid].nil?
+      # Reads current terminal width.
+      wid = `tput co`
+      wid.to_s.empty? ? 79 : wid.to_i
+    else
+      @options[:wid].to_i
+    end
   end
 end
 
