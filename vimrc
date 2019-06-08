@@ -17,13 +17,11 @@ set showbreak=+++               " Wrap-broken line prefix.
 set textwidth=80                " Line wrap (number of cols).
 set showmatch                   " Highlight matching brace.
 set visualbell                  " Use visual bell (no beeping).
-
 set hlsearch                    " Highlights all search results.
 set incsearch                   " Shows search matches as you type.
 set smartcase                   " Enable smart-case search.
 set ignorecase                  " Always case-insensitive.
 set incsearch                   " Searches for strings incrementally.
-
 set autoindent                  " Auto-indent new lines.
 set copyindent                  " Copy previous indentation on autoindenting.
 set expandtab                   " Use spaces instead of tabs.
@@ -33,7 +31,6 @@ set smarttab                    " Enable smart-tabs.
 set tabstop=2                   " Number of spaces per Tab.
 set softtabstop=2               " Number of spaces per Tab.
 set ruler                       " Show row and column ruler information.
-
 set undolevels=1000             " Number of undo levels.
 set history=1000                " Remembers more commands and search history.
 set backspace=indent,eol,start  " Backspace behaviour.
@@ -42,21 +39,26 @@ set noswapfile
 set title                       " Changes the terminal's title.
 set noerrorbells                " Don't beep.
 set lazyredraw                  " Redraw only when we need to.
-set nocompatible                " We're running Vim, not Vi!
-
-"set listchars=tab:>\ ,extends:›,precedes:‹,nbsp:·,trail:·
 set listchars=tab:░\ ,extends:»,precedes:«,nbsp:⣿,trail:·
 set showbreak="\u21aa "
 set list
+
+" Switches on and off relativenumber in hybrid mode.
+augroup numbertoggle
+  autocmd!
+  autocmd BufEnter,FocusGained,InsertLeave,WinEnter * set nu rnu
+  autocmd BufLeave,FocusLost,InsertEnter,WinLeave   * set nonu nornu
+augroup END
+:nnoremap <silent> <C-n> :set nu! rnu!<cr>
 
 " Configures Pathogen before Colors.
 execute pathogen#infect()
 
 " Colors.
 syntax on                      " Enables syntax processing.
-filetype on                    " Enable filetype detection.
-filetype indent on             " Enable filetype-specific indenting.
-filetype plugin on             " Enable filetype-specific plugins.
+filetype on                    " Enables filetype detection.
+filetype indent on             " Enables filetype-specific indenting.
+filetype plugin on             " Enables filetype-specific plugins.
 colorscheme zenburn
 
 " Highlights for text that goes over the 80 column limit.
