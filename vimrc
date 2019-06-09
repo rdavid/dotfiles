@@ -47,7 +47,7 @@ set list
 augroup numbertoggle
   autocmd!
   autocmd BufEnter,FocusGained,InsertLeave,WinEnter * set nu rnu
-  autocmd BufLeave,FocusLost,InsertEnter,WinLeave   * set nonu nornu
+  autocmd BufLeave,FocusLost,InsertEnter,WinLeave   * set nornu
 augroup END
 :nnoremap <silent> <C-n> :set nu! rnu!<cr>
 
