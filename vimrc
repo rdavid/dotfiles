@@ -66,12 +66,7 @@ highlight OverLength ctermbg=black ctermfg=white guibg=#592929
 match OverLength /\%81v.\+/
 
 set pastetoggle=<F2>            " Enables clear paste.
-
-" Plugins.
-set runtimepath^=~/.vim/bundle/ctrlp.vim
-set runtimepath^=~/.vim/bundle/ag
-
-let mapleader=","       " Leader is comma.
+let mapleader=","               " Leader is comma.
 
 " Edit vimrc/zshrc and load vimrc bindings.
 nnoremap <leader>ev :vsp $MYVIMRC<CR>
