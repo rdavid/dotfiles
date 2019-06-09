@@ -63,7 +63,7 @@ class OS
     # Packages without Xorg to install.
     @pkgs = %w[
       bat cmatrix cmus cowsay curl f3 ffmpeg figlet fortune fzf golang govendor
-      handbrake htop imagemagick mc most ncdu npm nnn python syncthing tmux
+      handbrake htop imagemagick mc mosh most ncdu npm nnn python syncthing tmux
       vifm vim wget zsh zsh-syntax-highlighting
     ]
 
