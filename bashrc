@@ -28,5 +28,7 @@ export HISTCONTROL='ignoreboth';
 # Highlights section titles in manual pages.
 export LESS_TERMCAP_md="${yellow}";
 
+# Switches on vi command-line editing.
+set -o vi
 
 [ -f ~/.fzf.bash ] && source ~/.fzf.bash

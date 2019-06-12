@@ -95,6 +95,9 @@ esac
 alias mc=". $MC"
 export DISABLE_AUTO_TITLE='true'
 
+# Switches on vi command-line editing.
+bindkey -v
+
 # Starts X if installed.
 if [[ ! $DISPLAY && $XDG_VTNR -eq 1 ]]; then
   if [[ `which startx` ]]; then
