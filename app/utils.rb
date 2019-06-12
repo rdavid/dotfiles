@@ -1,19 +1,17 @@
 # vim: tabstop=2 shiftwidth=2 expandtab textwidth=80 linebreak wrap
 #
-# utils.rb
-#
 # Copyright 2018 David Rabkin
-#
 
-# All methods ara static.
+# All methods are static.
 class Utils
   class << self
+    SEP = '~'.freeze
     def trim(src, lim)
       return src if src.length <= lim
 
-      beg = fin = (lim - 2) / 2
-      beg -= 1 if lim.even?
-      src[0..beg] + '..' + src[-fin..-1]
+      beg = fin = (lim - SEP.length) / 2
+      beg += 1 if lim.even?
+      src[0..beg] + SEP + src[-fin..-1]
     end
   end
 end
