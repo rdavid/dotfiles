@@ -1,11 +1,9 @@
-" vim: filetype=vifm :
-" Sample configuration file for vifm (last updated: 20 July, 2018)
-" You can edit this file by hand.
-" The " character at the beginning of a line comments out the line.
-" Blank lines are ignored.
-" The basic format for each item is shown with an example.
+" vim: filetype=vifm tabstop=2 shiftwidth=2 expandtab textwidth=80 linebreak wrap
+"
+" Copyright 2019-present David Rabkin
 
-" ------------------------------------------------------------------------------
+" Removes confirmation for deletion into trash as well as permanent.
+set confirm-=delete,permdelete
 
 " This is the actual command used to start vi.  The default is vim.
 " If you would like to use another vi clone such as Elvis or Vile
