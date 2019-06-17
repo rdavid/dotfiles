@@ -1,8 +1,6 @@
 #!/usr/bin/env python
 
 from __future__ import print_function
-
-from datetime import datetime
 from time import localtime
 from sys import exc_info
 from sys import exit
@@ -78,9 +76,8 @@ def to_fuzzy_time(hour, minutes, resolution):
 
     hour_word = _convert_hour_to_word(normalized_hour)
     minute_word = _convert_minute_to_word(minutes, resolution)
-    day = datetime.now().strftime("%d")
     if minute_word:
-        return " ".join([minute_word, conjunction, hour_word, "|", day])
+        return " ".join([minute_word, conjunction, hour_word])
     elif normalized_hour not in [0, 12]:
         return "{0} o'clock".format(hour_word)
     return hour_word
