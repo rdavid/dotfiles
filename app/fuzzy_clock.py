@@ -1,8 +1,8 @@
 #!/usr/bin/env python
 
-# TODO Add license header
 from __future__ import print_function
 
+from datetime import datetime
 from time import localtime
 from sys import exc_info
 from sys import exit
@@ -10,7 +10,6 @@ from sys import exit
 DEFAULT_RESOLUTION = 5
 MIDDAY = 12
 
-# TODO Internationalize
 HOUR_WORD_MAPPINGS = {
     0: "midnight",
     1: "one",
@@ -27,8 +26,6 @@ HOUR_WORD_MAPPINGS = {
     12: "noon"
 }
 
-
-# TODO Internationalize
 MINUTE_WORD_MAPPINGS = {
     0: "",
     5: "five",
@@ -77,12 +74,13 @@ def to_fuzzy_time(hour, minutes, resolution):
     conjunction = "past"
     if _is_half_past_hour(minutes, resolution):
         normalized_hour = _increment_hour(hour)
-        conjunction = "till"
+        conjunction = "to"
 
     hour_word = _convert_hour_to_word(normalized_hour)
     minute_word = _convert_minute_to_word(minutes, resolution)
+    day = datetime.now().strftime("%d")
     if minute_word:
-        return " ".join([minute_word, conjunction, hour_word])
+        return " ".join([minute_word, conjunction, hour_word, "|", day])
     elif normalized_hour not in [0, 12]:
         return "{0} o'clock".format(hour_word)
     return hour_word
@@ -92,9 +90,6 @@ if __name__ == "__main__":
     time_to_convert = localtime()
     resolution = DEFAULT_RESOLUTION
     try:
-        # TODO Add command line arguments for passing in time
-        # TODO Add command line argument to override the locale
-        # TODO Add command line argument to override the default resolution
         print(to_fuzzy_time(time_to_convert.tm_hour,
                             time_to_convert.tm_min,
                             resolution))
