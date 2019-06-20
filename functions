@@ -101,12 +101,15 @@ ds() {
   [ -n "$cid" ] && docker stop "$cid"
 }
 
-# Removes any file besides mp[3,4]. Removes empty directories.
+# Removes any file besides mp3, m4a, flac. Removes empty directories.
 mp3only() {
-  find . ! \( -name '*.[Mm][Pp]3' -o -name '*.[Mm]4[Aa]' \) -type f
+  find . -type f \
+    ! \( -name '*.mp3' -o -name '*.m4a' -o -name '*.flac' \)
   read -q "?Are you sure `pwd`? "
   if [[ $REPLY =~ ^[Yy]$ ]]; then
-    find . ! \( -name '*.[Mm][Pp]3' -o -name '*.[Mm]4[Aa]' \) -type f -exec rm -f {} +
+    find . -type f \
+      ! \( -name '*.mp3' -o -name '*.m4a' -o -name '*.flac' \) \
+      -exec rm -f {} +
     find . -type d -empty -delete
     echo "\nRemoved."
   fi
