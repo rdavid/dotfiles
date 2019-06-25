@@ -62,9 +62,9 @@ class OS
 
     # Packages without Xorg to install.
     @pkgs = %w[
-      bat cmatrix cmus cowsay curl f3 ffmpeg figlet fortune fzf golang govendor
-      handbrake htop imagemagick mc mosh most ncdu npm nnn python syncthing tmux
-      vifm vim wget zsh zsh-syntax-highlighting
+      bat cmatrix cmus cowsay curl f3 ffmpeg figlet fortune fzf handbrake htop
+      imagemagick mc mosh most ncdu npm nnn python syncthing tmux vifm vim wget
+      zsh zsh-syntax-highlighting
     ]
 
     # List of files/folders to symlink in homedir.
@@ -168,8 +168,6 @@ end
 module OpenBSD
   DIC = {
     bat: '',
-    golang: 'go',
-    govendor: '',
     f3: '',
     fortune: '',
     i3blocks: '',
@@ -213,8 +211,8 @@ end
 module Arch
   DIC = {
     fortune: 'fortune-mod',
-    golang: 'go',
     'font-awesome': 'ttf-font-awesome',
+    handbrake: 'handbrake-cli',
     'sublime-text': 'sublime-text-dev',
     'visual-studio-code': 'visual-studio-code-bin'
   }
@@ -297,7 +295,6 @@ module Alpine
     cowsay: '',
     f3: '',
     handbrake: '',
-    golang: 'go',
     most: '',
     npm: 'nodejs nodejs-npm',
     nnn: '',
