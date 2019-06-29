@@ -118,3 +118,10 @@ mp3only() {
 cheat() {
   curl cht.sh/$1
 }
+
+speed-mon() {
+  while true; do
+    speed | grep Download | gawk '{ print strftime("%H:%M:%S"), $2 }\'
+    sleep 10;
+  done
+}
