@@ -11,5 +11,6 @@ package-lock.json
 terminator/terminator
 tmux/plugins/tpm/
 tmux/tmux
+vim/.netrwhist
 vifm/vifminfo
 
