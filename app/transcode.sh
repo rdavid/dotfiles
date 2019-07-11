@@ -1,9 +1,6 @@
 #!/bin/sh
 #
-# transcode.sh
-#
 # Copyright 2016-present David Rabkin
-#
 
 declare -a AUD=( $(for i in {1..13}; do echo 7; done) )
 declare -a SUB=( $(for i in {1..13}; do echo 3; done) )
@@ -58,7 +55,7 @@ do
                   --main-audio ${AUD[$i]} \
                   --burn-subtitle ${SUB[$i]} \
                   --preset veryslow \
-                  --output /home/david/ ${FIL[$i]}
+                  --output ~ ${FIL[$i]}
 
 #  transcode-video --no-log \
 #                  --m4v \
@@ -66,19 +63,19 @@ do
 #                  --main-audio ${AUD[$i]} \
 #                  --burn-subtitle ${SUB[$i]} \
 #                  --preset veryslow \
-#                  --output /home/david/ ${FIL[$i]}
+#                  --output ~ ${FIL[$i]}
 
 #  transcode-video --no-log \
 #                  --m4v \
 #                  --main-audio ${AUD[$i]} \
 #                  --preset veryslow \
-#                  --output /home/david/ ${FIL[$i]}
+#                  --output ~ ${FIL[$i]}
 
 #  transcode-video --no-log \
 #                  --m4v \
 #                  --preset veryslow \
-#                  --output /home/david/ ${FIL[$i]}
-  mv /home/david/*.m4v /mnt/nas-box/box/ibx
+#                  --output ~ ${FIL[$i]}
+  mv ~/*.m4v /mnt/nas-box/box/ibx
   echo "${FIL[$i]} done."
 done
 echo "Done in `duration $BEG`."
