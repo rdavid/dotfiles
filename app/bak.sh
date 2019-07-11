@@ -1,16 +1,13 @@
 #!/bin/sh
 # vim: tabstop=2 shiftwidth=2 expandtab textwidth=80 linebreak wrap
 #
-# bak.sh
-#
 # Copyright 2016-present David Rabkin
 #
 # bak.sh <arc|box>
-#
 
 LOG="/tmp/bak.log"
 LCK="/tmp/$1.lck"
-SRC="/home/david/nas-$1/"
+SRC="~/nas-$1/"
 DST="/media/usb-bak/bak-$1"
 
 log()
