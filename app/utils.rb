@@ -1,6 +1,6 @@
 # vim: tabstop=2 shiftwidth=2 expandtab textwidth=80 linebreak wrap
 #
-# Copyright 2018 David Rabkin
+# Copyright 2018-present David Rabkin
 
 # All methods are static.
 class Utils
@@ -10,7 +10,7 @@ class Utils
       return src if src.length <= lim
 
       beg = fin = (lim - SEP.length) / 2
-      beg += 1 if lim.even?
+      beg -= 1 if lim.odd?
       src[0..beg] + SEP + src[-fin..-1]
     end
   end
