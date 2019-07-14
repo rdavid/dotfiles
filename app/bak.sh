@@ -7,7 +7,7 @@
 
 LOG="/tmp/bak.log"
 LCK="/tmp/$1.lck"
-SRC="~/nas-$1/"
+SRC="/home/david/nas-$1/"
 DST="/media/usb-bak/bak-$1"
 
 log()
