@@ -1,4 +1,6 @@
 #!/usr/bin/env ruby
+# frozen_string_literal: true
+
 # vim: tabstop=2 shiftwidth=2 expandtab textwidth=80 linebreak wrap
 #
 # Copyright 2017-present David Rabkin
@@ -53,7 +55,7 @@ class OS
   attr_reader :dotf
   attr_reader :conf
 
-  def initialize(cfg)
+  def initialize(cfg) # rubocop:disable MethodLength
     @type = ''
     @test = ''
     @inst = ''
@@ -77,16 +79,18 @@ class OS
 
     # For MacOS run '--no-xorg --pass'.
     unless cfg.pass.nil?
-      @prec << %{
+      @prec << %(
         rm -rf ~/dotfiles/bin
         unzip -P #{cfg.pass} ~/dotfiles/bin.zip -d ~/dotfiles
-      }
+      )
     end
     xconfigure if cfg.xorg?
   end
 
-  def xconfigure
-    @prec << %{
+  private
+
+  def xconfigure # rubocop:disable MethodLength
+    @prec << %(
       mkdir -p ~/.fonts
       for f in inconsolata-g.otf pragmatapro.ttf; do
         if [[ ! -e ~/.fonts/$f ]]; then
@@ -94,7 +98,7 @@ class OS
         fi
       done
       fc-cache -vf
-    }
+    )
     # Extends with Xorg related packages.
     (@pkgs << %w[
       conky feh firefox font-awesome google-chrome i3 i3blocks i3lock
@@ -103,18 +107,17 @@ class OS
     (@dotf << %w[i3 xinitrc]).flatten!
     (@conf << %w[conky kitty]).flatten!
   end
-
-  private :xconfigure
 end
 
 # Implements MacOS.
 module MacOS
   DIC = {
     syncthing: 'syncthing-app'
-  }
-  def self.extended(mod)
+  }.freeze
+
+  def self.extended(mod) # rubocop:disable MethodLength, AbcSize
     mod.type << 'MacOS'
-    mod.prec << %{
+    mod.prec << %(
       for f in inconsolata-g.otf pragmatapro.ttf; do
         if [[ ! -e ~/Library/Fonts/$f ]]; then
           cp ~/dotfiles/bin/$f ~/Library/Fonts/
@@ -129,7 +132,7 @@ module MacOS
       fi
       brew update && brew upgrade && brew cask upgrade
       brew cleanup && brew cask cleanup
-    }
+    )
     (
       mod.pkgs << %w[
         aerial disk-inventory-x docker feh firefox google-chrome iterm2
@@ -138,7 +141,7 @@ module MacOS
         visual-studio-code vox watch xquartz
       ]
     ).flatten!
-     .map! { |i| DIC[i.to_sym].nil? ? i : DIC[i.to_sym] }
+      .map! { |i| DIC[i.to_sym].nil? ? i : DIC[i.to_sym] }
     # MacOS is installed without Xorg, so some graphic settings are duplicated.
     mod.conf << 'kitty'
     mod.test << 'brew ls --versions %s >/dev/null 2>&1'
@@ -150,9 +153,9 @@ end
 module FreeBSD
   DIC = {
     fortune: 'fortune-mod-freebsd-classic'
-  }
+  }.freeze
 
-  def self.extended(mod)
+  def self.extended(mod) # rubocop:disable AbcSize
     mod.type << 'FreeBSD'
     (
       mod.pkgs << %w[
@@ -179,11 +182,11 @@ module OpenBSD
     'sublime-text': '',
     'visual-studio-code': '',
     'zsh-syntax-highlighting': ''
-  }
+  }.freeze
 
-  def self.extended(mod)
+  def self.extended(mod) # rubocop:disable MethodLength, AbcSize
     mod.type << 'OpenBSD'
-    mod.prec << %{
+    mod.prec << %(
       ln -sf ~/.xinitrc ~/.xsession
       doas rcctl enable xenodm
       cd ~
@@ -194,13 +197,13 @@ module OpenBSD
       doas gmake install
       cd ..
       rm -rf ~/3blocks
-    }
+    )
     (
       mod.pkgs << %w[
         coreutils py-pip terminator
       ]
     ).flatten!
-     .map! { |i| DIC[i.to_sym].nil? ? i : DIC[i.to_sym] }
+      .map! { |i| DIC[i.to_sym].nil? ? i : DIC[i.to_sym] }
     mod.conf << 'terminator'
     mod.test << 'which %s >/dev/null 2>&1'
     mod.inst << 'doas pkg_add %s'
@@ -215,11 +218,11 @@ module Arch
     handbrake: 'handbrake-cli',
     'sublime-text': 'sublime-text-dev',
     'visual-studio-code': 'visual-studio-code-bin'
-  }
+  }.freeze
 
-  def self.extended(mod)
+  def self.extended(mod) # rubocop:disable MethodLength, AbcSize
     mod.type << 'Arch'
-    mod.prec << %{
+    mod.prec << %(
       if [[ ! `cat /etc/pacman.conf | grep archlinuxfr` ]]; then
         echo "
           [archlinuxfr]
@@ -229,18 +232,18 @@ module Arch
         sudo pacman -Sy yaourt --noconfirm
       fi
       yaourt -Syauu --noconfirm
-    }
+    )
     (
       mod.pkgs << %w[
         alsa-utils atop handbrake-cli lolcat python-pip
       ]
     ).flatten!
-     .map! { |i| DIC[i.to_sym].nil? ? i : DIC[i.to_sym] }
+      .map! { |i| DIC[i.to_sym].nil? ? i : DIC[i.to_sym] }
     mod.test << 'yaourt -Qs --nameonly %s >/dev/null 2>&1'
     mod.inst << 'yaourt -Sy --noconfirm %s'
-    mod.post << %{
+    mod.post << %(
       #sed -i 's/usr\/share/usr\/lib/g' ~/.i3/i3blocks.conf
-    }
+    )
   end
 end
 
@@ -248,21 +251,21 @@ end
 module Debian
   DIC = {
     'font-awesome': 'fonts-font-awesome'
-  }
+  }.freeze
 
-  def self.extended(mod)
+  def self.extended(mod) # rubocop:disable MethodLength, AbcSize
     mod.type << 'Debian'
-    mod.prec << %{
+    mod.prec << %(
       sudo apt-get -y update
       sudo apt-get -y dist-upgrade
       curl -sL https://deb.nodesource.com/setup_9.x | sudo -E bash -
-    }
+    )
     (
       mod.pkgs << %w[
         apcalc atop byobu lolcat python-pip net-tools
       ]
     ).flatten!
-     .map! { |i| DIC[i.to_sym].nil? ? i : DIC[i.to_sym] }
+      .map! { |i| DIC[i.to_sym].nil? ? i : DIC[i.to_sym] }
     mod.test << 'dpkg -l %s >/dev/null 2>&1'
     mod.inst << 'sudo apt-get -y install %s'
   end
@@ -272,16 +275,16 @@ end
 module RedHat
   DIC = {
     'font-awesome': 'fontawesome-fonts'
-  }
+  }.freeze
 
-  def self.extended(mod)
+  def self.extended(mod) # rubocop:disable AbcSize
     mod.type << 'RedHat'
     (
       mod.pkgs << %w[
         lolcat
       ]
     ).flatten!
-     .map! { |i| DIC[i.to_sym].nil? ? i : DIC[i.to_sym] }
+      .map! { |i| DIC[i.to_sym].nil? ? i : DIC[i.to_sym] }
     mod.test << 'yum list installed %s >/dev/null 2>&1'
     mod.inst << 'sudo yum -y install %s'
   end
@@ -299,19 +302,19 @@ module Alpine
     npm: 'nodejs nodejs-npm',
     nnn: '',
     'zsh-syntax-highlighting': ''
-  }
+  }.freeze
 
-  def self.extended(mod)
+  def self.extended(mod) # rubocop:disable MethodLength, AbcSize
     mod.type << 'Alpine'
-    mod.prec << %{
+    mod.prec << %(
       sudo apk update && sudo apk upgrade
-    }
+    )
     (
       mod.pkgs << %w[
         atop linux-headers musl-dev python-dev py-pip
       ]
     ).flatten!
-     .map! { |i| DIC[i.to_sym].nil? ? i : DIC[i.to_sym] }
+      .map! { |i| DIC[i.to_sym].nil? ? i : DIC[i.to_sym] }
     mod.test << 'apk -e info %s >/dev/null 2>&1'
     mod.inst << 'sudo apk add %s'
   end
@@ -319,10 +322,10 @@ end
 
 # Defines current OS.
 class CurrentOS
-  def self.get
+  def self.get # rubocop:disable PerceivedComplexity, CyclomaticComplexity, AbcSize
     return MacOS   if OS.mac?
     return FreeBSD if OS.freebsd?
-    return OpenBSD if OS.host_os=~/openbsd/
+    return OpenBSD if OS.host_os =~ /openbsd/
     return Arch    if OS.linux? && File.file?('/etc/arch-release')
     return Debian  if OS.linux? && File.file?('/etc/debian_version')
     return RedHat  if OS.linux? && File.file?('/etc/redhat-release')
@@ -340,7 +343,7 @@ class Installer
     @odir = File.join(Dir.home, 'dotfiles-old')
   end
 
-  def do
+  def do # rubocop:disable PerceivedComplexity, CyclomaticComplexity, AbcSize, MethodLength
     # Sort should be first, reject! returns nil if there is no empty.
     @os.pkgs.sort!.reject!(&:empty?)
     puts("Hello #{@os.type}: #{@os.pkgs}: #{@os.dotf}: #{@os.conf}.")
@@ -354,7 +357,7 @@ class Installer
       system(@os.test % p)
 
       # Installs new packages.
-      if $CHILD_STATUS.exitstatus > 0
+      if $CHILD_STATUS.exitstatus.positive?
         puts("Install: #{p}.")
         system(@os.inst.gsub('%s', p))
       else
@@ -398,7 +401,8 @@ class Installer
     sh = ENV['SHELL']
     unless sh.eql? `which zsh`.strip
       system('chsh -s $(which zsh)')
-      puts("Unable to switch #{sh} to zsh.") unless $CHILD_STATUS.exitstatus > 0
+      rc = $CHILD_STATUS.exitstatus
+      puts("Unable to switch #{sh} to zsh.") unless rc.positive?
     end
 
     # Clones repositories out from GitHub.
@@ -427,7 +431,7 @@ class Installer
       next if `#{chk}`.strip.eql? '1'
 
       system("pip install --user #{p}")
-      puts("Unable to install #{p}.") unless $CHILD_STATUS.exitstatus > 0
+      puts("Unable to install #{p}.") unless $CHILD_STATUS.exitstatus.positive?
     end
 
     # Installs Ruby packages.
@@ -438,7 +442,7 @@ class Installer
       next if `#{chk}`.strip.eql? 'true'
 
       system("gem install #{p}")
-      puts("Unable to install #{p}.") unless $CHILD_STATUS.exitstatus > 0
+      puts("Unable to install #{p}.") unless $CHILD_STATUS.exitstatus.positive?
     end
 
     # Installs NoJS packages.
@@ -449,7 +453,7 @@ class Installer
       next unless $CHILD_STATUS.exitstatus
 
       system("npm install #{p}")
-      puts("Unable to install #{p}.") unless $CHILD_STATUS.exitstatus > 0
+      puts("Unable to install #{p}.") unless $CHILD_STATUS.exitstatus.positive?
     end
     puts('Bye-bye.')
   end
