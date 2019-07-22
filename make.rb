@@ -410,6 +410,10 @@ class Installer
       {
         src: 'https://github.com/tmux-plugins/tpm',
         dst: File.join(@ndir, 'tmux', 'plugins', 'tpm')
+      },
+      {
+        src: 'https://github.com/w0rp/ale.git',
+        dst: File.join(@ndir, 'vim', 'pack', 'git-plugins', 'start', 'ale')
       }
     ].each do |i|
       Git.clone(i[:src], i[:dst]) unless Dir.exist?(i[:dst])
@@ -428,7 +432,7 @@ class Installer
 
     # Installs Ruby packages.
     %w[
-      pry pry-doc video_transcoding terminal-table
+      pry pry-doc rubocop video_transcoding terminal-table
     ].each do |p|
       chk = "gem list -i #{p}"
       next if `#{chk}`.strip.eql? 'true'

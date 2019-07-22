@@ -12,5 +12,6 @@ terminator/terminator
 tmux/plugins/tpm/
 tmux/tmux
 vim/.netrwhist
+vim/pack
 vifm/vifminfo
 
