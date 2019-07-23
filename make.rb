@@ -130,8 +130,7 @@ module MacOS
         link='https://raw.githubusercontent.com/Homebrew/install/master/install'
         ruby -e "$(curl -fsSL $(link))"
       fi
-      brew update && brew upgrade && brew cask upgrade && brew cask doctor
-      brew cleanup
+      brew update && brew upgrade && brew cask upgrade && brew cleanup
     )
     (
       mod.pkgs << %w[
