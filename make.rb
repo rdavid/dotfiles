@@ -321,7 +321,9 @@ end
 
 # Defines current OS.
 class CurrentOS
+  # rubocop:disable LineLength
   def self.get # rubocop:disable PerceivedComplexity, CyclomaticComplexity, AbcSize
+    # rubocop:enable LineLength
     return MacOS   if OS.mac?
     return FreeBSD if OS.freebsd?
     return OpenBSD if OS.host_os =~ /openbsd/
@@ -342,7 +344,9 @@ class Installer
     @odir = File.join(Dir.home, 'dotfiles-old')
   end
 
+  # rubocop:disable LineLength
   def do # rubocop:disable PerceivedComplexity, CyclomaticComplexity, AbcSize, MethodLength
+    # rubocop:enable LineLength
     # Sort should be first, reject! returns nil if there is no empty.
     @os.pkgs.sort!.reject!(&:empty?)
     puts("Hello #{@os.type}: #{@os.pkgs}: #{@os.dotf}: #{@os.conf}.")
