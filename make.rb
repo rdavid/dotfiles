@@ -56,11 +56,11 @@ class OS
   attr_reader :conf
 
   def initialize(cfg) # rubocop:disable MethodLength
-    @type = ''
-    @test = ''
-    @inst = ''
-    @post = ''
-    @prec = ''
+    @type = +''
+    @test = +''
+    @inst = +''
+    @post = +''
+    @prec = +''
 
     # Packages without Xorg to install.
     @pkgs = %w[
