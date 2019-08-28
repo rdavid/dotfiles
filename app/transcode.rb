@@ -1,12 +1,11 @@
 #!/usr/bin/env ruby
+# frozen_string_literal: true
+
 # vim: tabstop=2 shiftwidth=2 expandtab textwidth=80 linebreak wrap
 #
-# transcode.rb
-#
-# Copyright 2018 David Rabkin
+# Copyright 2018-present David Rabkin
 #
 # Transcodes any video file to m4v format.
-#
 
 require 'set'
 require 'colorize'
@@ -99,14 +98,13 @@ class Transcoder
     @tim = Timer.new
   end
 
-  def do
+  def do # rubocop:disable MethodLength
     Dir[@cfg.dir + "/*.{#{EXT}}"].sort.each do |nme|
       @rep.add(nme)
-      if @cfg.sca?
-        v = `transcode-video --scan #{nme}`
-        puts v
-        break
-      end
+      next unless @cfg.sca?
+
+      v = `transcode-video --scan #{nme}`
+      puts v
     end
     @rep.do
     puts "#{@cfg.act? ? 'Real' : 'Simulation'}:"\
