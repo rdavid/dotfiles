@@ -1,4 +1,6 @@
 #!/usr/bin/env ruby
+# frozen_string_literal: true
+
 # vim: tabstop=2 shiftwidth=2 expandtab textwidth=80 linebreak wrap
 #
 # Copyright 2018-present David Rabkin
@@ -25,7 +27,7 @@ class Configuration
     ['-w', '--wid wid', 'Width of the table.',         :wid]
   ].freeze
 
-  def initialize
+  def initialize # rubocop:disable AbcSize
     ARGV << '-h' if ARGV.empty?
     @options = {}
     OptionParser.new do |o|
@@ -72,7 +74,7 @@ class Configuration
   def wid
     if @options[:wid].nil?
       # Reads current terminal width.
-      wid = `tput co`
+      wid = `tput cols`
       wid.to_s.empty? ? 79 : wid.to_i
     else
       @options[:wid].to_i
@@ -236,7 +238,7 @@ class ExistenceAction < Action
     @lim = lim
   end
 
-  def do(src)
+  def do(src) # rubocop:disable MethodLength, CyclomaticComplexity, AbcSize
     raise 'ExistenceAction needs original file name.' if @src.nil?
     return src if src == @src
     return src unless File.exist?(File.join(@dir, src))
@@ -282,7 +284,7 @@ class ActionsFactory
     @cfg = cfg
   end
 
-  def produce(dir)
+  def produce(dir) # rubocop:disable MethodLength, AbcSize
     if @cfg.lim?
       [
         OmitAction.new(LIMIT),
@@ -307,13 +309,14 @@ end
 
 # Formats and prints output data.
 class Reporter
+  @@tim = Timer.new
+  @@sta = { moved: 0, unaltered: 0, failed: 0 }
+
   def self.init(act, wid)
     @@act = act
     @@tbl = wid
     @@ttl = wid - 4
     @@str = (wid - 7) / 2
-    @@tim = Timer.new
-    @@sta = { moved: 0, unaltered: 0, failed: 0 }
   end
 
   def initialize(dir)
@@ -348,7 +351,9 @@ class Reporter
 
   def self.stat_out
     out = ''
-    @@sta.each { |k, v| out += ' ' + v.to_s + ' ' + k.to_s + ',' if v > 0 }
+    @@sta.each do |k, v|
+      out += ' ' + v.to_s + ' ' + k.to_s + ',' if v.positive?
+    end
     out.chop
   end
 
@@ -366,7 +371,7 @@ class Renamer
     @fac = ActionsFactory.new(@cfg)
   end
 
-  def move(dir, dat)
+  def move(dir, dat) # rubocop:disable MethodLength, AbcSize
     rep = Reporter.new(dir)
     dat.each do |src, dst|
       if src == dst
@@ -385,7 +390,7 @@ class Renamer
     rep.do
   end
 
-  def do_dir(dir)
+  def do_dir(dir) # rubocop:disable MethodLength, CyclomaticComplexity, AbcSize
     raise "No such directory: #{dir}." unless File.directory?(dir)
 
     dat = []
