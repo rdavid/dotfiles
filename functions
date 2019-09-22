@@ -125,3 +125,7 @@ speed-mon() {
     sleep 10;
   done
 }
+
+qr() {
+  qrencode "$1" -t ANSIUTF8 -o -;
+}
