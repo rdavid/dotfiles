@@ -113,7 +113,7 @@ end
 # Implements MacOS.
 module MacOS
   DIC = {
-    syncthing: 'syncthing-app'
+#    syncthing: 'syncthing-app'
   }.freeze
 
   def self.extended(mod) # rubocop:disable MethodLength, AbcSize
@@ -135,17 +135,18 @@ module MacOS
     )
     (
       mod.pkgs << %w[
-        aerial disk-inventory-x docker feh firefox google-chrome iterm2
-        keepassxc keepingyouawake kitty lolcat nmap spectacle spotifree
-        spotify sublime-text syncthing-app telegram vanilla virtualbox
-        visual-studio-code vox watch xquartz
+        aerial appcleaner disk-inventory-x docker feh firefox google-chrome
+        keepassxc keepingyouawake kitty lolcat nmap plex spectacle spotifree
+        spotify sublime-text telegram vanilla virtualbox watch xquartz
       ]
     ).flatten!
       .map! { |i| DIC[i.to_sym].nil? ? i : DIC[i.to_sym] }
     # MacOS is installed without Xorg, so some graphic settings are duplicated.
     mod.conf << 'kitty'
-    mod.test << 'brew ls --versions %s >/dev/null 2>&1'
-    mod.inst << 'brew install %s || brew cask install %s'
+    mod.test << %(
+      brew ls --versions %s || brew cask ls --versions %s >/dev/null 2>&1
+    )
+    mod.inst << 'brew install %s; brew cask install %s'
   end
 end
 
@@ -358,7 +359,7 @@ class Installer
     # Install packages.
     @os.pkgs.each do |p|
       # Tests if a package is installed.
-      system(@os.test % p)
+      system(@os.test.gsub('%s', p))
 
       # Installs new packages.
       if $CHILD_STATUS.exitstatus.positive?
