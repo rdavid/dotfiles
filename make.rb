@@ -114,7 +114,6 @@ end
 # Implements MacOS.
 module MacOS
   DIC = {
-#    syncthing: 'syncthing-app'
   }.freeze
 
   def self.extended(mod) # rubocop:disable MethodLength, AbcSize
@@ -145,7 +144,8 @@ module MacOS
     # MacOS is installed without Xorg, so some graphic settings are duplicated.
     mod.conf << 'kitty'
     mod.test << %(
-      brew ls --versions %s || brew cask ls --versions %s >/dev/null 2>&1
+      brew ls --versions %s >/dev/null 2>&1|| \
+        brew cask ls --versions %s >/dev/null 2>&1
     )
     mod.inst << 'brew install %s; brew cask install %s'
   end

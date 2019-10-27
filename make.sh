@@ -33,7 +33,7 @@ done
 # Installs needful packages.
 gems='colorize git os'
 for g in $gems; do
-  if gem list -i "$g"; then
+  if gem list -i "$g" >/dev/null 2>&1; then
     echo "$g is already installed."
     continue
   fi
