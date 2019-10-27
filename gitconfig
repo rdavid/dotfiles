@@ -1,7 +1,7 @@
 # This is Git's per-user configuration file.
 [user]
   name = David
-  email = david@rabkin.co.il
+	email = davidra@sigmadots.com
 [alias]
   # list files which have changed since master
   files = !git diff --name-only $(git merge-base HEAD \"master\")
