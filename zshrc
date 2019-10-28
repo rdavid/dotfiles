@@ -7,11 +7,13 @@ export PAGER=most
 export VISUAL=vim
 export EDITOR=vim
 export HISTCONTROL=ignorespace
+export BAT_PAGER=less
+export BAT_THEME=zenburn
 
 # Path to your oh-my-zsh installation.
 export ZSH="$HOME/.oh-my-zsh"
 #export ZSH_THEME="wezm"
-export ZSH_THEME="minimal"
+export ZSH_THEME=minimal
 
 # Uncomment the following line to change how often to auto-update (in days).
 export UPDATE_ZSH_DAYS=30
@@ -33,19 +35,24 @@ plugins=( \
   golang history lol osx pip python rsync ruby sudo tmux vi-mode \
   web-search yarn z \
 )
-
-# User configuration.
-export PATH='/opt/local/bin/:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin'
-export PATH="/usr/local/sbin:$PATH"
-export PATH="$HOME/.gem/ruby/2.5.0/bin:$PATH"
-export PATH="/usr/local/lib/ruby/gems/2.6.0/bin/:$PATH"
-export PATH="/usr/local/go/bin:$PATH"
-export PATH="/usr/local/opt/ruby/bin:$PATH"
-export PATH="$HOME/dotfiles/app:$PATH"
+export PATH="\
+/bin:\
+/sbin:\
+/usr/bin:\
+/usr/sbin:\
+/usr/local/bin:\
+/usr/local/sbin:\
+/opt/local/bin/:\
+$HOME/.gem/ruby/2.5.0/bin:\
+/usr/local/lib/ruby/gems/2.6.0/bin/:\
+/usr/local/go/bin:\
+/usr/local/opt/ruby/bin:\
+$HOME/dotfiles/app:\
+$HOME/src/go\
+"
 
 # Corrects work of tmuxp.
 export PATH="`python -m site --user-base`/bin":$PATH
-export GOPATH="$HOME/src/go"
 source "$HOME/dotfiles/app/z.sh"
 source "$ZSH/oh-my-zsh.sh"
 source "$HOME/dotfiles/aliases"
