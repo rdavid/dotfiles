@@ -54,6 +54,7 @@ class OS
   attr_reader :pkgs
   attr_reader :dotf
   attr_reader :conf
+  attr_reader :sudo
 
   def initialize(cfg) # rubocop:disable MethodLength
     @type = +''
@@ -78,6 +79,9 @@ class OS
 
     # List of files/folders to symlink in ~/.config.
     @conf = %w[mc vifm]
+
+    # Be super user command.
+    @sudo = 'sudo'
 
     # For MacOS run '--no-xorg --pass'.
     unless cfg.pass.nil?
@@ -209,6 +213,7 @@ module OpenBSD
     mod.conf << 'terminator'
     mod.test << 'which %s >/dev/null 2>&1'
     mod.inst << 'doas pkg_add %s'
+    mod.sudo = 'doas'
   end
 end
 
@@ -246,6 +251,7 @@ module Arch
     mod.post << %(
       #sed -i 's/usr\/share/usr\/lib/g' ~/.i3/i3blocks.conf
     )
+    mod.sudo = ''
   end
 end
 
@@ -428,6 +434,7 @@ class Installer
     ].each do |i|
       Git.clone(i[:src], i[:dst]) unless Dir.exist?(i[:dst])
     end
+    sudo = @os.sudo
 
     # Installs Python packages.
     %w[
@@ -440,16 +447,25 @@ class Installer
       puts("Unable to install #{p}.") unless $CHILD_STATUS.exitstatus.positive?
     end
 
+    # Updates all Python packages.
+    system('pip list --outdated --format=freeze |'\
+           'grep -v \'^\-e\' |'\
+           'cut -d = -f 1 |'\
+           'xargs -n1 pip install -U')
+    puts('Unable to update Python.') unless $CHILD_STATUS.exitstatus.positive?
+
     # Installs Ruby packages.
     %w[
-      pry pry-doc rubocop video_transcoding terminal-table
+      pry pry-doc rubocop rubygems-update video_transcoding terminal-table
     ].each do |p|
       chk = "gem list -i #{p}"
       next if `#{chk}`.strip.eql? 'true'
 
-      system("gem install #{p}")
+      system("#{sudo} gem install #{p}")
       puts("Unable to install #{p}.") unless $CHILD_STATUS.exitstatus.positive?
     end
+    system("#{sudo} update_rubygems && #{sudo} gem update --system")
+    puts('Unable to update Ruby.') unless $CHILD_STATUS.exitstatus.positive?
 
     # Installs NoJS packages.
     %w[
@@ -458,9 +474,11 @@ class Installer
       system("npm list -g #{p}")
       next unless $CHILD_STATUS.exitstatus
 
-      system("npm install #{p}")
+      system("#{sudo} npm install #{p}")
       puts("Unable to install #{p}.") unless $CHILD_STATUS.exitstatus.positive?
     end
+    system("#{sudo} npm update")
+    puts('Unable to update NodeJS.') unless $CHILD_STATUS.exitstatus.positive?
     puts('Bye-bye.')
   end
 end
