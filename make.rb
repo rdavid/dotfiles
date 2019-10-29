@@ -108,7 +108,7 @@ class OS
     # Extends with Xorg related packages.
     (@pkgs << %w[
       conky feh firefox font-awesome google-chrome i3 i3blocks i3lock
-      keepassxc kitty okular sublime-text visual-studio-code
+      keepassxc kitty mpv okular sublime-text
     ]).flatten!
     (@dotf << %w[i3 xinitrc]).flatten!
     (@conf << %w[conky kitty]).flatten!
@@ -140,7 +140,7 @@ module MacOS
     (
       mod.pkgs << %w[
         aerial appcleaner disk-inventory-x docker feh firefox google-chrome
-        keepassxc keepingyouawake kitty lolcat nmap plex spectacle spotifree
+        keepassxc keepingyouawake kitty lolcat mpv nmap plex spectacle spotifree
         spotify sublime-text telegram vanilla virtualbox watch xquartz
       ]
     ).flatten!
