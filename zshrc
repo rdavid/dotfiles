@@ -70,6 +70,7 @@ case $(uname -a) in
         export DISPLAY=:0
         export LC_ALL=en_US.UTF-8
         export LANG=en_US.UTF-8
+        export FZF_PATH='/usr/local/opt/'
         ;;
       linux*)
         MC='/usr/lib/mc/mc-wrapper.sh'
@@ -79,9 +80,11 @@ case $(uname -a) in
         export PATH="/home/linuxbrew/.linuxbrew/bin:$PATH"
         export MANPATH="/home/linuxbrew/.linuxbrew/share/man:$MANPATH"
         export INFOPATH="/home/linuxbrew/.linuxbrew/share/info:$INFOPATH"
+        export FZF_PATH='/usr/local/opt/'
         ;;
       freebsd*)
         MC='/usr/local/libexec/mc/mc-wrapper.sh'
+        export FZF_PATH='/usr/local/share/examples/'
         ;;
       openbsd*)
         MC='/usr/local/libexec/mc/mc-wrapper.sh'
@@ -89,6 +92,7 @@ case $(uname -a) in
         export LC_ALL=en_US.UTF-8
         export LANG=en_US.UTF-8
         alias ls='gls --color'
+        export FZF_PATH='/usr/local/share/examples/'
         ;;
       msys*)
         MC='/usr/lib/mc/mc-wrapper.sh'
