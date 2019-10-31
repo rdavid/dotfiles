@@ -1,4 +1,6 @@
 #!/bin/sh
+# vim: tabstop=2 shiftwidth=2 expandtab textwidth=80 linebreak wrap
+# Copyright 2019-present David Rabkin
 NME='youtube'
 LOG="/tmp/$NME.log"
 LCK="/tmp/$NME.lck"
@@ -17,8 +19,7 @@ log() {
 # shellcheck disable=SC2064
 trap "rm -f $LCK" INT TERM EXIT
 echo $$ > "$LCK"
-echo | tee -a "$LOG"
-log "Start $NME."
+log 'Start.'
 youtube-dl \
   --playlist-reverse \
   --download-archive /media/data/app/box/youtube/done.txt \
@@ -30,5 +31,5 @@ youtube-dl \
   --write-thumbnail \
   --batch-file=/media/data/app/box/youtube/channels.txt \
   2>&1 | tee -a "$LOG"
-log "Done $NME."
+log 'Done.'
 exit 0
