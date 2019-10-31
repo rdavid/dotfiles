@@ -1,18 +1,15 @@
 #!/bin/sh
 # vim: tabstop=2 shiftwidth=2 expandtab textwidth=80 linebreak wrap
-#
 # Copyright 2016-present David Rabkin
-#
 # bak.sh <arc|box>
-
-LOG='/tmp/bak.log'
-LCK="/tmp/$1.lck"
+NME='bak'
+LOG="/tmp/$NME.log"
+LCK="/tmp/$NME.lck"
 SRC="/home/david/nas-$1/"
 DST="/media/usb-bak/bak-$1"
 
-log()
-{
-  date +"%Y%m%d-%H:%M:%S $*" | tee -a $LOG
+log() {
+  date +"%Y%m%d-%H:%M:%S $*" | tee -a "$LOG"
 }
 
 if [ ! -d "$SRC" ]; then
@@ -26,7 +23,7 @@ fi
 
 # Prevents multiple instances.
 if [ -e "$LCK" ] && kill -0 "$(cat "$LCK")"; then
-  log "Backup of $1 is already running."
+  log "$NME is already running."
   exit 0
 fi
 
@@ -34,8 +31,6 @@ fi
 # shellcheck disable=SC2064
 trap "rm -f $LCK" INT TERM EXIT
 echo $$ > "$LCK"
-echo | tee -a $LOG
-echo "---------- $(date +"%Y%m%d") ----------" | tee -a $LOG
 log "Start $SRC->$DST."
 rdiff-backup --print-statistics       \
              --terminal-verbosity 4   \
