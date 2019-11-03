@@ -88,6 +88,17 @@ class OS
       @prec << %(
         rm -rf ~/dotfiles/bin
         unzip -P #{cfg.pass} ~/dotfiles/bin.zip -d ~/dotfiles
+        HIST="$HOME/.zsh_history"
+        if [ -f "$HIST" ]; then
+          cat ~/dotfiles/bin/zsh_history "$HIST" |\
+            awk -v date="WILL_NOT_APPEAR$(date +"%s")" \
+              '{if (sub(/\\$/,date)) printf "%s", $0; else print $0}' |\
+            LC_ALL=C sort -u |\
+            awk -v date="WILL_NOT_APPEAR$(date +"%s")" \
+              '{gsub('date',"\\\n"); print $0}' > "$HIST"
+        else
+          cp ~/dotfiles/bin/zsh_history "$HIST"
+        fi
       )
     end
     xconfigure if cfg.xorg?
@@ -141,7 +152,7 @@ module MacOS
       mod.pkgs << %w[
         aerial appcleaner disk-inventory-x docker feh firefox google-chrome
         keepassxc keepingyouawake kitty lolcat mpv nmap plex spectacle spotifree
-        spotify sublime-text telegram vanilla virtualbox watch xquartz
+        spotify sublime-text telegram truncate vanilla virtualbox watch xquartz
       ]
     ).flatten!
       .map! { |i| DIC[i.to_sym].nil? ? i : DIC[i.to_sym] }
