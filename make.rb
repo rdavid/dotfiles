@@ -438,7 +438,7 @@ class Installer
 
     # Installs Python packages.
     %w[
-      glances s_tui speedtest-cli tmuxp youtube_dl
+      glances s_tui pss speedtest-cli tmuxp youtube_dl
     ].each do |p|
       chk = "python -c \"help('modules');\" | grep #{p} | wc -l | xargs"
       next if `#{chk}`.strip.eql? '1'
