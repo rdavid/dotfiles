@@ -1,11 +1,12 @@
 # vim: tabstop=2 shiftwidth=2 expandtab textwidth=80 linebreak wrap
-#
+# frozen_string_literal: true
+
 # Copyright 2018-present David Rabkin
 
 # All methods are static.
 class Utils
   class << self
-    SEP = '~'.freeze
+    SEP = '~'
     def trim(src, lim)
       return src if src.length <= lim
 
