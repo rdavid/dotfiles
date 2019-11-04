@@ -75,6 +75,17 @@ nnoremap <leader>sv :source $MYVIMRC<CR>
 " Turns off search highlight.
 nnoremap <leader><space> :nohlsearch<CR>
 
+" Window.
+nmap <leader>sw<left>  :topleft  vnew<CR>
+nmap <leader>sw<right> :botright vnew<CR>
+nmap <leader>sw<up>    :topleft  new<CR>
+nmap <leader>sw<down>  :botright new<CR>
+" Buffer.
+nmap <leader>s<left>   :leftabove  vsplit<CR>
+nmap <leader>s<right>  :rightbelow vsplit<CR>
+nmap <leader>s<up>     :leftabove  split<CR>
+nmap <leader>s<down>   :rightbelow split<CR>
+
 " Don't pollute directories with swap files, keep them in one place.
 silent !mkdir -p ~/.vim/{backup,swp}/
 set backupdir=~/.vim/backup//
