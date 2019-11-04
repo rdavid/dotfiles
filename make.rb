@@ -88,16 +88,14 @@ class OS
       @prec << %(
         rm -rf ~/dotfiles/bin
         unzip -P #{cfg.pass} ~/dotfiles/bin.zip -d ~/dotfiles
-        HIST="$HOME/.zsh_history"
-        if [ -f "$HIST" ]; then
-          cat ~/dotfiles/bin/zsh_history "$HIST" |\
-            awk -v date="WILL_NOT_APPEAR$(date +"%s")" \
-              '{if (sub(/\\$/,date)) printf "%s", $0; else print $0}' |\
-            LC_ALL=C sort -u |\
-            awk -v date="WILL_NOT_APPEAR$(date +"%s")" \
-              '{gsub('date',"\\\n"); print $0}' > "$HIST"
+        SRC="$HOME/dotfiles/bin/zsh_history"
+        HST="$HOME/.zsh_history"
+        TMP='/tmp/merged.tmp'
+        if [ -f "$HST" ]; then
+          ~/dotfiles/app/merge_history.sh "$SRC" "$HST" > "$TMP"
+          cp -f "$TMP" "$HST" && rm -f "$TMP"
         else
-          cp ~/dotfiles/bin/zsh_history "$HIST"
+          cp "$SRC" "$HST"
         fi
       )
     end
