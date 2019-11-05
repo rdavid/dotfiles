@@ -167,14 +167,18 @@ end
 # Implements FreeBSD.
 module FreeBSD
   DIC = {
-    fortune: 'fortune-mod-freebsd-classic'
+    fortune: 'fortune-mod-freebsd-classic',
+    imagemagick: 'imagemagick7',
+    qrencode: 'py36-qrcode',
+    shellcheck: 'hs-ShellCheck',
+    yamllint: 'py36-yamllint'
   }.freeze
 
   def self.extended(mod) # rubocop:disable AbcSize
     mod.type << 'FreeBSD'
     (
       mod.pkgs << %w[
-        py27-pip rubygem-lolcat unzip
+        py36-pip py36-setuptools rubygem-lolcat unzip
       ]
     ).flatten!.map! { |i| DIC[i.to_sym].nil? ? i : DIC[i.to_sym] }
     mod.test << 'pkg info %s >/dev/null 2>&1'
