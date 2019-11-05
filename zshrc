@@ -37,12 +37,12 @@ plugins=( \
 )
 export PATH="\
 /usr/local/bin:\
-/usr/bin:\
-/bin:\
 /usr/local/sbin:\
-/usr/sbin:\
-/sbin:\
 /opt/local/bin/:\
+/usr/bin:\
+/usr/sbin:\
+/bin:\
+/sbin:\
 $HOME/.gem/ruby/2.5.0/bin:\
 /usr/local/lib/ruby/gems/2.6.0/bin/:\
 /usr/local/go/bin:\
