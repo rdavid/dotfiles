@@ -23,12 +23,12 @@ log 'Start.'
 youtube-dl \
   --playlist-reverse \
   --download-archive /media/data/app/box/youtube/done.txt \
+  --proxy 185.32.124.136:3128 \
   -i -o \
-  "/media/data/app/box/done/%(uploader)s/e%(playlist_index)s-%(title)s.%(ext)s" \
+  "/media/data/app/box/done/%(uploader)s/%(uploader)s-%(upload_date)s-%(title)s.%(ext)s" \
   -f bestvideo[ext=mp4]+bestaudio[ext=m4a] \
   --merge-output-format mp4 \
   --add-metadata \
-  --write-thumbnail \
   --batch-file=/media/data/app/box/youtube/channels.txt \
   2>&1 | tee -a "$LOG"
 log 'Done.'
