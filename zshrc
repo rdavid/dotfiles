@@ -36,12 +36,12 @@ plugins=( \
   web-search yarn z \
 )
 export PATH="\
-/bin:\
-/sbin:\
-/usr/bin:\
-/usr/sbin:\
 /usr/local/bin:\
+/usr/bin:\
+/bin:\
 /usr/local/sbin:\
+/usr/sbin:\
+/sbin:\
 /opt/local/bin/:\
 $HOME/.gem/ruby/2.5.0/bin:\
 /usr/local/lib/ruby/gems/2.6.0/bin/:\

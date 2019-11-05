@@ -174,7 +174,7 @@ module FreeBSD
     mod.type << 'FreeBSD'
     (
       mod.pkgs << %w[
-        py27-pip rubygem-lolcat
+        py27-pip rubygem-lolcat unzip
       ]
     ).flatten!.map! { |i| DIC[i.to_sym].nil? ? i : DIC[i.to_sym] }
     mod.test << 'pkg info %s >/dev/null 2>&1'
