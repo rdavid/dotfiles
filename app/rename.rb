@@ -143,8 +143,8 @@ class ToEnAction < Action
     '№' => '-num-',
     '&' => '-and-'
   }.freeze
-  SRC = 'абвгдезийклмнопрстуфхъыьэ¨áçéĭöôü'.chars.freeze
-  DST = 'abvgdeziyklmnoprstufh y e aceioou'.chars.freeze
+  SRC = 'абвгдезийклмнопрстуфхъыьэáçéĭöü¨'.chars.freeze
+  DST = 'abvgdeziyklmnoprstufh y eaceiou '.chars.freeze
   DIC = SRC.zip(DST).to_h.merge(MSC).freeze
 
   def do(src)
