@@ -20,10 +20,10 @@ log() {
 trap "rm -f $LCK" INT TERM EXIT
 echo $$ > "$LCK"
 log 'Start.'
+#  --proxy 95.80.252.189:52371 \
 youtube-dl \
   --playlist-reverse \
   --download-archive /media/data/app/box/youtube/done.txt \
-  --proxy 185.32.124.136:3128 \
   -i -o \
   "/media/data/app/box/done/%(uploader)s/%(uploader)s-%(upload_date)s-%(title)s.%(ext)s" \
   -f bestvideo[ext=mp4]+bestaudio[ext=m4a] \
