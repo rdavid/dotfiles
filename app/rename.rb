@@ -206,6 +206,16 @@ class TrimAction < Action
   end
 end
 
+# Checks if the resulted string has only ASCII symbols.
+class ASCIIValidatorAction < Action
+  def do(src)
+    ascii = src.chars.select(&:ascii_only?).join
+    raise "String #{src} has non-ASCII symbols." if src != ascii
+
+    src
+  end
+end
+
 # Limits file length.
 class TruncateAction < Action
   def initialize(lim)
@@ -299,6 +309,7 @@ class ActionsFactory
         ToEnAction.new,
         @cfg.mod? ? PrependDateAction.new(dir) : nil,
         @cfg.pre.nil? ? nil : PrependAction.new(@cfg.pre),
+        ASCIIValidatorAction.new,
         TrimAction.new,
         TruncateAction.new(LIMIT),
         ExistenceAction.new(dir, LIMIT)
