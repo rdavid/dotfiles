@@ -8,6 +8,7 @@
 # This script renames files in given directory by specific rules.
 
 require 'fileutils'
+require 'i18n'
 require 'optparse'
 require 'set'
 require 'terminal-table'
@@ -143,12 +144,35 @@ class ToEnAction < Action
     '№' => '-num-',
     '&' => '-and-'
   }.freeze
-  SRC = 'абвгдезийклмнопрстуфхъыьэáçéĭöü¨'.chars.freeze
-  DST = 'abvgdeziyklmnoprstufh y eaceiou '.chars.freeze
+  SRC = 'абвгдезийклмнопрстуфхъыьэ'.chars.freeze
+  DST = 'abvgdeziyklmnoprstufh y e'.chars.freeze
   DIC = SRC.zip(DST).to_h.merge(MSC).freeze
 
   def do(src)
     src.chars.map { |c| DIC[c].nil? ? c : DIC[c] }.collect(&:strip).join
+  end
+end
+
+# Internationalization and localization solution.
+class LocalizationAction < Action
+  SRC = 'ÀÁÂÃÄÅàáâãäåĀāĂăĄąÇçĆćĈĉĊċČčÐðĎďĐđ'\
+        'ÈÉÊËèéêëĒēĔĕĖėĘęĚěĜĝĞğĠġĢģĤĥĦħÌÍÎÏ'\
+        'ìíîïĨĩĪīĬĭĮįİıĴĵĶķĸĹĺĻļĽľĿŀŁłÑñŃńŅ'\
+        'ņŇňŉŊŋÒÓÔÕÖØòóôõöøŌōŎŏŐőŔŕŖŗŘřŚśŜŝ'\
+        'ŞşŠšſŢţŤťŦŧÙÚÛÜùúûüŨũŪūŬŭŮůŰűŲųŴŵÝ'\
+        'ýÿŶŷŸŹźŻżŽž'
+  DST = 'AAAAAAaaaaaaAaAaAaCcCcCcCcCcDdDdDd'\
+        'EEEEeeeeEeEeEeEeEeGgGgGgGgHhHhIIII'\
+        'iiiiIiIiIiIiIiJjKkkLlLlLlLlLlNnNnN'\
+        'nNnnNnOOOOOOooooooOoOoOoRrRrRrSsSs'\
+        'SsSssTtTtTtUUUUuuuuUuUuUuUuUuUuWwY'\
+        'yyYyYZzZzZz'
+  def initialize
+    I18n.config.available_locales = :en
+  end
+
+  def do(src)
+    I18n.transliterate(src.tr(SRC, DST)).tr('?', '')
   end
 end
 
@@ -307,6 +331,7 @@ class ActionsFactory
         DowncaseAction.new,
         CharAction.new,
         ToEnAction.new,
+        LocalizationAction.new,
         @cfg.mod? ? PrependDateAction.new(dir) : nil,
         @cfg.pre.nil? ? nil : PrependAction.new(@cfg.pre),
         ASCIIValidatorAction.new,
