@@ -25,7 +25,7 @@ youtube-dl \
   --playlist-reverse \
   --download-archive /media/data/app/box/youtube/done.txt \
   -i -o \
-  "/media/data/app/box/done/%(uploader)s/%(uploader)s-%(upload_date)s-%(title)s.%(ext)s" \
+  "/media/data/app/box/done/%(uploader)s-%(upload_date)s-%(title)s.%(ext)s" \
   -f bestvideo[ext=mp4]+bestaudio[ext=m4a] \
   --merge-output-format mp4 \
   --add-metadata \
