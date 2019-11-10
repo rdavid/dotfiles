@@ -96,6 +96,26 @@ class Action
   end
 end
 
+# Manual localization.
+class ManualLocalizationAction < Action
+  SRC = 'ÀÁÂÃÄÅàáâãäåĀāĂăĄąÇçĆćĈĉĊċČčÐðĎďĐđ'\
+        'ÈÉÊËèéêëĒēĔĕĖėĘęĚěĜĝĞğĠġĢģĤĥĦħÌÍÎÏ'\
+        'ìíîïĨĩĪīĬĭĮįİıĴĵĶķĸĹĺĻļĽľĿŀŁłÑñŃńŅ'\
+        'ņŇňŉŊŋÒÓÔÕÖØòóôõöøŌōŎŏŐőŔŕŖŗŘřŚśŜŝ'\
+        'ŞşŠšſŢţŤťŦŧÙÚÛÜùúûüŨũŪūŬŭŮůŰűŲųŴŵÝ'\
+        'ýÿŶŷŸŹźŻżŽž'
+  DST = 'AAAAAAaaaaaaAaAaAaCcCcCcCcCcDdDdDd'\
+        'EEEEeeeeEeEeEeEeEeGgGgGgGgHhHhIIII'\
+        'iiiiIiIiIiIiIiJjKkkLlLlLlLlLlNnNnN'\
+        'nNnnNnOOOOOOooooooOoOoOoRrRrRrSsSs'\
+        'SsSssTtTtTtUUUUuuuuUuUuUuUuUuUuWwY'\
+        'yyYyYZzZzZz'
+
+  def do(src)
+    src.tr(SRC, DST)
+  end
+end
+
 # All names should be downcased.
 class DowncaseAction < Action
   def do(src)
@@ -129,8 +149,8 @@ class CharAction < Action
   end
 end
 
-# Transliterate to English.
-class ToEnAction < Action
+# Transliterates Russian to English.
+class RuToEnAction < Action
   MSC = {
     'ё' => 'jo',
     'ж' => 'zh',
@@ -153,26 +173,14 @@ class ToEnAction < Action
   end
 end
 
-# Internationalization and localization solution.
-class LocalizationAction < Action
-  SRC = 'ÀÁÂÃÄÅàáâãäåĀāĂăĄąÇçĆćĈĉĊċČčÐðĎďĐđ'\
-        'ÈÉÊËèéêëĒēĔĕĖėĘęĚěĜĝĞğĠġĢģĤĥĦħÌÍÎÏ'\
-        'ìíîïĨĩĪīĬĭĮįİıĴĵĶķĸĹĺĻļĽľĿŀŁłÑñŃńŅ'\
-        'ņŇňŉŊŋÒÓÔÕÖØòóôõöøŌōŎŏŐőŔŕŖŗŘřŚśŜŝ'\
-        'ŞşŠšſŢţŤťŦŧÙÚÛÜùúûüŨũŪūŬŭŮůŰűŲųŴŵÝ'\
-        'ýÿŶŷŸŹźŻżŽž'
-  DST = 'AAAAAAaaaaaaAaAaAaCcCcCcCcCcDdDdDd'\
-        'EEEEeeeeEeEeEeEeEeGgGgGgGgHhHhIIII'\
-        'iiiiIiIiIiIiIiJjKkkLlLlLlLlLlNnNnN'\
-        'nNnnNnOOOOOOooooooOoOoOoRrRrRrSsSs'\
-        'SsSssTtTtTtUUUUuuuuUuUuUuUuUuUuWwY'\
-        'yyYyYZzZzZz'
+# Automatic localization.
+class AutoLocalizationAction < Action
   def initialize
     I18n.config.available_locales = :en
   end
 
   def do(src)
-    I18n.transliterate(src.tr(SRC, DST)).tr('?', '')
+    I18n.transliterate(src).tr('?', '')
   end
 end
 
@@ -328,10 +336,11 @@ class ActionsFactory
       [
         PointAction.new(dir), # Should be the first.
         @cfg.src.nil? ? nil : SubstituteAction.new(@cfg.src, @cfg.dst),
+        ManualLocalizationAction.new,
         DowncaseAction.new,
         CharAction.new,
-        ToEnAction.new,
-        LocalizationAction.new,
+        RuToEnAction.new,
+        AutoLocalizationAction.new,
         @cfg.mod? ? PrependDateAction.new(dir) : nil,
         @cfg.pre.nil? ? nil : PrependAction.new(@cfg.pre),
         ASCIIValidatorAction.new,
