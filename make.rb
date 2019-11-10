@@ -468,7 +468,7 @@ class Installer
     system('pip list --outdated --format=freeze |'\
            'grep -v \'^\-e\' |'\
            'cut -d = -f 1 |'\
-           'xargs -n1 pip install -U')
+           'xargs -n1 pip install -U --user')
     puts('Unable to update Python.') unless $CHILD_STATUS.exitstatus.positive?
 
     # Installs Ruby packages.
