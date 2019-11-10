@@ -81,7 +81,7 @@ class OS
     @conf = %w[mc vifm]
 
     # Be super user command.
-    @sudo = 'sudo'
+    @sudo = +''
 
     # For MacOS run '--no-xorg --pass'.
     unless cfg.pass.nil?
@@ -161,6 +161,7 @@ module MacOS
         brew cask ls --versions %s >/dev/null 2>&1
     )
     mod.inst << 'brew install %s; brew cask install %s'
+    mod.sudo << 'sudo'
   end
 end
 
@@ -183,6 +184,7 @@ module FreeBSD
     ).flatten!.map! { |i| DIC[i.to_sym].nil? ? i : DIC[i.to_sym] }
     mod.test << 'pkg info %s >/dev/null 2>&1'
     mod.inst << 'sudo pkg install -y %s'
+    mod.sudo << 'sudo'
   end
 end
 
@@ -226,7 +228,7 @@ module OpenBSD
     mod.conf << 'terminator'
     mod.test << 'which %s >/dev/null 2>&1'
     mod.inst << 'doas pkg_add %s'
-    mod.sudo = 'doas'
+    mod.sudo << 'doas'
   end
 end
 
@@ -264,7 +266,6 @@ module Arch
     mod.post << %(
       #sed -i 's/usr\/share/usr\/lib/g' ~/.i3/i3blocks.conf
     )
-    mod.sudo = ''
   end
 end
 
@@ -289,6 +290,7 @@ module Debian
       .map! { |i| DIC[i.to_sym].nil? ? i : DIC[i.to_sym] }
     mod.test << 'dpkg -l %s >/dev/null 2>&1'
     mod.inst << 'sudo apt-get -y install %s'
+    mod.sudo << 'sudo'
   end
 end
 
@@ -308,6 +310,7 @@ module RedHat
       .map! { |i| DIC[i.to_sym].nil? ? i : DIC[i.to_sym] }
     mod.test << 'yum list installed %s >/dev/null 2>&1'
     mod.inst << 'sudo yum -y install %s'
+    mod.sudo << 'sudo'
   end
 end
 
@@ -338,6 +341,7 @@ module Alpine
       .map! { |i| DIC[i.to_sym].nil? ? i : DIC[i.to_sym] }
     mod.test << 'apk -e info %s >/dev/null 2>&1'
     mod.inst << 'sudo apk add %s'
+    mod.sudo << 'sudo'
   end
 end
 
