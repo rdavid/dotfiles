@@ -16,24 +16,53 @@ require_relative 'utils'
 
 # Handles input parameters.
 class Configuration
+  attr_reader :files
   DIC = [
-    ['-a', '--act',     'Real encoding.',          :act],
-    ['-c', '--sca',     'Scan first file.',        :sca],
-    ['-d', '--dir dir', 'Directory to transcode.', :dir],
-    ['-u', '--aud aud', 'Audio stream number.',    :aud],
-    ['-s', '--sub sub', 'Subtitle stream number.', :sub],
-    ['-w', '--wid wid', 'Width of the table.',     :wid]
+    ['-a', '--act', 'Real encoding.', nil, :act],
+    ['-c', '--sca', 'Scan first file.', nil, :sca],
+    ['-d', '--dir dir', 'Directory to transcode.', String, :dir],
+    ['-u', '--aud aud', 'Audio stream numbers.', Array, :aud],
+    ['-s', '--sub sub', 'Subtitle stream numbers.', Array, :sub],
+    ['-w', '--wid wid', 'Width of the table.', Integer, :wid]
   ].freeze
+  EXT = %i[avi flv mkv mp4].map(&:to_s).join(',').freeze
 
   def initialize
     ARGV << '-h' if ARGV.empty?
     @options = {}
     OptionParser.new do |o|
-      o.banner = 'Usage: rename.rb [options].'
-      DIC.each { |f, p, d, k| o.on(f, p, d) { |i| @options[k] = i } }
+      o.banner = "Usage: #{File.basename($PROGRAM_NAME)} [options]."
+      DIC.each { |f, p, d, t, k| o.on(f, p, t, d) { |i| @options[k] = i } }
     end.parse!
+    validate_dir
+    validate_files
+    validate_sizes
+    raise "Width of the table should exeeds 14 symbols: #{wid}." if wid < 15
+  end
+
+  def validate_dir
     raise 'Directory option is not given.' if dir.nil?
     raise "No such directory: #{dir}." unless File.directory?(dir)
+  end
+
+  def validate_files
+    @files = Dir[dir + "/*.{#{EXT}}"].sort
+    raise "Directory #{dir} doesn't have #{EXT} files." if @files.empty?
+
+    bad = @files.reject { |f| File.readable?(f) }
+    raise "Unable to read #{bad} files." unless bad.empty?
+  end
+
+  def validate_sizes
+    f = @files.size
+    unless aud.nil?
+      a = aud.size
+      raise "Aud and files do not suit #{a} != #{f}." unless a == f
+    end
+    unless sub.nil?
+      s = sub.size
+      raise "Sub and files do not suit #{s} != #{f}." unless s == f
+    end
   end
 
   def act?
@@ -57,7 +86,13 @@ class Configuration
   end
 
   def wid
-    @options[:wid].nil? ? 79 : @options[:wid].to_i
+    if @options[:wid].nil?
+      # Reads current terminal width.
+      wid = `tput cols`
+      wid.to_s.empty? ? 79 : wid.to_i
+    else
+      @options[:wid].to_i
+    end
   end
 end
 
@@ -71,15 +106,17 @@ class Reporter
     @row = []
   end
 
-  def add(rhs)
-    @row << [Utils.trim(rhs, @str)]
+  def add(nam, aud, sub)
+    @row << [Utils.trim(nam, @str), aud, sub]
   end
 
   def do
     puts Terminal::Table.new(
       title: Utils.trim(@tit, @ttl),
       headings: [
-        { value: 'file', alignment: :center }
+        { value: 'file', alignment: :center },
+        { value: 'audio', alignment: :center },
+        { value: 'subtitles', alignment: :center }
       ],
       rows: @row,
       style: { width: @tbl }
@@ -89,8 +126,6 @@ end
 
 # Transcodes any video file to m4v format.
 class Transcoder
-  EXT = %i[avi mkv].map(&:to_s).join(',').freeze
-
   def initialize
     @cfg = Configuration.new
     @sta = { converted: 0, failed: 0 }
@@ -98,13 +133,18 @@ class Transcoder
     @tim = Timer.new
   end
 
-  def do # rubocop:disable MethodLength
-    Dir[@cfg.dir + "/*.{#{EXT}}"].sort.each do |nme|
-      @rep.add(nme)
-      next unless @cfg.sca?
-
-      v = `transcode-video --scan #{nme}`
+  def scan
+    @cfg.files.each do |file|
+      puts "---------- #{File.basename(file)} ----------"
+      v = `transcode-video --scan #{file}`
       puts v
+    end
+  end
+
+  def do
+    scan && return if @cfg.sca?
+    @cfg.files.each do |file|
+      @rep.add(file, '0', '0')
     end
     @rep.do
     puts "#{@cfg.act? ? 'Real' : 'Simulation'}:"\
