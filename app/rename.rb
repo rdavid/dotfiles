@@ -32,7 +32,7 @@ class Configuration
     ARGV << '-h' if ARGV.empty?
     @options = {}
     OptionParser.new do |o|
-      o.banner = 'Usage: rename.rb [options].'
+      o.banner = "Usage: #{File.basename($PROGRAM_NAME)} [options]."
       DIC.each { |f, p, d, k| o.on(f, p, d) { |i| @options[k] = i } }
     end.parse!
     raise 'Directory option is not given.' if dir.nil?
