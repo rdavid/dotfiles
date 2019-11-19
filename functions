@@ -119,10 +119,21 @@ cheat() {
   curl cht.sh/$1
 }
 
+timestamp() {
+  while IFS= read -r line; do
+    printf '%s %s\n' "$(date '+%Y%m%d%H%M%S')" "$line";
+  done
+}
+
+# Prints download and upload internet speed with timestamp.
 speed-mon() {
   while true; do
-    speed | grep Download | gawk '{ print strftime("%H:%M:%S"), $2 }\'
-    sleep 10;
+    speed | \
+      grep -E 'Download|Upload' | \
+      awk '{print $2}' | \
+      xargs | \
+      timestamp
+    test $? -gt 128 && break
   done
 }
 
