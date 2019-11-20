@@ -34,9 +34,14 @@ class Configuration
       o.banner = "Usage: #{File.basename($PROGRAM_NAME)} [options]."
       DIC.each { |f, p, d, t, k| o.on(f, p, t, d) { |i| @options[k] = i } }
     end.parse!
+    validate
+  end
+
+  def validate
     validate_dir
     validate_files
-    validate_sizes
+    validate_audio
+    validate_subtitles
     raise "Width of the table should exeeds 14 symbols: #{wid}." if wid < 15
   end
 
@@ -53,14 +58,26 @@ class Configuration
     raise "Unable to read #{bad} files." unless bad.empty?
   end
 
-  def validate_sizes
+  def validate_audio
+    return if aud.nil?
+
     f = @files.size
-    unless aud.nil?
-      a = aud.size
+    a = aud.size
+    if a == 1
+      @options[:aud] = Array.new(f, aud.first)
+    else
       raise "Aud and files do not suit #{a} != #{f}." unless a == f
     end
-    unless sub.nil?
-      s = sub.size
+  end
+
+  def validate_subtitles
+    return if aud.nil?
+
+    f = @files.size
+    s = sub.size
+    if s == 1
+      @options[:sub] = Array.new(f, sub.first)
+    else
       raise "Sub and files do not suit #{s} != #{f}." unless s == f
     end
   end
