@@ -56,12 +56,13 @@ class OS
   attr_reader :conf
   attr_reader :sudo
 
-  def initialize(cfg) # rubocop:disable MethodLength
+  def initialize(cfg) # rubocop:disable MethodLength, AbcSize
     @type = +''
     @test = +''
     @inst = +''
     @post = +''
     @prec = +''
+    @sudo = +''
 
     # Packages without Xorg to install.
     @pkgs = %w[
@@ -79,9 +80,6 @@ class OS
 
     # List of files/folders to symlink in ~/.config.
     @conf = %w[mc vifm]
-
-    # Be super user command.
-    @sudo = +''
 
     # For MacOS run '--no-xorg --pass'.
     unless cfg.pass.nil?
@@ -347,9 +345,7 @@ end
 
 # Defines current OS.
 class CurrentOS
-  # rubocop:disable LineLength
   def self.get # rubocop:disable PerceivedComplexity, CyclomaticComplexity, AbcSize
-    # rubocop:enable LineLength
     return MacOS   if OS.mac?
     return FreeBSD if OS.freebsd?
     return OpenBSD if OS.host_os =~ /openbsd/
@@ -370,9 +366,7 @@ class Installer
     @odir = File.join(Dir.home, 'dotfiles-old')
   end
 
-  # rubocop:disable LineLength
   def do # rubocop:disable PerceivedComplexity, CyclomaticComplexity, AbcSize, MethodLength
-    # rubocop:enable LineLength
     # Sort should be first, reject! returns nil if there is no empty.
     @os.pkgs.sort!.reject!(&:empty?)
     puts("Hello #{@os.type}: #{@os.pkgs}: #{@os.dotf}: #{@os.conf}.")
