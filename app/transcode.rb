@@ -12,6 +12,7 @@ require 'colorize'
 require 'optparse'
 require 'fileutils'
 require 'terminal-table'
+require 'English'
 require_relative 'utils'
 
 # Handles input parameters.
@@ -21,6 +22,7 @@ class Configuration
     ['-a', '--act', 'Real encoding.', nil, :act],
     ['-c', '--sca', 'Scan first file.', nil, :sca],
     ['-d', '--dir dir', 'Directory to transcode.', String, :dir],
+    ['-o', '--out out', 'Directory to output.', String, :out],
     ['-u', '--aud aud', 'Audio stream numbers.', Array, :aud],
     ['-s', '--sub sub', 'Subtitle stream numbers.', Array, :sub],
     ['-w', '--wid wid', 'Width of the table.', Integer, :wid]
@@ -40,14 +42,16 @@ class Configuration
   def validate
     validate_dir
     validate_files
-    validate_audio
-    validate_subtitles
+    validate_val(aud, :aud)
+    validate_val(sub, :sub)
     raise "Width of the table should exeeds 14 symbols: #{wid}." if wid < 15
   end
 
   def validate_dir
     raise 'Directory option is not given.' if dir.nil?
     raise "No such directory: #{dir}." unless File.directory?(dir)
+
+    @options[:out] = '~' if out.nil?
   end
 
   def validate_files
@@ -58,27 +62,17 @@ class Configuration
     raise "Unable to read #{bad} files." unless bad.empty?
   end
 
-  def validate_audio
-    return if aud.nil?
-
+  def validate_val(val, tag) # rubocop:disable Metrics/MethodLength
     f = @files.size
-    a = aud.size
-    if a == 1
-      @options[:aud] = Array.new(f, aud.first)
-    else
-      raise "Aud and files do not suit #{a} != #{f}." unless a == f
+    if val.nil?
+      @options[tag] = Array.new(f, '0')
+      return
     end
-  end
-
-  def validate_subtitles
-    return if aud.nil?
-
-    f = @files.size
-    s = sub.size
+    s = val.size
     if s == 1
-      @options[:sub] = Array.new(f, sub.first)
+      @options[tag] = Array.new(f, val.first)
     else
-      raise "Sub and files do not suit #{s} != #{f}." unless s == f
+      raise "#{tag} and files do not suit #{s} != #{f}." unless s == f
     end
   end
 
@@ -92,6 +86,10 @@ class Configuration
 
   def dir
     @options[:dir]
+  end
+
+  def out
+    @options[:out]
   end
 
   def aud
@@ -124,7 +122,11 @@ class Reporter
   end
 
   def add(nam, aud, sub)
-    @row << [Utils.trim(nam, @str), aud, sub]
+    @row << [
+      Utils.trim(nam, @str),
+      { value: aud, alignment: :right },
+      { value: sub, alignment: :right }
+    ]
   end
 
   def do
@@ -146,28 +148,53 @@ class Transcoder
   def initialize
     @cfg = Configuration.new
     @sta = { converted: 0, failed: 0 }
-    @rep = Reporter.new(@cfg.dir, @cfg.wid)
+    @rep = Reporter.new(File.expand_path(@cfg.dir), @cfg.wid)
     @tim = Timer.new
   end
 
   def scan
     @cfg.files.each do |file|
       puts "---------- #{File.basename(file)} ----------"
-      v = `transcode-video --scan #{file}`
-      puts v
+      puts `transcode-video --scan #{file}`
     end
   end
 
-  def do
-    scan && return if @cfg.sca?
-    @cfg.files.each do |file|
-      @rep.add(file, '0', '0')
-    end
-    @rep.do
+  # Converts files, aud and sub arrays to hash 'file->[aud, sub]'.
+  def data
+    @cfg.files.zip([@cfg.aud, @cfg.sub].transpose).to_h
+  end
+
+  def cmd(file, aud, sub)
+    cmd = "transcode-video --no-log --preset veryslow --output #{@cfg.out}"
+    cmd += " --main-audio #{aud}" unless aud == '0'
+    cmd += " --burn-subtitle #{sub}" unless sub == '0'
+    cmd + " #{file}"
+  end
+
+  def stat
     puts "#{@cfg.act? ? 'Real' : 'Simulation'}:"\
          " #{@sta[:converted]} converted,"\
          " #{@sta[:failed]} failed in"\
          " #{@tim.read}."
+  end
+
+  def run(cmd)
+    puts "Run: #{cmd}."
+    out = `#{cmd}`
+    @sta[$CHILD_STATUS.exitstatus.positive? ? :failed : :converted] += 1
+    puts out
+  end
+
+  def do
+    scan && return if @cfg.sca?
+    data.each do |file, audsub|
+      @rep.add(file, audsub[0], audsub[1])
+      next unless @cfg.act?
+
+      run(cmd(file, audsub[0], audsub[1]))
+    end
+    @rep.do
+    stat
   end
 end
 

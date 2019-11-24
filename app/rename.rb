@@ -417,7 +417,7 @@ class Renamer
   end
 
   def move(dir, dat) # rubocop:disable MethodLength, AbcSize
-    rep = Reporter.new(dir)
+    rep = Reporter.new(File.expand_path(dir))
     dat.each do |src, dst|
       if src == dst
         rep.add(File.basename(src), '')
