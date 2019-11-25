@@ -8,7 +8,7 @@
 # Transcodes any video file to m4v format.
 
 require 'colorize'
-require 'english'
+require 'English'
 require 'fileutils'
 require 'optparse'
 require 'set'
