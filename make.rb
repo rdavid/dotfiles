@@ -467,7 +467,8 @@ class Installer
 
     # Installs Ruby packages.
     %w[
-      pry pry-doc rubocop rubygems-update video_transcoding terminal-table
+      English pry pry-doc rubocop rubygems-update video_transcoding
+      terminal-table
     ].each do |p|
       chk = "gem list -i #{p}"
       next if `#{chk}`.strip.eql? 'true'
