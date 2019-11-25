@@ -20,7 +20,7 @@ class Configuration
   attr_reader :files
   DIC = [
     ['-a', '--act', 'Real encoding.', nil, :act],
-    ['-c', '--sca', 'Scan first file.', nil, :sca],
+    ['-c', '--sca', 'Scan files at the directory.', nil, :sca],
     ['-d', '--dir dir', 'Directory to transcode.', String, :dir],
     ['-o', '--out out', 'Directory to output.', String, :out],
     ['-u', '--aud aud', 'Audio stream numbers.', Array, :aud],
@@ -48,26 +48,28 @@ class Configuration
   end
 
   def validate_dir
-    raise 'Directory option is not given.' if dir.nil?
-    raise "No such directory: #{dir}." unless File.directory?(dir)
+    if dir.nil?
+      @options[:dir] = Dir.pwd
+    else
+      raise "No such directory: #{dir}." unless File.directory?(dir)
 
-    @options[:out] = '~' if out.nil?
+      @options[:dir] = File.expand_path(dir)
+    end
+    @options[:out] = File.expand_path('~') if out.nil?
   end
 
   def validate_files
-    @files = Dir[dir + "/*.{#{EXT}}"].sort
-    raise "Directory #{dir} doesn't have #{EXT} files." if @files.empty?
+    @files = Dir[dir + "/*.{#{EXT}}"]
+    @files += Dir.glob('*').select { |f| File.directory? f }
+    raise "#{dir} doesn't have #{EXT} files or directories." if @files.empty?
 
     bad = @files.reject { |f| File.readable?(f) }
     raise "Unable to read #{bad} files." unless bad.empty?
   end
 
-  def validate_val(val, tag) # rubocop:disable Metrics/MethodLength
+  def validate_val(val, tag)
     f = @files.size
-    if val.nil?
-      @options[tag] = Array.new(f, '0')
-      return
-    end
+    (@options[tag] = Array.new(f, '0')).nil? || return if val.nil?
     s = val.size
     if s == 1
       @options[tag] = Array.new(f, val.first)
@@ -113,24 +115,28 @@ end
 
 # Formats and prints output data.
 class Reporter
-  def initialize(tit, wid)
+  def initialize(act, tit, wid)
+    @act = act
     @tit = tit
     @tbl = wid
     @ttl = @tbl - 4
     @str = (@tbl - 7) / 2
     @row = []
+    @tim = Timer.new
+    @sta = { converted: 0, failed: 0 }
   end
 
-  def add(nam, aud, sub)
+  def add(file, aud, sub, res)
     @row << [
-      Utils.trim(nam, @str),
+      Utils.trim(File.basename(file), @str),
       { value: aud, alignment: :right },
       { value: sub, alignment: :right }
     ]
+    @sta[res ? :converted : :failed] += 1
   end
 
-  def do
-    puts Terminal::Table.new(
+  def table
+    Terminal::Table.new(
       title: Utils.trim(@tit, @ttl),
       headings: [
         { value: 'file', alignment: :center },
@@ -141,15 +147,32 @@ class Reporter
       style: { width: @tbl }
     )
   end
+
+  def do
+    puts table
+    final
+  end
+
+  def stat
+    out = ''
+    @sta.each do |k, v|
+      out += ' ' + v.to_s + ' ' + k.to_s + ',' if v.positive?
+    end
+    out.chop
+  end
+
+  def final
+    msg = "#{@act ? 'Real' : 'Test'}:#{stat} in #{@tim.read}."
+    msg = Utils.trim(msg, @ttl)
+    puts "| #{msg}#{' ' * (@ttl - msg.length)} |\n+-#{'-' * @ttl}-+"
+  end
 end
 
 # Transcodes any video file to m4v format.
 class Transcoder
   def initialize
     @cfg = Configuration.new
-    @sta = { converted: 0, failed: 0 }
-    @rep = Reporter.new(File.expand_path(@cfg.dir), @cfg.wid)
-    @tim = Timer.new
+    @rep = Reporter.new(@cfg.act?, @cfg.dir, @cfg.wid)
   end
 
   def scan
@@ -161,40 +184,33 @@ class Transcoder
 
   # Converts files, aud and sub arrays to hash 'file->[aud, sub]'.
   def data
-    @cfg.files.zip([@cfg.aud, @cfg.sub].transpose).to_h
+    @data ||= @cfg.files.zip([@cfg.aud, @cfg.sub].transpose).to_h
   end
 
   def cmd(file, aud, sub)
-    cmd = "transcode-video --no-log --preset veryslow --output #{@cfg.out}"
-    cmd += " --main-audio #{aud}" unless aud == '0'
-    cmd += " --burn-subtitle #{sub}" unless sub == '0'
-    cmd + " #{file}"
-  end
-
-  def stat
-    puts "#{@cfg.act? ? 'Real' : 'Simulation'}:"\
-         " #{@sta[:converted]} converted,"\
-         " #{@sta[:failed]} failed in"\
-         " #{@tim.read}."
+    @cmd ||= begin
+      c = "transcode-video --no-log --preset veryslow --output #{@cfg.out}"
+      c += " --main-audio #{aud}" unless aud == '0'
+      c += " --burn-subtitle #{sub}" unless sub == '0'
+      c + " #{file}"
+    end
   end
 
   def run(cmd)
     puts "Run: #{cmd}."
     out = `#{cmd}`
-    @sta[$CHILD_STATUS.exitstatus.positive? ? :failed : :converted] += 1
+    res = !$CHILD_STATUS.exitstatus.positive?
     puts out
+    res
   end
 
   def do
     scan && return if @cfg.sca?
     data.each do |file, audsub|
-      @rep.add(file, audsub[0], audsub[1])
-      next unless @cfg.act?
-
-      run(cmd(file, audsub[0], audsub[1]))
+      res = @cfg.act? ? run(cmd(file, audsub[0], audsub[1])) : true
+      @rep.add(file, audsub[0], audsub[1], res)
     end
     @rep.do
-    stat
   end
 end
 
