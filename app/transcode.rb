@@ -7,12 +7,12 @@
 #
 # Transcodes any video file to m4v format.
 
-require 'set'
 require 'colorize'
-require 'optparse'
+require 'english'
 require 'fileutils'
+require 'optparse'
+require 'set'
 require 'terminal-table'
-require 'English'
 require_relative 'utils'
 
 # Handles input parameters.
@@ -192,16 +192,17 @@ class Transcoder
       c = "transcode-video --no-log --preset veryslow --output #{@cfg.out}"
       c += " --main-audio #{aud}" unless aud == '0'
       c += " --burn-subtitle #{sub}" unless sub == '0'
-      c + " #{file}"
+      c + " #{file} 2>&1"
     end
   end
 
+  # Runs command and prints output instantly. Returns true on success.
   def run(cmd)
     puts "Run: #{cmd}."
-    out = `#{cmd}`
-    res = !$CHILD_STATUS.exitstatus.positive?
-    puts out
-    res
+    IO.popen(cmd).each do |line|
+      puts line.chomp
+    end.close
+    !$CHILD_STATUS.exitstatus.positive?
   end
 
   def do
