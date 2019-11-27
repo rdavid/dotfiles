@@ -20,17 +20,16 @@ class Configuration
   attr_reader :files
   DIC = [
     ['-a', '--act', 'Real encoding.', nil, :act],
-    ['-c', '--sca', 'Scan files at the directory.', nil, :sca],
+    ['-s', '--sca', 'Scan files at the directory.', nil, :sca],
     ['-d', '--dir dir', 'Directory to transcode.', String, :dir],
     ['-o', '--out out', 'Directory to output.', String, :out],
     ['-u', '--aud aud', 'Audio stream numbers.', Array, :aud],
-    ['-s', '--sub sub', 'Subtitle stream numbers.', Array, :sub],
+    ['-t', '--sub sub', 'Subtitle stream numbers.', Array, :sub],
     ['-w', '--wid wid', 'Width of the table.', Integer, :wid]
   ].freeze
   EXT = %i[avi flv mkv mp4].map(&:to_s).join(',').freeze
 
   def initialize
-    ARGV << '-h' if ARGV.empty?
     @options = {}
     OptionParser.new do |o|
       o.banner = "Usage: #{File.basename($PROGRAM_NAME)} [options]."
