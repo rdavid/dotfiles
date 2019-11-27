@@ -187,13 +187,11 @@ class Transcoder
   end
 
   def cmd(file, aud, sub)
-    @cmd ||= begin
-      c = 'transcode-video --m4v --no-log --preset veryslow'\
-          " --output #{@cfg.out}"
-      c += " --main-audio #{aud}" unless aud == '0'
-      c += " --burn-subtitle #{sub}" unless sub == '0'
-      c + " #{file} 2>&1"
-    end
+    c = 'transcode-video --m4v --no-log --preset veryslow'\
+        " --output #{@cfg.out}"
+    c += " --main-audio #{aud}" unless aud == '0'
+    c += " --burn-subtitle #{sub}" unless sub == '0'
+    c + " #{file} 2>&1"
   end
 
   # Runs command and prints output instantly. Returns true on success.
