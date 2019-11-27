@@ -4,11 +4,11 @@
 
 # Calculates duration time for report.
 duration() {
-  dur="$(("$(date +%s)" - "$1"))"
+  dur="$(($(date +%s) - $1))"
   printf "%d:%02d:%02d" \
-    $(("$dur" / 3600)) \
-    $(("$dur" % 3600 / 60)) \
-    $(("$dur" % 60))
+    $((dur / 3600)) \
+    $((dur % 3600 / 60)) \
+    $((dur % 60))
 }
 
 if [ 0 -eq $# ]; then
