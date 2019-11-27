@@ -23,8 +23,8 @@ fi
 printf 'Run %s, are you sure? [y/N] ' "$DIR"
 CFG=$(stty -g)
 stty raw -echo; ans=$(head -c 1); stty "$CFG"
+printf '\n'
 if ! echo "$ans" | grep -iq "^y"; then
-  printf '\n'
   exit 0
 fi
 BEG="$(date +%s)"
