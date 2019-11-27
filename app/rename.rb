@@ -28,15 +28,23 @@ class Configuration
     ['-w', '--wid wid', 'Width of the table.',         :wid]
   ].freeze
 
-  def initialize # rubocop:disable AbcSize
-    ARGV << '-h' if ARGV.empty?
+  def initialize
     @options = {}
     OptionParser.new do |o|
       o.banner = "Usage: #{File.basename($PROGRAM_NAME)} [options]."
       DIC.each { |f, p, d, k| o.on(f, p, d) { |i| @options[k] = i } }
     end.parse!
-    raise 'Directory option is not given.' if dir.nil?
-    raise "No such directory: #{dir}." unless File.directory?(dir)
+    validate
+  end
+
+  def validate
+    if dir.nil?
+      @options[:dir] = Dir.pwd
+    else
+      raise "No such directory: #{dir}." unless File.directory?(dir)
+
+      @options[:dir] = File.expand_path(dir)
+    end
     raise "Width of the table should exeeds 14 symbols: #{wid}." if wid < 15
   end
 
