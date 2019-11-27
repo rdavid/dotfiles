@@ -183,7 +183,7 @@ class Transcoder
 
   # Converts files, aud and sub arrays to hash 'file->[aud, sub]'.
   def data
-    @data ||= @cfg.files.zip([@cfg.aud, @cfg.sub].transpose).to_h
+    @data ||= @cfg.files.sort.reverse.zip([@cfg.aud, @cfg.sub].transpose).to_h
   end
 
   def cmd(file, aud, sub)
