@@ -20,14 +20,15 @@ class Configuration
   attr_reader :files
   DIC = [
     ['-a', '--act', 'Real encoding.', nil, :act],
-    ['-s', '--sca', 'Scan files at the directory.', nil, :sca],
+    ['-s', '--sca', 'Scans files at the directory.', nil, :sca],
+    ['-m', '--mp3', 'Converts files to mp3.', nil, :mp3],
     ['-d', '--dir dir', 'Directory to transcode.', String, :dir],
     ['-o', '--out out', 'Directory to output.', String, :out],
     ['-u', '--aud aud', 'Audio stream numbers.', Array, :aud],
     ['-t', '--sub sub', 'Subtitle stream numbers.', Array, :sub],
     ['-w', '--wid wid', 'Width of the table.', Integer, :wid]
   ].freeze
-  EXT = %i[avi flv mkv mp4].map(&:to_s).join(',').freeze
+  EXT = %i[avi flv m4v mkv mp4].map(&:to_s).join(',').freeze
 
   def initialize
     @options = {}
@@ -59,7 +60,7 @@ class Configuration
 
   def validate_files
     @files = Dir[dir + "/*.{#{EXT}}"]
-    @files += Dir.glob('*').select { |f| File.directory? f }
+    @files += Dir.glob('*').select { |f| File.directory? f } unless mp3?
     raise "#{dir} doesn't have #{EXT} files or directories." if @files.empty?
 
     bad = @files.reject { |f| File.readable?(f) }
@@ -83,6 +84,10 @@ class Configuration
 
   def sca?
     @options[:sca]
+  end
+
+  def mp3?
+    @options[:mp3]
   end
 
   def dir
@@ -125,31 +130,42 @@ class Reporter
     @sta = { converted: 0, failed: 0 }
   end
 
-  def add(file, aud, sub, res)
-    @row << [
-      Utils.trim(File.basename(file), @str),
-      { value: aud, alignment: :right },
-      { value: sub, alignment: :right }
-    ]
+  def add(file, res, aud = 0, sub = 0)
+    row = [Utils.trim(File.basename(file), @str)]
+    if aud != 0 || sub != 0
+      (row << [
+        { value: aud, alignment: :right },
+        { value: sub, alignment: :right }
+      ]).flatten!
+    end
+    @row << row
     @sta[res ? :converted : :failed] += 1
+  end
+
+  def head
+    head = [{ value: 'file', alignment: :center }]
+    if @row.first.size == 3
+      (head << [
+        { value: 'audio', alignment: :center },
+        { value: 'subtitles', alignment: :center }
+      ]).flatten!
+    end
+    head
   end
 
   def table
     Terminal::Table.new(
       title: Utils.trim(@tit, @ttl),
-      headings: [
-        { value: 'file', alignment: :center },
-        { value: 'audio', alignment: :center },
-        { value: 'subtitles', alignment: :center }
-      ],
+      headings: head,
       rows: @row,
       style: { width: @tbl }
     )
   end
 
   def do
-    puts table
-    final
+    msg = "#{@act ? 'Real' : 'Test'}:#{stat} in #{@tim.read}."
+    msg = Utils.trim(msg, @ttl)
+    puts "#{table}\n| #{msg}#{' ' * (@ttl - msg.length)} |\n+-#{'-' * @ttl}-+"
   end
 
   def stat
@@ -159,12 +175,6 @@ class Reporter
     end
     out.chop
   end
-
-  def final
-    msg = "#{@act ? 'Real' : 'Test'}:#{stat} in #{@tim.read}."
-    msg = Utils.trim(msg, @ttl)
-    puts "| #{msg}#{' ' * (@ttl - msg.length)} |\n+-#{'-' * @ttl}-+"
-  end
 end
 
 # Transcodes any video file to m4v format.
@@ -172,26 +182,6 @@ class Transcoder
   def initialize
     @cfg = Configuration.new
     @rep = Reporter.new(@cfg.act?, @cfg.dir, @cfg.wid)
-  end
-
-  def scan
-    @cfg.files.each do |file|
-      puts "---------- #{File.basename(file)} ----------"
-      puts `transcode-video --scan #{file}`
-    end
-  end
-
-  # Converts files, aud and sub arrays to hash 'file->[aud, sub]'.
-  def data
-    @data ||= @cfg.files.sort.reverse.zip([@cfg.aud, @cfg.sub].transpose).to_h
-  end
-
-  def cmd(file, aud, sub)
-    c = 'transcode-video --m4v --no-log --preset veryslow'\
-        " --output #{@cfg.out}"
-    c += " --main-audio #{aud}" unless aud == '0'
-    c += " --burn-subtitle #{sub}" unless sub == '0'
-    c + " #{file} 2>&1"
   end
 
   # Runs command and prints output instantly. Returns true on success.
@@ -203,11 +193,38 @@ class Transcoder
     !$CHILD_STATUS.exitstatus.positive?
   end
 
+  def m4v_cmd(file, aud, sub)
+    c = 'transcode-video --m4v --no-log --preset veryslow'\
+        " --output #{@cfg.out}"
+    c += " --main-audio #{aud}" unless aud == '0'
+    c += " --burn-subtitle #{sub}" unless sub == '0'
+    c + " #{file} 2>&1"
+  end
+
+  # Converts files, aud and sub arrays to hash 'file->[aud, sub]'.
+  def data
+    @data ||= @cfg.files.sort.reverse.zip([@cfg.aud, @cfg.sub].transpose).to_h
+  end
+
+  def m4v
+    data.each do |f, as|
+      res = @cfg.act? ? run(m4v_cmd(f, as[0], as[1])) : true
+      @rep.add(f, res, as[0], as[1])
+    end
+  end
+
+  def mp3_cmd(file)
+    "ffmpeg -i #{file} -vn -ar 44100 -ac 2 -ab 192k -f mp3 " \
+      "#{@cfg.out}/#{File.basename(file, '.*')}.mp3"
+  end
+
   def do
-    scan && return if @cfg.sca?
-    data.each do |file, audsub|
-      res = @cfg.act? ? run(cmd(file, audsub[0], audsub[1])) : true
-      @rep.add(file, audsub[0], audsub[1], res)
+    if @cfg.mp3?
+      @cfg.files.each { |f| @rep.add(f, @cfg.act? ? run(mp3_cmd(f)) : true) }
+    elsif @cfg.sca?
+      @cfg.files.each { |f| @rep.add(f, run("transcode-video --scan #{f}")) }
+    else
+      m4v
     end
     @rep.do
   end
