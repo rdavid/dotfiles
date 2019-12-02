@@ -10,6 +10,7 @@
 require 'fileutils'
 require 'i18n'
 require 'optparse'
+require 'pidfile'
 require 'set'
 require 'terminal-table'
 require_relative 'utils'
@@ -465,4 +466,5 @@ class Renamer
   end
 end
 
+PidFile.new
 Renamer.new.do

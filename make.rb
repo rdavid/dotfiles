@@ -11,11 +11,12 @@
 # For MacOS run without X and with the password for binary:
 #   make --no-xorg -pass pass
 
-require 'os'
-require 'git'
-require 'optparse'
-require 'fileutils'
 require 'English'
+require 'git'
+require 'fileutils'
+require 'optparse'
+require 'os'
+require 'pidfile'
 
 # Handles input parameters.
 class Configuration
@@ -495,4 +496,5 @@ class Installer
   end
 end
 
+PidFile.new
 Installer.new.do

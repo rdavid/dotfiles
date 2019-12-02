@@ -11,6 +11,7 @@ require 'colorize'
 require 'English'
 require 'fileutils'
 require 'optparse'
+require 'pidfile'
 require 'set'
 require 'terminal-table'
 require_relative 'utils'
@@ -55,7 +56,7 @@ class Configuration
 
       @options[:dir] = File.expand_path(dir)
     end
-    @options[:out] = File.expand_path('~') if out.nil?
+    @options[:out] = File.expand_path(out.nil? ? '~' : out)
   end
 
   def validate_files
@@ -181,7 +182,7 @@ end
 class Transcoder
   def initialize
     @cfg = Configuration.new
-    @rep = Reporter.new(@cfg.act?, @cfg.dir, @cfg.wid)
+    @rep = Reporter.new(@cfg.act?, "#{@cfg.dir} -> #{@cfg.out}", @cfg.wid)
   end
 
   # Runs command and prints output instantly. Returns true on success.
@@ -230,4 +231,5 @@ class Transcoder
   end
 end
 
+PidFile.new
 Transcoder.new.do
