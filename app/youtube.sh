@@ -1,6 +1,11 @@
 #!/bin/sh
 # vim: tabstop=2 shiftwidth=2 expandtab textwidth=80 linebreak wrap
 # Copyright 2019-present David Rabkin
+
+# The script is ran by crontab, the environment is stricked.
+export LC_ALL=en_US.UTF-8
+export LANG=en_US.UTF-8
+
 NME='youtube'
 LOG="/tmp/$NME.log"
 LCK="/tmp/$NME.lck"
