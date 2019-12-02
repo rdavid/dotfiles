@@ -130,9 +130,9 @@ speed-mon() {
   while true; do
     speed | \
       grep -E 'Download|Upload' | \
-      awk '{print $2}' | \
+      gawk '{print $2}' | \
       xargs | \
-      awk '{print strftime("%Y%m%d-%H%M%S"), $0}'
+      gawk '{print strftime("%Y%m%d-%H%M%S"), $0}'
     test $? -gt 128 && break
   done
 }
