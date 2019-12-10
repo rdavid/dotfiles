@@ -147,9 +147,10 @@ module MacOS
     )
     (
       mod.pkgs << %w[
-        aerial appcleaner disk-inventory-x docker feh firefox google-chrome
-        keepassxc keepingyouawake kitty lolcat mpv nmap plex spectacle spotifree
-        spotify sublime-text telegram truncate vanilla virtualbox watch xquartz
+        aerial appcleaner disk-inventory-x docker feh firefox iterm2
+        google-chrome keepassxc keepingyouawake kitty lolcat mpv nmap plex
+        spectacle spotifree spotify sublime-text telegram truncate vanilla
+        virtualbox watch xquartz
       ]
     ).flatten!
       .map! { |i| DIC[i.to_sym].nil? ? i : DIC[i.to_sym] }
