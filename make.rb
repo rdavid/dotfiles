@@ -237,7 +237,8 @@ module Arch
   DIC = {
     fortune: 'fortune-mod',
     'font-awesome': 'ttf-font-awesome',
-    handbrake: 'handbrake-cli',
+    handbrake: '',
+    shellcheck: '',
     'sublime-text': 'sublime-text-dev',
     'visual-studio-code': 'visual-studio-code-bin'
   }.freeze
@@ -257,7 +258,7 @@ module Arch
     )
     (
       mod.pkgs << %w[
-        alsa-utils atop handbrake-cli lolcat python-pip
+        alsa-utils atop lolcat python-pip
       ]
     ).flatten!
       .map! { |i| DIC[i.to_sym].nil? ? i : DIC[i.to_sym] }
