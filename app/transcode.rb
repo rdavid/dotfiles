@@ -55,7 +55,7 @@ class Configuration
 
   def find_fil
     @files = Dir.glob("#{dir}/*.{#{EXT}}").select { |f| File.file? f }
-    @fiels += Dir.glob("#{dir}/*").select { |f| File.directory? f } unless mp3?
+    @files += Dir.glob("#{dir}/*").select { |f| File.directory? f } unless mp3?
   end
 
   def validate
