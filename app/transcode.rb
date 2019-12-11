@@ -37,18 +37,12 @@ class Configuration
       o.banner = "Usage: #{File.basename($PROGRAM_NAME)} [options]."
       DIC.each { |f, p, d, t, k| o.on(f, p, t, d) { |i| @options[k] = i } }
     end.parse!
+    find_dir
+    find_fil
     validate
   end
 
-  def validate
-    validate_dir
-    validate_files
-    validate_val(aud, :aud)
-    validate_val(sub, :sub)
-    raise "Width of the table should exeeds 14 symbols: #{wid}." if wid < 15
-  end
-
-  def validate_dir
+  def find_dir
     if dir.nil?
       @options[:dir] = Dir.pwd
     else
@@ -59,9 +53,19 @@ class Configuration
     @options[:out] = File.expand_path(out.nil? ? '~' : out)
   end
 
+  def find_fil
+    @files = Dir.glob("#{dir}/*.{#{EXT}}").select { |f| File.file? f }
+    @fiels += Dir.glob("#{dir}/*").select { |f| File.directory? f } unless mp3?
+  end
+
+  def validate
+    validate_files
+    validate_val(aud, :aud)
+    validate_val(sub, :sub)
+    raise "Width of the table should exeeds 14 symbols: #{wid}." if wid < 15
+  end
+
   def validate_files
-    @files = Dir[dir + "/*.{#{EXT}}"]
-    @files += Dir.glob('*').select { |f| File.directory? f } unless mp3?
     raise "#{dir} doesn't have #{EXT} files or directories." if @files.empty?
 
     bad = @files.reject { |f| File.readable?(f) }
