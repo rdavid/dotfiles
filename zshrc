@@ -80,7 +80,7 @@ case $(uname -a) in
         export PATH="/home/linuxbrew/.linuxbrew/bin:$PATH"
         export MANPATH="/home/linuxbrew/.linuxbrew/share/man:$MANPATH"
         export INFOPATH="/home/linuxbrew/.linuxbrew/share/info:$INFOPATH"
-        export FZF_PATH='/usr/share/fzf'
+        export FZF_PATH='/usr/share/doc/fzf/examples'
         ;;
       freebsd*)
         MC='/usr/local/libexec/mc/mc-wrapper.sh'
