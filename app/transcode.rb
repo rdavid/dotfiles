@@ -191,11 +191,12 @@ class Transcoder
 
   # Runs command and prints output instantly. Returns true on success.
   def run(cmd)
+    cmd += ' 2>&1'
     puts "Run: #{cmd}."
     IO.popen(cmd).each do |line|
       puts line.chomp
     end.close
-    !$CHILD_STATUS.exitstatus.positive?
+    $CHILD_STATUS.success?
   end
 
   def m4v_cmd(file, aud, sub)
@@ -203,7 +204,7 @@ class Transcoder
         " --output #{@cfg.out}"
     c += " --main-audio #{aud}" unless aud == '0'
     c += " --burn-subtitle #{sub}" unless sub == '0'
-    c + " #{file} 2>&1"
+    c + " #{file}"
   end
 
   # Converts files, aud and sub arrays to hash 'file->[aud, sub]'.
