@@ -34,6 +34,10 @@ class Configuration
     OptionParser.new do |o|
       o.banner = "Usage: #{File.basename($PROGRAM_NAME)} [options]."
       DIC.each { |f, p, d, k| o.on(f, p, d) { |i| @options[k] = i } }
+      o.on('-c', '--cut pos,len', Array, 'Removes len symbols from pos.') do |l|
+        @options[:pos] = l[0]
+        @options[:len] = l[1]
+      end
     end.parse!
     validate
   end
@@ -79,6 +83,14 @@ class Configuration
 
   def pre
     @options[:pre]
+  end
+
+  def pos
+    @options[:pos]
+  end
+
+  def len
+    @options[:len]
   end
 
   def wid
@@ -205,6 +217,24 @@ class SubstituteAction < Action
 
   def do(src)
     src.gsub(@src, @dst)
+  end
+end
+
+# Removes symbols between left and right positions.
+class RemoveAction < Action
+  def initialize(pos, len)
+    raise 'len cannot bi nil.' if len.nil?
+    raise 'pos cannot be nil.' if pos.nil?
+    raise 'pos has to be positive.' unless pos.to_i.positive?
+
+    @pos = pos.to_i
+    @len = len.to_i
+  end
+
+  def do(src)
+    return src[@len..-1] if @pos == 1
+
+    src[0..@pos - 1] + src[@pos + @len..-1]
   end
 end
 
@@ -344,6 +374,7 @@ class ActionsFactory
     else
       [
         PointAction.new(dir), # Should be the first.
+        @cfg.pos.nil? ? nil : RemoveAction.new(@cfg.pos, @cfg.len),
         @cfg.src.nil? ? nil : SubstituteAction.new(@cfg.src, @cfg.dst),
         ManualLocalizationAction.new,
         DowncaseAction.new,
