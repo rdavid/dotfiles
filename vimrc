@@ -12,7 +12,6 @@ set encoding=utf-8
 " General.
 set hidden                      " Hides buffers instead of closing them.
 set linebreak                   " Break lines at word (requires Wrap lines).
-set showbreak=+++               " Wrap-broken line prefix.
 set textwidth=80                " Line wrap (number of cols).
 set showmatch                   " Highlight matching brace.
 set visualbell                  " Use visual bell (no beeping).
