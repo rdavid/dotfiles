@@ -56,6 +56,8 @@ class Configuration
   def find_fil
     @files = Dir.glob("#{dir}/*.{#{EXT}}").select { |f| File.file? f }
     @files += Dir.glob("#{dir}/*").select { |f| File.directory? f } unless mp3?
+    @files.sort_by!(&:naturalized)
+    @files.sort_by!(&:swapcase)
   end
 
   def validate
@@ -209,7 +211,7 @@ class Transcoder
 
   # Converts files, aud and sub arrays to hash 'file->[aud, sub]'.
   def data
-    @data ||= @cfg.files.sort.reverse.zip([@cfg.aud, @cfg.sub].transpose).to_h
+    @data ||= @cfg.files.zip([@cfg.aud, @cfg.sub].transpose).to_h
   end
 
   def m4v
