@@ -13,6 +13,7 @@ require 'fileutils'
 require 'optparse'
 require 'pidfile'
 require 'set'
+require 'shellwords'
 require 'terminal-table'
 require_relative 'utils'
 
@@ -206,7 +207,7 @@ class Transcoder
         " --output #{@cfg.out}"
     c += " --main-audio #{aud}" unless aud == '0'
     c += " --burn-subtitle #{sub}" unless sub == '0'
-    c + " #{file}"
+    c + " #{file.shellescape}"
   end
 
   # Converts files, aud and sub arrays to hash 'file->[aud, sub]'.
@@ -222,15 +223,20 @@ class Transcoder
   end
 
   def mp3_cmd(file)
-    "ffmpeg -i #{file} -vn -ar 44100 -ac 2 -ab 192k -f mp3 " \
+    file = file.shellescape
+    "ffmpeg -i #{file} -vn -ar 44100 -ac 2 -ab 192k -f mp3 "\
       "#{@cfg.out}/#{File.basename(file, '.*')}.mp3"
   end
 
-  def do
+  def scn_cmd(file)
+    "transcode-video --scan #{file.shellescape}"
+  end
+
+  def do # rubocop:disable Metrics/AbcSize
     if @cfg.mp3?
       @cfg.files.each { |f| @rep.add(f, @cfg.act? ? run(mp3_cmd(f)) : true) }
     elsif @cfg.sca?
-      @cfg.files.each { |f| @rep.add(f, run("transcode-video --scan #{f}")) }
+      @cfg.files.each { |f| @rep.add(f, run(scn_cmd(f))) }
     else
       m4v
     end
