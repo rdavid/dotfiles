@@ -140,3 +140,7 @@ speed-mon() {
 qr() {
   qrencode "$1" -t ANSIUTF8 -o -;
 }
+
+pdf2jpg() {
+  for i in *.pdf; do sips -s format jpeg $i --out $i.jpg; done
+}
