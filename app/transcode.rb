@@ -25,6 +25,7 @@ class Configuration
     ['-s', '--sca', 'Scans files at the directory.', nil, :sca],
     ['-m', '--mp3', 'Converts files to mp3.', nil, :mp3],
     ['-d', '--dir dir', 'Directory to transcode.', String, :dir],
+    ['-i', '--tit tit', 'Specific title by number.', Integer, :tit],
     ['-o', '--out out', 'Directory to output.', String, :out],
     ['-u', '--aud aud', 'Audio stream numbers.', Array, :aud],
     ['-t', '--sub sub', 'Subtitle stream numbers.', Array, :sub],
@@ -100,6 +101,10 @@ class Configuration
 
   def dir
     @options[:dir]
+  end
+
+  def tit
+    @options[:tit]
   end
 
   def out
@@ -207,6 +212,7 @@ class Transcoder
         " --output #{@cfg.out}"
     c += " --main-audio #{aud}" unless aud == '0'
     c += " --burn-subtitle #{sub}" unless sub == '0'
+    c += " --title #{@cfg.tit}" unless @cfg.tit.nil?
     c + " #{file.shellescape}"
   end
 
