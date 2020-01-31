@@ -25,7 +25,7 @@ class Configuration
     ['-s', '--sca', 'Scans files at the directory.', nil, :sca],
     ['-m', '--mp3', 'Converts files to mp3.', nil, :mp3],
     ['-d', '--dir dir', 'Directory to transcode.', String, :dir],
-    ['-i', '--tit tit', 'Specific title by number.', Integer, :tit],
+    ['-i', '--tit tit', 'Specific title by number.', Array, :tit],
     ['-o', '--out out', 'Directory to output.', String, :out],
     ['-u', '--aud aud', 'Audio stream numbers.', Array, :aud],
     ['-t', '--sub sub', 'Subtitle stream numbers.', Array, :sub],
@@ -66,6 +66,7 @@ class Configuration
     validate_files
     validate_val(aud, :aud)
     validate_val(sub, :sub)
+    validate_val(tit, :tit)
     raise "Width of the table should exeeds 14 symbols: #{wid}." if wid < 15
   end
 
@@ -74,6 +75,11 @@ class Configuration
 
     bad = @files.reject { |f| File.readable?(f) }
     raise "Unable to read #{bad} files." unless bad.empty?
+
+    return if @tit.nil?
+
+    f = @files.dup
+    (@tit.size - 1).times { @files += f }
   end
 
   def validate_val(val, tag)
@@ -83,6 +89,7 @@ class Configuration
     if s == 1
       @options[tag] = Array.new(f, val.first)
     else
+      return if tag == :tit
       raise "#{tag} and files do not suit #{s} != #{f}." unless s == f
     end
   end
@@ -143,12 +150,13 @@ class Reporter
     @sta = { converted: 0, failed: 0 }
   end
 
-  def add(file, res, aud = 0, sub = 0)
+  def add(file, res, aud = 0, sub = 0, tit = 0)
     row = [Utils.trim(File.basename(file), @str)]
     if aud != 0 || sub != 0
       (row << [
         { value: aud, alignment: :right },
-        { value: sub, alignment: :right }
+        { value: sub, alignment: :right },
+        { value: tit, alignment: :right }
       ]).flatten!
     end
     @row << row
@@ -157,10 +165,11 @@ class Reporter
 
   def head
     head = [{ value: 'file', alignment: :center }]
-    if @row.first.size == 3
+    if @row.first.size == 4
       (head << [
         { value: 'audio', alignment: :center },
-        { value: 'subtitles', alignment: :center }
+        { value: 'subtitles', alignment: :center },
+        { value: 'titles', alignment: :center }
       ]).flatten!
     end
     head
@@ -207,24 +216,26 @@ class Transcoder
     $CHILD_STATUS.success?
   end
 
-  def m4v_cmd(file, aud, sub)
+  def m4v_cmd(file, aud, sub, tit)
     c = 'transcode-video --m4v --no-log --preset veryslow'\
         " --output #{@cfg.out}"
     c += " --main-audio #{aud}" unless aud == '0'
     c += " --burn-subtitle #{sub}" unless sub == '0'
-    c += " --title #{@cfg.tit}" unless @cfg.tit.nil?
+    c += " --title #{tit}" unless til == '0'
     c + " #{file.shellescape}"
   end
 
-  # Converts files, aud and sub arrays to hash 'file->[aud, sub]'.
+  # Converts files, audibale, subtitles and titles arrays to array:
+  #   [ file1 [ aud1, sub1, tit1 ] ]
+  #   [ file2 [ aud2, sub2, tit2 ] ]
   def data
-    @data ||= @cfg.files.zip([@cfg.aud, @cfg.sub].transpose).to_h
+    @data ||= @cfg.files.zip([@cfg.aud, @cfg.sub, @cfg.tit].transpose)
   end
 
   def m4v
     data.each do |f, as|
-      res = @cfg.act? ? run(m4v_cmd(f, as[0], as[1])) : true
-      @rep.add(f, res, as[0], as[1])
+      res = @cfg.act? ? run(m4v_cmd(f, as[0], as[1], as[2])) : true
+      @rep.add(f, res, as[0], as[1], as[2])
     end
   end
 
