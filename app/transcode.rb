@@ -64,32 +64,34 @@ class Configuration
 
   def validate
     validate_files
+    validate_tit
     validate_val(aud, :aud)
     validate_val(sub, :sub)
-    validate_val(tit, :tit)
     raise "Width of the table should exeeds 14 symbols: #{wid}." if wid < 15
   end
 
   def validate_files
-    raise "#{dir} doesn't have #{EXT} files or directories." if @files.empty?
+    raise "#{dir} doesn't have #{EXT} files or directories." if files.empty?
 
-    bad = @files.reject { |f| File.readable?(f) }
+    bad = files.reject { |f| File.readable?(f) }
     raise "Unable to read #{bad} files." unless bad.empty?
+  end
 
-    return if @tit.nil?
+  def validate_tit
+    return if tit.nil?
 
-    f = @files.dup
-    (@tit.size - 1).times { @files += f }
+    raise "Title feature doesn't support #{files.size} files." if files.size > 1
+
+    @files = Array.new(tit.size, files.first)
   end
 
   def validate_val(val, tag)
-    f = @files.size
+    f = files.size
     (@options[tag] = Array.new(f, '0')).nil? || return if val.nil?
     s = val.size
     if s == 1
       @options[tag] = Array.new(f, val.first)
     else
-      return if tag == :tit
       raise "#{tag} and files do not suit #{s} != #{f}." unless s == f
     end
   end
@@ -219,9 +221,12 @@ class Transcoder
   def m4v_cmd(file, aud, sub, tit)
     c = 'transcode-video --m4v --no-log --preset veryslow'\
         " --output #{@cfg.out}"
+    unless tit == '0'
+      c += "/#{File.basename(file.shellescape)}-#{tit}.m4v"
+      c += " --title #{tit}"
+    end
     c += " --main-audio #{aud}" unless aud == '0'
     c += " --burn-subtitle #{sub}" unless sub == '0'
-    c += " --title #{tit}" unless tit == '0'
     c + " #{file.shellescape}"
   end
 
