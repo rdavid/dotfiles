@@ -221,7 +221,7 @@ class Transcoder
         " --output #{@cfg.out}"
     c += " --main-audio #{aud}" unless aud == '0'
     c += " --burn-subtitle #{sub}" unless sub == '0'
-    c += " --title #{tit}" unless til == '0'
+    c += " --title #{tit}" unless tit == '0'
     c + " #{file.shellescape}"
   end
 
