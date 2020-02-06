@@ -82,7 +82,10 @@ class Configuration
       @options[:tit] = Array.new(files.size, '0')
       return
     end
-    @files = Array.new(tit.size, files.first) if files.size == 1
+    if files.size == 1
+      @files = Array.new(tit.size, files.first)
+      return
+    end
     raise "Title feature doesn't support #{files.size} files."
   end
 
