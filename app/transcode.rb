@@ -77,12 +77,13 @@ class Configuration
     raise "Unable to read #{bad} files." unless bad.empty?
   end
 
-  def validate_tit
-    return if tit.nil?
-
-    raise "Title feature doesn't support #{files.size} files." if files.size > 1
-
-    @files = Array.new(tit.size, files.first)
+  def validate_tit # rubocop:disable Metrics/AbcSize
+    if tit.nil?
+      @options[:tit] = Array.new(files.size, '0')
+      return
+    end
+    @files = Array.new(tit.size, files.first) if files.size == 1
+    raise "Title feature doesn't support #{files.size} files."
   end
 
   def validate_val(val, tag)
