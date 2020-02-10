@@ -8,6 +8,7 @@ mc/mc
 node_modules/
 oh-my-zsh/
 package-lock.json
+tags
 terminator/terminator
 tmux/plugins/tpm/
 tmux/tmux
