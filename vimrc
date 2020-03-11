@@ -51,6 +51,9 @@ augroup END
 
 " Configures Pathogen before Colors.
 execute pathogen#infect()
+let g:syntastic_c_checkers = ['cppcheck']
+let g:syntastic_sh_checkers = ['shellcheck']
+let g:syntastic_ruby_checkers = ['rubocop']
 
 " Colors.
 syntax on                      " Enables syntax processing.
