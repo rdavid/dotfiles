@@ -31,7 +31,9 @@ class Configuration
     ['-t', '--sub sub', 'Subtitle stream numbers.', Array, :sub],
     ['-w', '--wid wid', 'Width of the table.', Integer, :wid]
   ].freeze
-  EXT = %i[avi flv m4v mkv mp4 mpg mpeg ts webm wvm].map(&:to_s).join(',').freeze
+  EXT = %i[
+    avi flv m4v mkv mp4 mpg mpeg ts webm vob wvm
+  ].map(&:to_s).join(',').freeze
 
   def initialize
     @options = {}
