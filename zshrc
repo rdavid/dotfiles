@@ -50,13 +50,13 @@ $HOME/.gem/ruby/2.5.0/bin:\
 $HOME/dotfiles/app:\
 $HOME/src/go\
 "
+source "$HOME/dotfiles/aliases"
+source "$HOME/dotfiles/functions"
 
 # Corrects work of tmuxp.
 export PATH="`python -m site --user-base`/bin":$PATH
 source "$HOME/dotfiles/app/z.sh"
 source "$ZSH/oh-my-zsh.sh"
-source "$HOME/dotfiles/aliases"
-source "$HOME/dotfiles/functions"
 alias src="source $HOME/.zshrc"
 case $(uname -a) in
   *Microsoft*)
