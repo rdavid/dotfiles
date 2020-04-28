@@ -1,6 +1,8 @@
 #!/bin/sh
 # vim: tabstop=2 shiftwidth=2 expandtab textwidth=80 linebreak wrap
 # Copyright 2019-present David Rabkin
+#
+# Sets owner to foobar user, set right permitions for files and directories.
 
 # Calculates duration time for report.
 duration() {
@@ -28,7 +30,7 @@ if ! echo "$ans" | grep -iq "^y"; then
   exit 0
 fi
 BEG="$(date +%s)"
-chown -R david "$DIR"
+chown -R foobar "$DIR"
 find "$DIR" -type d -exec chmod 755 {} \;
 find "$DIR" -type f -exec chmod 644 {} \;
 printf 'Done in %s seconds.\n' "$(duration "$BEG")"
