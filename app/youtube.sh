@@ -1,9 +1,9 @@
 #!/bin/sh
 # vim: tabstop=2 shiftwidth=2 expandtab textwidth=80 linebreak wrap
 # Copyright 2019-present David Rabkin
-# The script downloads all new video from pre-configured channels.txt. It
-# updates IDs of downloaded files at done.txt. The script coud be ran by a
-# cron job. Uses youtube-dl and rsync.
+# The script downloads all new video from pre-configured acoounts in
+# channels.txt. It updates IDs of downloaded files at done.txt. The script
+# could be ran by a cron job. Uses youtube-dl, rsync, rename.rb.
 
 # Exists on any error.
 set -e
@@ -15,10 +15,10 @@ export LANG=en_US.UTF-8
 NME='youtube'
 LOG="/tmp/$NME.log"
 LCK="/tmp/$NME.lck"
-SRC='/mnt/ibx/ytb/app/channels.txt'
-ARC='/mnt/ibx/ytb/app/done.txt'
-REN='/mnt/ibx/ytb/app/rename.rb'
-DST='/mnt/ibx/ytb'
+SRC='/mnt/nas-ibx/ytb/app/channels.txt'
+ARC='/mnt/nas-ibx/ytb/app/done.txt'
+REN='/mnt/nas-ibx/ytb/app/rename.rb'
+DST='/mnt/nas-ibx/ytb'
 TMP='/tmp/out'
 
 log() {
@@ -47,8 +47,12 @@ youtube-dl \
   --add-metadata \
   --batch-file="$SRC" \
   2>&1 | tee -a "$LOG"
-$REN -d "$TMP" -a
-rsync -zvhr --progress "$TMP/*" "$DST" 2>&1 | tee -a "$LOG"
+# Do nothing if the output directory is empty.
+# shellcheck disable=SC2010
+if ls -1A "$TMP" | grep -q .; then
+  $REN -d "$TMP" -a 2>&1 | tee -a "$LOG"
+  rsync -zvhr --progress "$TMP"/* "$DST" 2>&1 | tee -a "$LOG"
+fi
 rm -rf "$TMP"
 log "$NME says bye."
 exit 0
