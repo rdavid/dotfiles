@@ -6,24 +6,21 @@
 export PAGER=most
 export VISUAL=vim
 export EDITOR=vim
-export HISTCONTROL=ignorespace
+export HISTCONTROL='ignoredups'
+export HISTIGNORE='make.sh:youtube-dl'
+export HIST_STAMPS='yyyy-mm-dd'
 export BAT_PAGER=less
 export BAT_THEME=zenburn
 
 # Path to your oh-my-zsh installation.
 export ZSH="$HOME/.oh-my-zsh"
-#export ZSH_THEME="wezm"
 export ZSH_THEME=minimal
 
 # Uncomment the following line to change how often to auto-update (in days).
 export UPDATE_ZSH_DAYS=30
 
 # Uncomment the following line to display red dots whilst waiting for completion.
-COMPLETION_WAITING_DOTS="true"
-
-# Uncomment the following line if you want to change the command execution time
-# stamp shown in the history command output.
-HIST_STAMPS="yyyy-mm-dd"
+COMPLETION_WAITING_DOTS='true'
 
 # Which plugins would you like to load? (plugins can be found in
 # ~/.oh-my-zsh/plugins/*). Custom plugins may be added to
