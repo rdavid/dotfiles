@@ -32,6 +32,7 @@ plugins=( \
   golang history lol osx pip python rsync ruby sudo tmux vi-mode \
   web-search yarn z \
 )
+autoload zmv
 export PATH="\
 /usr/local/bin:\
 /usr/local/sbin:\
