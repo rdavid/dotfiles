@@ -68,7 +68,7 @@ class OS
     # Packages without Xorg to install.
     @pkgs = %w[
       bat cmatrix cmus cowsay cppcheck curl ctags exa f3 ffmpeg figlet fortune
-      fzf gawk handbrake htop imagemagick mc mosh most ncdu npm nnn python
+      fzf gawk handbrake htop imagemagick lynx mc mosh most ncdu npm nnn python
       qrencode ripgrep shellcheck syncthing tmux vifm vim wget zsh
       zsh-syntax-highlighting yamllint
     ]
