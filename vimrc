@@ -40,6 +40,8 @@ set lazyredraw                  " Redraw only when we need to.
 set listchars=tab:░\ ,extends:»,precedes:«,nbsp:⣿,trail:·
 set showbreak="\u21aa "
 set list
+set splitbelow
+set splitright
 
 " Switches on and off relativenumber in hybrid mode.
 augroup numbertoggle
@@ -76,6 +78,12 @@ nnoremap <leader>sv :source $MYVIMRC<CR>
 
 " Turns off search highlight.
 nnoremap <leader><space> :nohlsearch<CR>
+
+" Easier split navigations.
+nnoremap <C-J> <C-W><C-J>
+nnoremap <C-K> <C-W><C-K>
+nnoremap <C-L> <C-W><C-L>
+nnoremap <C-H> <C-W><C-H>
 
 " Window.
 nmap <leader>sw<left>  :topleft  vnew<CR>
