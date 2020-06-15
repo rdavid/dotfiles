@@ -1,8 +1,5 @@
 #!/usr/bin/env ruby
-# vim: tabstop=2 shiftwidth=2 expandtab textwidth=80 linebreak wrap
-#
-# country.rb
-#
+# vi:ts=2 sw=2 tw=79 et lbr wrap
 # Copyright 2018 David Rabkin
 #
 # This script prints a country name by public IP.
