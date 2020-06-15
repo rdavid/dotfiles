@@ -1,22 +1,24 @@
 #!/usr/bin/env ruby
+# frozen_string_literal: true
+
 # vi:ts=2 sw=2 tw=79 et lbr wrap
 # Copyright 2018 David Rabkin
 #
 # This script prints a country name by public IP.
 
-require 'rubygems'
+require 'English'
 require 'json'
+require 'rubygems'
 
 # Runs curl silently with 1 second time out.
 str = `curl -s -m 1 ipinfo.io`
-if !$?.success? || str.include?('timed out')
+if !$CHILD_STATUS.exitstatus.positive? || str.include?('timed out')
   print 'no'
   exit
 end
 
 # Extracts country name.
 val = JSON.parse(str)['country'].downcase
-
 case val
 when 'us'
   val = ''
@@ -29,5 +31,4 @@ when 'uk'
 when 'ru'
   val = ''
 end
-
 print val
