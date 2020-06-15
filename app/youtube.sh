@@ -15,9 +15,9 @@ LOG="/tmp/$NME.log"
 LCK="/tmp/$NME.lck"
 SRC='/mnt/nas-ibx/ytb/app/channels.txt'
 ARC='/mnt/nas-ibx/ytb/app/done.txt'
-REN='/mnt/nas-ibx/ytb/app/rename.rb'
 DST='/mnt/nas-ibx/ytb'
 TMP='/tmp/out'
+REN='renamr'
 
 log() {
   date +"%Y%m%d-%H:%M:%S $*" | tee -a "$LOG"
@@ -26,6 +26,11 @@ log() {
 # Prevents multiple instances.
 if [ -e "$LCK" ] && kill -0 "$(cat "$LCK")"; then
   log "$0 is already running."
+  exit 0
+fi
+
+if ! gem spec "$REN" > /dev/null 2>&1; then
+  log "Please install $REN: git install $REN."
   exit 0
 fi
 
