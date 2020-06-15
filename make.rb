@@ -1,8 +1,7 @@
 #!/usr/bin/env ruby
 # frozen_string_literal: true
 
-# vim: tabstop=2 shiftwidth=2 expandtab textwidth=80 linebreak wrap
-#
+# vi:ts=2 sw=2 tw=79 et lbr wrap
 # Copyright 2017-present David Rabkin
 #
 # This script creates symlinks from the home directory to any desired
