@@ -147,8 +147,8 @@ module MacOS
     (
       mod.pkgs << %w[
         aerial appcleaner disk-inventory-x docker feh firefox hadolint iterm2
-        google-chrome keepassxc keepingyouawake kitty lolcat mpv nmap plex
-        plexamp spectacle spotifree spotify sublime-text telegram truncate
+        google-chrome keepassxc keepingyouawake kitty launchbar lolcat mpv nmap
+        plex plexamp spectacle spotifree spotify sublime-text telegram truncate
         vanilla virtualbox watch xquartz
       ]
     ).flatten!
