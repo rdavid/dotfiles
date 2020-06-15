@@ -56,7 +56,7 @@ class OS
   attr_reader :conf
   attr_reader :sudo
 
-  def initialize(cfg) # rubocop:disable MethodLength, AbcSize
+  def initialize(cfg) # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
     @type = +''
     @test = +''
     @inst = +''
@@ -102,7 +102,7 @@ class OS
 
   private
 
-  def xconfigure # rubocop:disable MethodLength
+  def xconfigure # rubocop:disable Metrics/MethodLength
     @prec << %(
       mkdir -p ~/.fonts
       for f in inconsolata-g.otf pragmatapro.ttf; do
@@ -127,7 +127,7 @@ module MacOS
   DIC = {
   }.freeze
 
-  def self.extended(mod) # rubocop:disable MethodLength, AbcSize
+  def self.extended(mod) # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
     mod.type << 'MacOS'
     mod.prec << %(
       for f in inconsolata-g.otf pragmatapro.ttf; do
@@ -174,7 +174,7 @@ module FreeBSD
     yamllint: 'py36-yamllint'
   }.freeze
 
-  def self.extended(mod) # rubocop:disable AbcSize
+  def self.extended(mod) # rubocop:disable Metrics/AbcSize
     mod.type << 'FreeBSD'
     (
       mod.pkgs << %w[
@@ -204,7 +204,7 @@ module OpenBSD
     'zsh-syntax-highlighting': ''
   }.freeze
 
-  def self.extended(mod) # rubocop:disable MethodLength, AbcSize
+  def self.extended(mod) # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
     mod.type << 'OpenBSD'
     mod.prec << %(
       ln -sf ~/.xinitrc ~/.xsession
@@ -242,7 +242,7 @@ module Arch
     'visual-studio-code': 'visual-studio-code-bin'
   }.freeze
 
-  def self.extended(mod) # rubocop:disable MethodLength, AbcSize
+  def self.extended(mod) # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
     mod.type << 'Arch'
     mod.prec << %(
       if [[ ! `cat /etc/pacman.conf | grep archlinuxfr` ]]; then
@@ -275,7 +275,7 @@ module Debian
     'font-awesome': 'fonts-font-awesome'
   }.freeze
 
-  def self.extended(mod) # rubocop:disable MethodLength, AbcSize
+  def self.extended(mod) # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
     mod.type << 'Debian'
     mod.prec << %(
       sudo apt-get -y update
@@ -300,7 +300,7 @@ module RedHat
     'font-awesome': 'fontawesome-fonts'
   }.freeze
 
-  def self.extended(mod) # rubocop:disable AbcSize
+  def self.extended(mod) # rubocop:disable Metrics/AbcSize
     mod.type << 'RedHat'
     (
       mod.pkgs << %w[
@@ -328,7 +328,7 @@ module Alpine
     'zsh-syntax-highlighting': ''
   }.freeze
 
-  def self.extended(mod) # rubocop:disable MethodLength, AbcSize
+  def self.extended(mod) # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
     mod.type << 'Alpine'
     mod.prec << %(
       sudo apk update && sudo apk upgrade
@@ -347,7 +347,7 @@ end
 
 # Defines current OS.
 class CurrentOS
-  def self.get # rubocop:disable PerceivedComplexity, CyclomaticComplexity, AbcSize
+  def self.get # rubocop:disable Metrics/PerceivedComplexity, Metrics/CyclomaticComplexity, Metrics/AbcSize
     return MacOS   if OS.mac?
     return FreeBSD if OS.freebsd?
     return OpenBSD if OS.host_os =~ /openbsd/
@@ -368,7 +368,7 @@ class Installer
     @odir = File.join(Dir.home, 'dotfiles-old')
   end
 
-  def do # rubocop:disable PerceivedComplexity, CyclomaticComplexity, AbcSize, MethodLength
+  def do # rubocop:disable Metrics/PerceivedComplexity, Metrics/CyclomaticComplexity, Metrics/AbcSize, Metrics/MethodLength
     # Sort should be first, reject! returns nil if there is no empty.
     @os.pkgs.sort!.reject!(&:empty?)
     puts("Hello #{@os.type}: #{@os.pkgs}: #{@os.dotf}: #{@os.conf}.")
