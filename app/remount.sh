@@ -1,6 +1,5 @@
-#!/bin/sh
-# vim: tabstop=2 shiftwidth=2 expandtab textwidth=80 linebreak wrap
-#
+#!/bin/sh -e
+# vi:ts=2 sw=2 tw=79 et lbr wrap
 # Copyright 2016-present David Rabkin
 
 TMP='/etc/fstab-tmp'

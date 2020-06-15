@@ -1,12 +1,10 @@
-#!/bin/sh
-# vim: tabstop=2 shiftwidth=2 expandtab textwidth=80 linebreak wrap
+#!/bin/sh -e
+# vi:ts=2 sw=2 tw=79 et lbr wrap
 # Copyright 2019-present David Rabkin
+#
 # The script downloads all new video from pre-configured acoounts in
 # channels.txt. It updates IDs of downloaded files at done.txt. The script
 # could be ran by a cron job. Uses youtube-dl, rsync, rename.rb.
-
-# Exists on any error.
-set -e
 
 # The script is ran by cron, the environment is stricked.
 export LC_ALL=en_US.UTF-8
