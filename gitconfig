@@ -1,7 +1,8 @@
 # This is Git's per-user configuration file.
 [user]
-  name = David
-	email = davidra@sigmadots.com
+	name = David Rabkin
+	email = david@rabkin.co.il
+	signingkey = 61DA1757
 [alias]
   # list files which have changed since master
   files = !git diff --name-only $(git merge-base HEAD \"master\")
@@ -22,3 +23,8 @@
   # instead of opening all files:
   # git reviewone foo.js bar.js
   reviewone = !vim -p +\"tabdo Gdiff master\" +\"let g:gitgutter_diff_base = 'master'\"
+	lg = log --color --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit
+[commit]
+	gpgsign = true
+[gpg]
+	program = gpg

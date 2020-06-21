@@ -10,6 +10,7 @@ export EDITOR=vim
 export HISTSIZE='32768';
 export HISTFILESIZE="${HISTSIZE}";
 export HISTCONTROL='ignoreboth';
+export GPG_TTY=`tty`
 
 PATH=/opt/local/bin:/usr/local/bin:$PATH
 
