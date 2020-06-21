@@ -10,7 +10,6 @@ export HISTIGNORE='make.sh:youtube-dl'
 export HIST_STAMPS='yyyy-mm-dd'
 export BAT_PAGER=less
 export BAT_THEME=zenburn
-export GPG_TTY=`tty`
 
 # Path to your oh-my-zsh installation.
 export ZSH="$HOME/.oh-my-zsh"
@@ -21,6 +20,9 @@ export UPDATE_ZSH_DAYS=30
 
 # Uncomment the following line to display red dots whilst waiting for completion.
 COMPLETION_WAITING_DOTS='true'
+
+GPG_TTY="$(tty)"
+export GPG_TTY
 
 # Which plugins would you like to load? (plugins can be found in
 # ~/.oh-my-zsh/plugins/*). Custom plugins may be added to
