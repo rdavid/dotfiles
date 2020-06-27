@@ -18,4 +18,4 @@ if [ ! -f "$PRM" ]; then
 fi
 cp "$TMP" /etc/fstab && mount -a
 cp "$PRM" /etc/fstab
-echo 'Done!'
+printf 'Done!\n'
