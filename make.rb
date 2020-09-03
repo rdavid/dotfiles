@@ -68,8 +68,8 @@ class OS
     @pkgs = %w[
       bat cmatrix cmus cowsay cppcheck curl ctags exa f3 fdupes ffmpeg figlet
       fortune fzf gawk gnupg handbrake htop imagemagick lynx mc mosh most ncdu
-      npm nnn python qrencode ripgrep shellcheck syncthing tmux vifm vim wget
-      zsh zsh-syntax-highlighting yamllint
+      npm nnn python qrencode redo ripgrep shellcheck syncthing tmux vifm vim
+      wget zsh zsh-syntax-highlighting yamllint
     ]
 
     # List of files/folders to symlink in homedir.
