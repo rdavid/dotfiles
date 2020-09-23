@@ -155,10 +155,8 @@ pdf2png() {
 }
 
 vid2aud() {
-  command -v ffmpeg >/dev/null 2>&1 || {
-    printf 'Install ffmpeg.'
-    exit 1
-  }
+  command -v ffmpeg >/dev/null 2>&1 ||
+    { printf 'Install ffmpeg.\n'; return }
   # shellcheck disable=SC2039
   find . -type f -maxdepth 1 -print0\
     \( -name \*.mp4 -o -name \*.m4v -o -name \*.avi -o -name \*.mkv \) |
