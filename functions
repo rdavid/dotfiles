@@ -153,3 +153,20 @@ pdf2png() {
       pdftoppm "${file}" "${file%.*}" -png
     done
 }
+
+vid2aud() {
+  command -v ffmpeg >/dev/null 2>&1 || {
+    printf 'Install ffmpeg.'
+    exit 1
+  }
+  # shellcheck disable=SC2039
+  find . -type f -maxdepth 1 -print0\
+    \( -name \*.mp4 -o -name \*.m4v -o -name \*.avi -o -name \*.mkv \) |
+    xargs -0 |
+    while read -r -d ' ' src; do
+      src=$(basename -- "$src")
+      dst=${src%.*}.mp3
+      printf 'Convert %s -> %s.\n' "$src" "$dst"
+      ffmpeg -nostdin -i "$src" -vn -ar 44100 -ac 2 -ab 320k -f mp3 "$dst"
+    done
+}
