@@ -48,16 +48,13 @@ $HOME/.gem/ruby/2.5.0/bin:\
 /usr/local/go/bin:\
 /usr/local/opt/ruby/bin:\
 $HOME/dotfiles/app:\
-$HOME/src/go\
+$HOME/src/go:\
+$(python -m site --user-base)/bin
 "
+source "$ZSH/oh-my-zsh.sh"
+source "$HOME/dotfiles/app/z.sh"
 source "$HOME/dotfiles/aliases"
 source "$HOME/dotfiles/functions"
-
-# Corrects work of tmuxp.
-export PATH="`python -m site --user-base`/bin":$PATH
-source "$HOME/dotfiles/app/z.sh"
-source "$ZSH/oh-my-zsh.sh"
-alias src="source $HOME/.zshrc"
 case $(uname -a) in
   *Microsoft*)
     unsetopt BG_NICE

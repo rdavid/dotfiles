@@ -37,4 +37,5 @@ alias ipe='curl ipinfo.io/ip'
 alias ipi='ipconfig getifaddr en0'
 alias c='clear'
 alias src-tmux="tmux source-file $HOME/.tmux.conf"
-alias h='history'
+alias src="source $HOME/.zshrc"
+alias rsync='rsync -zvhr --progress'
