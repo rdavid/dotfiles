@@ -146,10 +146,10 @@ module MacOS
     )
     (
       mod.pkgs << %w[
-        aerial appcleaner disk-inventory-x docker feh firefox hadolint iterm2
-        google-chrome keepassxc keepingyouawake kitty launchbar lolcat mpv nmap
-        plex plexamp spectacle spotifree spotify sublime-text telegram truncate
-        vanilla virtualbox watch xquartz
+        aerial appcleaner coreutils disk-inventory-x docker feh firefox hadolint
+        iterm2 google-chrome keepassxc keepingyouawake kitty launchbar librsync
+        lolcat mpv nmap plex plexamp spectacle spotifree spotify sublime-text
+        telegram vanilla virtualbox watch xquartz
       ]
     ).flatten!
       .map! { |i| DIC[i.to_sym].nil? ? i : DIC[i.to_sym] }
@@ -451,7 +451,7 @@ class Installer
 
     # Installs Python packages.
     %w[
-      glances s_tui pss speedtest-cli tmuxp youtube_dl
+      glances s_tui pss rdiff_backup speedtest-cli tmuxp youtube_dl
     ].each do |p|
       chk = "python -c \"help('modules');\" | grep #{p} | wc -l | xargs"
       next if `#{chk}`.strip.eql? '1'
