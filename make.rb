@@ -347,14 +347,15 @@ end
 
 # Defines current OS.
 class CurrentOS
+  ARCH = ['/etc/arch-release', '/etc/artix-release'].freeze
   def self.get # rubocop:disable Metrics/PerceivedComplexity, Metrics/CyclomaticComplexity, Metrics/AbcSize
-    return MacOS   if OS.mac?
+    return MacOS if OS.mac?
     return FreeBSD if OS.freebsd?
     return OpenBSD if OS.host_os =~ /openbsd/
-    return Arch    if OS.linux? && File.file?('/etc/arch-release')
-    return Debian  if OS.linux? && File.file?('/etc/debian_version')
-    return RedHat  if OS.linux? && File.file?('/etc/redhat-release')
-    return Alpine  if OS.linux? && File.file?('/etc/alpine-release')
+    return Arch if OS.linux? && ARCH.detect { |i| File.file?(i) }
+    return Debian if OS.linux? && File.file?('/etc/debian_version')
+    return RedHat if OS.linux? && File.file?('/etc/redhat-release')
+    return Alpine if OS.linux? && File.file?('/etc/alpine-release')
 
     raise 'Current OS is not supported.'
   end
