@@ -245,15 +245,14 @@ module Arch
   def self.extended(mod) # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
     mod.type << 'Arch'
     mod.prec << %(
-      if [[ ! `cat /etc/pacman.conf | grep archlinuxfr` ]]; then
-        echo "
-          [archlinuxfr]
-          SigLevel = Never
-          Server = http://repo.archlinux.fr/$arch
-        " | sudo tee -a /etc/pacman.conf
-        sudo pacman -Sy yaourt --noconfirm
+      if [ ! $(command -v yay >/dev/null 2>&1) ]; then
+        sudo pacman -Sy --noconfirm base-devel
+        git clone https://aur.archlinux.org/yay.git /tmp/yay
+        cd /tmp/yay
+        makepkg -si --noconfirm
+        cd -
       fi
-      yaourt -Syauu --noconfirm
+      yay -Syauu --noconfirm
     )
     (
       mod.pkgs << %w[
@@ -261,8 +260,8 @@ module Arch
       ]
     ).flatten!
       .map! { |i| DIC[i.to_sym].nil? ? i : DIC[i.to_sym] }
-    mod.test << 'yaourt -Qs --nameonly %s >/dev/null 2>&1'
-    mod.inst << 'yaourt -Sy --noconfirm %s'
+    mod.test << 'yay -Qs %s >/dev/null 2>&1'
+    mod.inst << 'yay -Sy --noconfirm %s'
     mod.post << %(
       #sed -i 's/usr\/share/usr\/lib/g' ~/.i3/i3blocks.conf
     )
