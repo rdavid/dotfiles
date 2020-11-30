@@ -47,7 +47,7 @@ $HOME/.gem/ruby/2.5.0/bin:\
 /usr/local/lib/ruby/gems/2.6.0/bin/:\
 /usr/local/go/bin:\
 /usr/local/opt/ruby/bin:\
-$HOME/dotfiles/app:\
+$HOME/src/toolbox/app:\
 $HOME/src/go:\
 $(python -m site --user-base)/bin
 "
