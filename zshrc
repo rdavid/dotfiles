@@ -68,6 +68,7 @@ case $(uname -a) in
         export LC_ALL=en_US.UTF-8
         export LANG=en_US.UTF-8
         export FZF_PATH='/usr/local/opt/fzf/shell'
+        export PATH="$PATH:/Library/TeX/texbin"
         ;;
       linux*)
         MC='/usr/lib/mc/mc-wrapper.sh'
