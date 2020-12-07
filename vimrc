@@ -95,6 +95,14 @@ nmap <leader>s<right>  :rightbelow vsplit<CR>
 nmap <leader>s<up>     :leftabove  split<CR>
 nmap <leader>s<down>   :rightbelow split<CR>
 
+" This mapping sorts the lines of a paragraph, or block of text separated by
+" blank lines. I use this a lot to sort #include directives.
+nmap <leader>s vip:sort<CR>
+
+" Similar to the last mapping, this one sorts lines inside braces. I use this to
+" sort switch statement cases or array initializers.
+nmap <leader>S $vi{:sort<CR>
+
 " Don't pollute directories with swap files, keep them in one place.
 silent !mkdir -p ~/.vim/{backup,swp}/
 set backupdir=~/.vim/backup//

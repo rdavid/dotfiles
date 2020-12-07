@@ -24,6 +24,11 @@ COMPLETION_WAITING_DOTS='true'
 GPG_TTY="$(tty)"
 export GPG_TTY
 
+# This is useful if you sometimes type, for example, ‘cd src/bin’ wanting to go
+# to ~/src/bin but you aren't in ~.  If the path doesn't exist in the current
+# directory, cd will try it in ~ as well.
+export CDPATH=:~
+
 # Which plugins would you like to load? (plugins can be found in
 # ~/.oh-my-zsh/plugins/*). Custom plugins may be added to
 # ~/.oh-my-zsh/custom/plugins/. Example format: plugins=(git textmate ruby)
