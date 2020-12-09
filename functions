@@ -110,18 +110,6 @@ timestamp() {
   done
 }
 
-# Prints download and upload internet speed with timestamp.
-speedmon() {
-  while true; do
-    speed | \
-      grep -E 'Download|Upload' | \
-      gawk '{print $2}' | \
-      xargs | \
-      gawk '{print strftime("%Y%m%d-%H%M%S"), $0}'
-    test $? -gt 128 && break
-  done
-}
-
 qr() {
   qrencode "$1" -t ANSIUTF8 -o -;
 }
