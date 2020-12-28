@@ -1,5 +1,5 @@
 # vi:ts=2 sw=2 tw=79 et lbr wrap
-# Copyright 2016-present David Rabkin
+# Copyright 2016 by David Rabkin
 
 if [ "$(xrandr --query | grep 'connected')" != "" ]; then
   echo "Xft.dpi: 100" | xrdb -merge
