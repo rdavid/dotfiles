@@ -1,6 +1,6 @@
 # shellcheck shell=sh
 # vi:ts=2 sw=2 tw=79 et lbr wrap
-# Copyright 2019-present David Rabkin
+# Copyright 2019 by David Rabkin
 # SC2039: In POSIX sh, 'local' is undefined.
 # shellcheck disable=SC2039
 
