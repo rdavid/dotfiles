@@ -41,6 +41,7 @@ plugins=( \
 )
 autoload zmv
 export PATH="\
+/usr/local/opt/ruby/bin:\
 /usr/local/bin:\
 /usr/local/sbin:\
 /opt/local/bin/:\
@@ -48,10 +49,7 @@ export PATH="\
 /usr/sbin:\
 /bin:\
 /sbin:\
-$HOME/.gem/ruby/2.5.0/bin:\
-/usr/local/lib/ruby/gems/2.6.0/bin/:\
 /usr/local/go/bin:\
-/usr/local/opt/ruby/bin:\
 $HOME/src/toolbox/app:\
 $HOME/src/go:\
 $(python -m site --user-base)/bin
