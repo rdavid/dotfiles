@@ -2,11 +2,9 @@
 # vi:ts=2 sw=2 tw=79 et lbr wrap
 # Copyright 2019 by David Rabkin
 
-# Easier navigation: .., ..., ...., ....., ~ and -
+# Easier navigation: .., ..., ~ and -
 alias ..='cd ..'
 alias ...='cd ../..'
-alias ....='cd ../../..'
-alias .....='cd ../../../..'
 alias ~='cd ~' # `cd` is probably faster to type though
 alias -- -='cd -'
 alias vi='vim'
@@ -28,6 +26,9 @@ else
   alias ls="ls ${colorflag}"
   # shellcheck disable=SC2139
   alias la="ls -laFH ${colorflag}"
+fi
+if command -v bat >/dev/null 2>&1; then
+  alias cat='bat --style=plain'
 fi
 
 # Always enables colored `grep` output.
