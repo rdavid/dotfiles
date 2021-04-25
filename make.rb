@@ -24,7 +24,7 @@ class Configuration
     ['-p', '--pass pass', 'Password for binary.', :pass]
   ].freeze
 
-  def initialize
+  def initialize # rubocop:disable Metrics/AbcSize
     ARGV << '-h' if ARGV.empty?
     @options = {}
     OptionParser.new do |o|
@@ -46,17 +46,9 @@ end
 
 # Base class for definition of multiple OS.
 class OS
-  attr_reader :type
-  attr_reader :test
-  attr_reader :inst
-  attr_reader :prec
-  attr_reader :post
-  attr_reader :pkgs
-  attr_reader :dotf
-  attr_reader :conf
-  attr_reader :sudo
+  attr_reader :type, :test, :inst, :prec, :post, :pkgs, :dotf, :conf, :sudo
 
-  def initialize(cfg) # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
+  def initialize(cfg) # rubocop:disable Metrics/MethodLength
     @type = +''
     @test = +''
     @inst = +''
@@ -67,9 +59,9 @@ class OS
     # Packages without Xorg to install.
     @pkgs = %w[
       bat cmake cmatrix cmus cowsay cppcheck curl ctags exa f3 fdupes ffmpeg
-      figlet fortune fzf gawk gnupg handbrake htop imagemagick lynx mc mosh most
-      ncdu npm nnn python qrencode redo ripgrep shellcheck syncthing tmux vifm
-      vim wget zsh zsh-syntax-highlighting yamllint
+      figlet fortune fzf gawk git-delta gnupg handbrake htop imagemagick lynx mc
+      mosh most ncdu npm nnn python qrencode redo ripgrep shellcheck syncthing
+      tmux vifm vim wget zsh zsh-syntax-highlighting yamllint
     ]
 
     # List of files/folders to symlink in homedir.
@@ -397,8 +389,8 @@ class Installer
     # then creates symlinks from the homedir to any files in the ~/dotfiles
     # directory specified in $files.
     @os.dotf.each do |f|
-      src = File.join(Dir.home, '.' + f)
-      dst = File.join(@odir, '.' + f)
+      src = File.join(Dir.home, ".#{f}")
+      dst = File.join(@odir, ".#{f}")
       if File.exist?(src) && !File.symlink?(src)
         puts("mv #{src}->#{dst}.")
         FileUtils.mv(src, dst)
