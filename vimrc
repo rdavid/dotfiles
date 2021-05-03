@@ -21,7 +21,6 @@ set ignorecase                  " Always case-insensitive.
 set incsearch                   " Searches for strings incrementally.
 set autoindent                  " Auto-indent new lines.
 set copyindent                  " Copy previous indentation on autoindenting.
-set expandtab                   " Use spaces instead of tabs.
 set shiftwidth=2                " Number of auto-indent spaces.
 set smartindent                 " Enable smart-indent.
 set smarttab                    " Enable smart-tabs.
@@ -36,7 +35,7 @@ set noswapfile
 set title                       " Changes the terminal's title.
 set noerrorbells                " Don't beep.
 set lazyredraw                  " Redraw only when we need to.
-set listchars=tab:░\ ,extends:»,precedes:«,nbsp:⣿,trail:·
+set listchars=tab:␉·,extends:»,precedes:«,nbsp:⣿,trail:·
 set showbreak="\u21aa "
 set list
 set splitbelow
