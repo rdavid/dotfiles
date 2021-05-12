@@ -147,3 +147,11 @@ vid2aud() {
       ffmpeg -nostdin -i "$src" -vn -ar 44100 -ac 2 -ab 320k -f mp3 "$dst"
     done
 }
+
+heic2jpg() {
+  if ! command -v magick >/dev/null 2>&1; then
+    printf 'Install imagemagick.\n'
+    return
+  fi
+  magick mogrify -monitor -format jpg *.HEIC
+}
