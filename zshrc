@@ -51,13 +51,12 @@ export PATH="\
 /sbin:\
 /usr/local/go/bin:\
 $HOME/src/toolbox/app:\
-$HOME/src/go:\
-$(python -m site --user-base)/bin
-"
-source "$ZSH/oh-my-zsh.sh"
-source "$HOME/dotfiles/app/z.sh"
-source "$HOME/dotfiles/aliases"
-source "$HOME/dotfiles/functions"
+$HOME/bin:\
+$(python -m site --user-base)/bin"
+. "$ZSH/oh-my-zsh.sh"
+. "$HOME/dotfiles/app/z.sh"
+. "$HOME/dotfiles/aliases"
+. "$HOME/dotfiles/functions"
 case $(uname -a) in
   *Microsoft*)
     unsetopt BG_NICE
