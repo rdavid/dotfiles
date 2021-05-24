@@ -32,7 +32,7 @@ done
 # Installs needful packages.
 gems='colorize git i18n os pidfile'
 for g in $gems; do
-  if gem list -i "$g" >/dev/null 2>&1; then
+  if gem list -ie "$g" >/dev/null 2>&1; then
     echo "$g is already installed."
     continue
   fi
