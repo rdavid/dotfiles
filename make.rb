@@ -119,8 +119,19 @@ module MacOS
   DIC = {
   }.freeze
 
-  def self.extended(mod) # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
-    mod.type << 'MacOS'
+  def self.pkgs(mod)
+    (
+      mod.pkgs << %w[
+        aerial appcleaner coreutils disk-inventory-x docker feh firefox hadolint
+        iterm2 google-chrome keepassxc keepingyouawake kitty launchbar librsync
+        lolcat mpv nmap plex plexamp spectacle spotifree spotify sublime-text
+        telegram vanilla virtualbox watch xquartz
+      ]
+    ).flatten!
+      .map! { |i| DIC[i.to_sym].nil? ? i : DIC[i.to_sym] }
+  end
+
+  def self.prec(mod) # rubocop:disable Metrics/MethodLength
     mod.prec << %(
       for f in inconsolata-g.otf pragmatapro.ttf; do
         if [[ ! -e ~/Library/Fonts/$f ]]; then
@@ -136,15 +147,13 @@ module MacOS
       fi
       brew update && brew upgrade && brew upgrade --cask && brew cleanup
     )
-    (
-      mod.pkgs << %w[
-        aerial appcleaner coreutils disk-inventory-x docker feh firefox hadolint
-        iterm2 google-chrome keepassxc keepingyouawake kitty launchbar librsync
-        lolcat mpv nmap plex plexamp spectacle spotifree spotify sublime-text
-        telegram vanilla virtualbox watch xquartz
-      ]
-    ).flatten!
-      .map! { |i| DIC[i.to_sym].nil? ? i : DIC[i.to_sym] }
+  end
+
+  def self.extended(mod)
+    pkgs(mod)
+    prec(mod)
+    mod.sudo << 'sudo'
+    mod.type << 'MacOS'
     # MacOS is installed without Xorg, so some graphic settings are duplicated.
     mod.conf << 'kitty'
     mod.test << %(
@@ -152,7 +161,6 @@ module MacOS
         brew cask ls --versions %s >/dev/null 2>&1
     )
     mod.inst << 'brew install %s; brew cask install %s'
-    mod.sudo << 'sudo'
   end
 end
 
@@ -166,16 +174,20 @@ module FreeBSD
     yamllint: 'py36-yamllint'
   }.freeze
 
-  def self.extended(mod) # rubocop:disable Metrics/AbcSize
-    mod.type << 'FreeBSD'
+  def self.pkgs(mod)
     (
       mod.pkgs << %w[
         py36-pip py36-setuptools rubygem-lolcat unzip zip
       ]
-    ).flatten!.map! { |i| DIC[i.to_sym].nil? ? i : DIC[i.to_sym] }
-    mod.test << 'pkg info %s >/dev/null 2>&1'
-    mod.inst << 'sudo pkg install -y %s'
+    ).flatten!
+      .map! { |i| DIC[i.to_sym].nil? ? i : DIC[i.to_sym] }
+  end
+
+  def self.extended(mod)
+    pkgs(mod)
     mod.sudo << 'sudo'
+    mod.inst << 'sudo pkg install -y %s'
+    mod.test << 'pkg info %s >/dev/null 2>&1'
   end
 end
 
@@ -196,30 +208,35 @@ module OpenBSD
     'zsh-syntax-highlighting': ''
   }.freeze
 
-  def self.extended(mod) # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
-    mod.type << 'OpenBSD'
-    mod.prec << %(
-      ln -sf ~/.xinitrc ~/.xsession
-      doas rcctl enable xenodm
-      cd ~
-      git clone git://github.com/tghelew/i3blocks
-      cd i3blocks
-      doas pkg_add gmake
-      gmake clean all
-      doas gmake install
-      cd ..
-      rm -rf ~/3blocks
-    )
+  def self.pkgs(mod)
     (
       mod.pkgs << %w[
         coreutils py-pip terminator
       ]
     ).flatten!
       .map! { |i| DIC[i.to_sym].nil? ? i : DIC[i.to_sym] }
-    mod.conf << 'terminator'
-    mod.test << 'which %s >/dev/null 2>&1'
-    mod.inst << 'doas pkg_add %s'
+  end
+
+  def self.prec(mod)
+    mod.prec << %(
+      ln -sf ~/.xinitrc ~/.xsession
+      doas rcctl enable xenodm
+      cd ~ && git clone git://github.com/tghelew/i3blocks
+      cd i3blocks && doas pkg_add gmake
+      gmake clean all
+      doas gmake install
+      cd .. && rm -rf ~/3blocks
+    )
+  end
+
+  def self.extended(mod)
+    pkgs(mod)
+    prec(mod)
     mod.sudo << 'doas'
+    mod.type << 'OpenBSD'
+    mod.conf << 'terminator'
+    mod.inst << 'doas pkg_add %s'
+    mod.test << 'which %s >/dev/null 2>&1'
   end
 end
 
@@ -234,8 +251,16 @@ module Arch
     'visual-studio-code': 'visual-studio-code-bin'
   }.freeze
 
-  def self.extended(mod) # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
-    mod.type << 'Arch'
+  def self.pkgs(mod)
+    (
+      mod.pkgs << %w[
+        alsa-utils atop lolcat python-pip
+      ]
+    ).flatten!
+      .map! { |i| DIC[i.to_sym].nil? ? i : DIC[i.to_sym] }
+  end
+
+  def self.prec(mod)
     mod.prec << %(
       if [ ! $(command -v yay >/dev/null 2>&1) ]; then
         sudo pacman -Sy --noconfirm base-devel
@@ -246,14 +271,14 @@ module Arch
       fi
       yay -Syauu --noconfirm
     )
-    (
-      mod.pkgs << %w[
-        alsa-utils atop lolcat python-pip
-      ]
-    ).flatten!
-      .map! { |i| DIC[i.to_sym].nil? ? i : DIC[i.to_sym] }
-    mod.test << 'yay -Qs %s >/dev/null 2>&1'
+  end
+
+  def self.extended(mod)
+    pkgs(mod)
+    prec(mod)
+    mod.type << 'Arch'
     mod.inst << 'yay -Sy --noconfirm %s'
+    mod.test << 'yay -Qs %s >/dev/null 2>&1'
     mod.post << %(
       #sed -i 's/usr\/share/usr\/lib/g' ~/.i3/i3blocks.conf
     )
@@ -266,22 +291,30 @@ module Debian
     'font-awesome': 'fonts-font-awesome'
   }.freeze
 
-  def self.extended(mod) # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
-    mod.type << 'Debian'
-    mod.prec << %(
-      sudo apt-get -y update
-      sudo apt-get -y dist-upgrade
-      curl -sL https://deb.nodesource.com/setup_9.x | sudo -E bash -
-    )
+  def self.pkgs(mod)
     (
       mod.pkgs << %w[
         apcalc atop byobu lolcat python-pip net-tools
       ]
     ).flatten!
       .map! { |i| DIC[i.to_sym].nil? ? i : DIC[i.to_sym] }
-    mod.test << 'dpkg -l %s >/dev/null 2>&1'
-    mod.inst << 'sudo apt-get -y install %s'
+  end
+
+  def self.prec(mod)
+    mod.prec << %(
+      sudo apt-get -y update
+      sudo apt-get -y dist-upgrade
+      curl -sL https://deb.nodesource.com/setup_9.x | sudo -E bash -
+    )
+  end
+
+  def self.extended(mod)
+    pkgs(mod)
+    prec(mod)
     mod.sudo << 'sudo'
+    mod.type << 'Debian'
+    mod.inst << 'sudo apt-get -y install %s'
+    mod.test << 'dpkg -l %s >/dev/null 2>&1'
   end
 end
 
@@ -362,20 +395,29 @@ module Alpine
     'zsh-syntax-highlighting': ''
   }.freeze
 
-  def self.extended(mod) # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
-    mod.type << 'Alpine'
-    mod.prec << %(
-      sudo apk update && sudo apk upgrade
-    )
+  def self.pkgs(mod)
     (
       mod.pkgs << %w[
         atop linux-headers musl-dev python-dev py-pip
       ]
     ).flatten!
       .map! { |i| DIC[i.to_sym].nil? ? i : DIC[i.to_sym] }
-    mod.test << 'apk -e info %s >/dev/null 2>&1'
-    mod.inst << 'sudo apk add %s'
+  end
+
+  def self.prec(mod)
+    mod.prec << %(
+      sudo apk update
+      sudo apk upgrade
+    )
+  end
+
+  def self.extended(mod)
+    pkgs(mod)
+    prec(mod)
     mod.sudo << 'sudo'
+    mod.type << 'Alpine'
+    mod.inst << 'sudo apk add %s'
+    mod.test << 'apk -e info %s >/dev/null 2>&1'
   end
 end
 
