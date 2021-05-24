@@ -107,7 +107,7 @@ class OS
     # Extends with Xorg related packages.
     (@pkgs << %w[
       conky feh firefox font-awesome google-chrome i3 i3blocks i3lock
-      keepassxc kitty mpv okular sublime-text
+      keepassxc kitty mpv okular sublime-text xrdp xrandr
     ]).flatten!
     (@dotf << %w[i3 xinitrc]).flatten!
     (@conf << %w[conky kitty]).flatten!
