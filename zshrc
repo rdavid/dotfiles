@@ -80,9 +80,12 @@ case $(uname -a) in
         export PATH="/home/linuxbrew/.linuxbrew/bin:$PATH"
         export MANPATH="/home/linuxbrew/.linuxbrew/share/man:$MANPATH"
         export INFOPATH="/home/linuxbrew/.linuxbrew/share/info:$INFOPATH"
-        case "$OSTYPE" in
+        case $(uname -a) in
           *artix*)
             export FZF_PATH='/usr/share/fzf'
+            ;;
+          *fedora*)
+            export FZF_PATH='/usr/share/fzf/shell'
             ;;
           *)
             export FZF_PATH='/usr/share/doc/fzf/examples'

@@ -17,7 +17,7 @@ for p in $pkgs; do
     if [ -f /etc/arch-release ]; then
       sudo pacman --noconfirm -S "$p"
     elif [ -f /etc/redhat-release ]; then
-      sudo yum install "$p"
+      sudo dnf install -y "$p"
     elif [ -f /etc/debian_version ]; then
       sudo apt-get -y install "$p"
     fi
