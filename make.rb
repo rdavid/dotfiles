@@ -288,20 +288,63 @@ end
 # Implements RedHat Linux.
 module RedHat
   DIC = {
-    'font-awesome': 'fontawesome-fonts'
+    'font-awesome': 'fontawesome-fonts',
+    fortune: 'fortune-mod',
+    'google-chrome': 'google-chrome-stable',
+    imagemagick: 'ImageMagick',
+    redo: '',
+    shellcheck: 'ShellCheck'
   }.freeze
 
-  def self.extended(mod) # rubocop:disable Metrics/AbcSize
-    mod.type << 'RedHat'
+  def self.pkgs(mod)
     (
       mod.pkgs << %w[
-        lolcat
+        librsync-devel lolcat python3-devel util-linux-user
       ]
     ).flatten!
       .map! { |i| DIC[i.to_sym].nil? ? i : DIC[i.to_sym] }
-    mod.test << 'yum list installed %s >/dev/null 2>&1'
-    mod.inst << 'sudo yum -y install %s'
+  end
+
+  def self.rpmfusion(mod)
+    mod.prec << %(
+      if ! dnf list installed | grep rpmfusion-free >/dev/null; then
+        sudo dnf -y install \
+          https://download1.rpmfusion.org/free/fedora/rpmfusion-free-release-$(rpm -E %fedora).noarch.rpm
+        sudo dnf -y install \
+          https://download1.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-$(rpm -E %fedora).noarch.rpm
+      fi
+    )
+  end
+
+  def self.repositories(mod)
+    mod.prec << %(
+      if ! dnf list installed | grep fedora-workstation-repositories >/dev/null; then
+        sudo dnf install -y fedora-workstation-repositories
+        sudo dnf config-manager --set-enabled google-chrome
+      fi
+      if ! dnf repolist enabled | grep sublime-text >/dev/null; then
+        sudo rpm -v --import https://download.sublimetext.com/sublimehq-rpm-pub.gpg
+        sudo dnf config-manager --add-repo https://download.sublimetext.com/rpm/stable/x86_64/sublime-text.repo
+      fi
+    )
+  end
+
+  def self.prec(mod)
+    rpmfusion(mod)
+    repositories(mod)
+    mod.prec << %(
+      dnf -y check-update
+      sudo dnf -y upgrade --refresh
+    )
+  end
+
+  def self.extended(mod)
+    pkgs(mod)
+    prec(mod)
     mod.sudo << 'sudo'
+    mod.type << 'RedHat'
+    mod.inst << 'sudo dnf -y install %s'
+    mod.test << 'dnf list installed | grep %s >/dev/null 2>&1'
   end
 end
 
@@ -441,9 +484,12 @@ class Installer
     end
     sudo = @os.sudo
 
-    # Installs Python packages.
+    # Installs Python packages,
+    # rdiff_backup depends on wheel.
+    # speedtest-cli depends on matplotlib.
     %w[
-      glances s_tui pss rdiff_backup speedtest-cli tmuxp youtube_dl
+      glances matplotlib pss wheel rdiff_backup s_tui speedtest-cli tmuxp
+      youtube_dl
     ].each do |p|
       chk = "python -c \"help('modules');\" | grep #{p} | wc -l | xargs"
       next if `#{chk}`.strip.eql? '1'
