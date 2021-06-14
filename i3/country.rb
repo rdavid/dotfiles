@@ -12,7 +12,7 @@ require 'rubygems'
 
 # Runs curl silently with 1 second time out.
 str = `curl -s -m 1 ipinfo.io`
-if !$CHILD_STATUS.exitstatus.positive? || str.include?('timed out')
+if !$CHILD_STATUS.success? || str.include?('timed out')
   print 'no'
   exit
 end
