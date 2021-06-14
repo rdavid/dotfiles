@@ -80,17 +80,13 @@ case $(uname -a) in
         export PATH="/home/linuxbrew/.linuxbrew/bin:$PATH"
         export MANPATH="/home/linuxbrew/.linuxbrew/share/man:$MANPATH"
         export INFOPATH="/home/linuxbrew/.linuxbrew/share/info:$INFOPATH"
-        case $(uname -a) in
-          *artix*)
-            export FZF_PATH='/usr/share/fzf'
-            ;;
-          *fedora*)
-            export FZF_PATH='/usr/share/fzf/shell'
-            ;;
-          *)
-            export FZF_PATH='/usr/share/doc/fzf/examples'
-            ;;
-        esac
+        if [ -f /etc/redhat-release ]; then
+          export FZF_PATH='/usr/share/fzf/shell'
+        elif [ -f /etc/arch-release ]; then
+          export FZF_PATH='/usr/share/fzf'
+        else
+          export FZF_PATH='/usr/share/doc/fzf/examples'
+        fi
         ;;
       freebsd*)
         MC='/usr/local/libexec/mc/mc-wrapper.sh'

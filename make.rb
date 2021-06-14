@@ -58,10 +58,11 @@ class OS
 
     # Packages without Xorg to install.
     @pkgs = %w[
-      bat cmake cmatrix cmus cowsay cppcheck curl ctags exa f3 fdupes ffmpeg
-      figlet fortune fzf gawk git-delta gnupg handbrake htop imagemagick lynx mc
-      mosh most ncdu npm nnn python qrencode redo ripgrep shellcheck syncthing
-      tmux vifm vim wget zsh zsh-syntax-highlighting yamllint
+      bat cairo-devel cmake cmatrix cmus cowsay cppcheck curl ctags exa f3
+      fdupes ffmpeg figlet fortune fzf gawk git-delta gnupg handbrake htop
+      imagemagick lynx mc mosh most ncdu npm nnn python qrencode redo ripgrep
+      shellcheck syncthing tmux vifm vim wget zsh zsh-syntax-highlighting
+      yamllint
     ]
 
     # List of files/folders to symlink in homedir.
@@ -106,11 +107,12 @@ class OS
     )
     # Extends with Xorg related packages.
     (@pkgs << %w[
-      conky feh firefox font-awesome google-chrome i3 i3blocks i3lock
-      keepassxc kitty mpv okular sublime-text xrdp xrandr
+      acpi feh blueman firefox font-awesome google-chrome i3 i3blocks
+      i3lock keepassxc kitty mpv network-manager-applet okular sublime-text
+      xautolock xkill xmodmap xrdp xrandr
     ]).flatten!
     (@dotf << %w[i3 xinitrc]).flatten!
-    (@conf << %w[conky kitty]).flatten!
+    (@conf << %w[kitty]).flatten!
   end
 end
 

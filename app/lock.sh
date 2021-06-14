@@ -1,11 +1,8 @@
-#!/usr/bin/env bash
+#!/bin/sh
+# vi:ts=2 sw=2 tw=79 et lbr wrap
+# Copyright 2021 by David Rabkin
 
-icon="$HOME/dotfiles/pic/icon.png"
-tmpbg='/tmp/screen.png'
-
-(( $# )) && { icon=$1; }
-
-scrot "$tmpbg"
-convert "$tmpbg" -scale 10% -scale 1000% "$tmpbg"
-convert "$tmpbg" "$icon" -gravity center -composite -matte "$tmpbg"
-i3lock -u -i "$tmpbg"
+IMG="$HOME/dotfiles/pic/bg.jpg"
+TMP='/tmp/screen.png'
+[ -f "$TMP" ] || convert "$IMG" "$TMP"
+i3lock -t -i "$TMP"
