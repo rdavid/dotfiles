@@ -108,8 +108,8 @@ class OS
     # Extends with Xorg related packages.
     (@pkgs << %w[
       acpi feh blueman firefox font-awesome google-chrome i3 i3blocks
-      i3lock keepassxc kitty mpv network-manager-applet okular sublime-text
-      xautolock xkill xmodmap xrdp xrandr
+      i3lock keepassxc kitty lm_sensors mpv network-manager-applet okular
+      sublime-text xautolock xkill xmodmap xrdp xrandr
     ]).flatten!
     (@dotf << %w[i3 xinitrc]).flatten!
     (@conf << %w[kitty]).flatten!

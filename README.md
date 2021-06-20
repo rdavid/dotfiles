@@ -13,7 +13,7 @@ Hi, I'm [David Rabkin](http://cv.rabkin.co.il). This is my dotfiles.
 
 ## Installation
 
-    git clone https://github.com/rdavid/dotfiles.git ~/dotfiles
+    git clone --recurse-submodules https://github.com/rdavid/dotfiles.git ~/dotfiles
     cd ~/dotfiles && ./make.sh
 
 ## License
