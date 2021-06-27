@@ -58,9 +58,9 @@ class OS
 
     # Packages without Xorg to install.
     @pkgs = %w[
-      bat cairo-devel cmake cmatrix cmus cowsay cppcheck curl ctags exa f3
+      atop bat cairo cmake cmatrix cmus cowsay cppcheck curl ctags exa f3
       fdupes ffmpeg figlet fortune fzf gawk git-delta gnupg handbrake htop
-      imagemagick lynx mc mosh most ncdu npm nnn python qrencode redo ripgrep
+      imagemagick lynx mc mosh most ncdu nnn python3 qrencode redo ripgrep
       shellcheck syncthing tmux vifm vim wget zsh zsh-syntax-highlighting
       yamllint
     ]
@@ -256,7 +256,7 @@ module Arch
   def self.pkgs(mod)
     (
       mod.pkgs << %w[
-        alsa-utils atop lolcat python-pip
+        alsa-utils lolcat python-pip
       ]
     ).flatten!
       .map! { |i| DIC[i.to_sym].nil? ? i : DIC[i.to_sym] }
@@ -290,13 +290,17 @@ end
 # Implements Debian Linux.
 module Debian
   DIC = {
-    'font-awesome': 'fonts-font-awesome'
+    bat: '',
+    cairo: 'libcairo2-dev',
+    'font-awesome': 'fonts-font-awesome',
+    'git-delta': '',
+    redo: ''
   }.freeze
 
   def self.pkgs(mod)
     (
       mod.pkgs << %w[
-        apcalc atop byobu lolcat python-pip net-tools
+        apcalc byobu libgirepository1.0-dev lolcat python3-pip net-tools
       ]
     ).flatten!
       .map! { |i| DIC[i.to_sym].nil? ? i : DIC[i.to_sym] }
@@ -306,7 +310,7 @@ module Debian
     mod.prec << %(
       sudo apt-get -y update
       sudo apt-get -y dist-upgrade
-      curl -sL https://deb.nodesource.com/setup_9.x | sudo -E bash -
+      sudo apt -y autoremove
     )
   end
 
@@ -323,6 +327,7 @@ end
 # Implements RedHat Linux.
 module RedHat
   DIC = {
+    cairo: 'cairo-devel',
     'font-awesome': 'fontawesome-fonts',
     fortune: 'fortune-mod',
     'google-chrome': 'google-chrome-stable',
@@ -400,7 +405,7 @@ module Alpine
   def self.pkgs(mod)
     (
       mod.pkgs << %w[
-        atop linux-headers musl-dev python-dev py-pip
+        linux-headers musl-dev python-dev py-pip
       ]
     ).flatten!
       .map! { |i| DIC[i.to_sym].nil? ? i : DIC[i.to_sym] }
@@ -551,7 +556,7 @@ class Installer
 
     # Installs Ruby packages.
     %w[
-      English pry pry-doc renamr rubocop rubygems-update transcode
+      pry pry-doc renamr rubocop rubygems-update transcode
     ].each do |p|
       chk = "gem list -i #{p}"
       next if `#{chk}`.strip.eql? 'true'
