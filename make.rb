@@ -60,9 +60,9 @@ class OS
     @pkgs = %w[
       atop bat boxes cairo cmake cmatrix cmus cowsay cppcheck curl ctags exa f3
       fdupes ffmpeg figlet fortune fzf gawk git-delta gnupg handbrake htop
-      imagemagick lynx mc mosh most ncdu nnn python3 qrencode redo ripgrep
-      shellcheck syncthing tmux vifm vim wget zsh zsh-syntax-highlighting
-      yamllint
+      imagemagick lynx mc mosh most ncdu neofetch nnn node python3 qrencode redo
+      ripgrep shellcheck syncthing tmux vifm vim wget zsh
+      zsh-syntax-highlighting yamllint
     ]
 
     # List of files/folders to symlink in homedir.
@@ -119,15 +119,17 @@ end
 # Implements MacOS.
 module MacOS
   DIC = {
+    atop: ''
   }.freeze
 
   def self.pkgs(mod)
     (
       mod.pkgs << %w[
-        aerial appcleaner coreutils disk-inventory-x docker feh firefox hadolint
-        iterm2 google-chrome keepassxc keepingyouawake kitty launchbar librsync
-        lolcat mpv nmap plex plexamp spectacle spotifree spotify sublime-text
-        telegram vanilla virtualbox watch xquartz
+        aerial appcleaner coreutils disk-inventory-x dropbox docker feh firefox
+        hadolint ilya-birman-typography-layout iterm2 google-chrome keepassxc
+        keepingyouawake kitty launchbar librsync lolcat mpv nmap nvalt plex
+        plexamp spectacle spotify sublime-text telegram vanilla virtualbox watch
+        xquartz
       ]
     ).flatten!
       .map! { |i| DIC[i.to_sym].nil? ? i : DIC[i.to_sym] }
@@ -144,8 +146,8 @@ module MacOS
       if hash brew &> /dev/null; then
         echo 'Homebrew already installed.'
       else
-        link='https://raw.githubusercontent.com/Homebrew/install/master/install'
-        ruby -e "$(curl -fsSL $(link))"
+        link='https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh'
+        /bin/bash -c "$(curl -fsSL $link)"
       fi
       brew update && brew upgrade && brew upgrade --cask && brew cleanup
     )
@@ -162,7 +164,7 @@ module MacOS
       brew ls --versions %s >/dev/null 2>&1|| \
         brew cask ls --versions %s >/dev/null 2>&1
     )
-    mod.inst << 'brew install %s; brew cask install %s'
+    mod.inst << 'brew install %s; brew install --cask %s'
   end
 end
 
@@ -204,7 +206,6 @@ module OpenBSD
     handbrake: '',
     imagemagick: 'ImageMagick',
     kitty: '',
-    npm: 'node',
     'sublime-text': '',
     'visual-studio-code': '',
     'zsh-syntax-highlighting': ''
@@ -397,7 +398,7 @@ module Alpine
     f3: '',
     handbrake: '',
     most: '',
-    npm: 'nodejs nodejs-npm',
+    node: 'nodejs nodejs-npm',
     nnn: '',
     'zsh-syntax-highlighting': ''
   }.freeze
