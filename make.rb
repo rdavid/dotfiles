@@ -61,7 +61,7 @@ class OS
       atop bat boxes cairo cmake cmatrix cmus cowsay cppcheck curl ctags exa f3
       fdupes ffmpeg figlet fortune fzf gawk git-delta gnupg handbrake htop
       imagemagick lynx mc mosh most ncdu neofetch nnn node python3 qrencode redo
-      ripgrep shellcheck syncthing tmux vifm vim wget zsh
+      ripgrep shellcheck syncthing tmux tree vifm vim wget zsh
       zsh-syntax-highlighting yamllint
     ]
 
