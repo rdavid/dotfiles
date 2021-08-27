@@ -109,7 +109,7 @@ class OS
     (@pkgs << %w[
       acpi feh blueman firefox font-awesome google-chrome i3 i3blocks
       i3lock keepassxc kitty lm_sensors mpv network-manager-applet okular
-      sublime-text xautolock xkill xmodmap xrdp xrandr
+      sublime-text visual-studio-code xautolock xkill xmodmap xrdp xrandr
     ]).flatten!
     (@dotf << %w[i3 xinitrc]).flatten!
     (@conf << %w[kitty]).flatten!
@@ -128,8 +128,8 @@ module MacOS
         aerial appcleaner coreutils disk-inventory-x dropbox docker feh firefox
         hadolint ilya-birman-typography-layout iterm2 google-chrome keepassxc
         keepingyouawake kitty launchbar librsync lolcat mpv nmap nvalt plex
-        plexamp spectacle spotify sublime-text telegram vanilla virtualbox watch
-        xquartz
+        plexamp spectacle spotify sublime-text telegram vanilla virtualbox
+        visual-studio-code watch xquartz
       ]
     ).flatten!
       .map! { |i| DIC[i.to_sym].nil? ? i : DIC[i.to_sym] }
@@ -334,7 +334,8 @@ module RedHat
     'google-chrome': 'google-chrome-stable',
     imagemagick: 'ImageMagick',
     redo: '',
-    shellcheck: 'ShellCheck'
+    shellcheck: 'ShellCheck',
+    'visual-studio-code': 'code'
   }.freeze
 
   def self.pkgs(mod)
