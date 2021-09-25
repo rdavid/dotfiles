@@ -60,9 +60,9 @@ class OS
     @pkgs = %w[
       atop bat boxes cairo cmake cmatrix cmus cowsay cppcheck curl ctags exa f3
       fdupes ffmpeg figlet fortune fzf gawk git-delta gnupg handbrake htop
-      imagemagick lazydocker lazygit lynx mc mosh most ncdu neofetch nnn node
-      python3 qrencode redo ripgrep shellcheck syncthing tmux tree vifm vim wget
-      zsh zsh-syntax-highlighting yamllint
+      imagemagick lazydocker lazygit librsync-dev lynx mc mosh most ncdu
+      neofetch nnn node python3 qrencode redo ripgrep ruby-dev shellcheck
+      syncthing tmux tree vifm vim wget zsh zsh-syntax-highlighting yamllint
     ]
 
     # List of files/folders to symlink in homedir.
