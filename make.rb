@@ -61,7 +61,7 @@ class OS
       atop bat boxes cairo cmake cmatrix cmus cowsay cppcheck curl ctags exa f3
       fdupes ffmpeg figlet fortune fzf gawk git-delta gnupg handbrake htop
       imagemagick lazydocker lazygit librsync-dev lynx mc mosh most ncdu
-      neofetch nnn node python3 qrencode redo ripgrep ruby-dev shellcheck
+      neofetch nnn node npm python3 qrencode redo ripgrep ruby-dev shellcheck
       syncthing tmux tree vifm vim wget zsh zsh-syntax-highlighting yamllint
     ]
 
@@ -297,13 +297,15 @@ module Debian
     'git-delta': '',
     lazydocker: '',
     lazygit: '',
+    node: 'nodejs',
     redo: ''
   }.freeze
 
   def self.pkgs(mod)
     (
       mod.pkgs << %w[
-        apcalc byobu libgirepository1.0-dev lolcat python3-pip net-tools
+        apcalc byobu libcurl4-openssl-dev libgirepository1.0-dev libssl-dev
+        lolcat python3-pip net-tools
       ]
     ).flatten!
       .map! { |i| DIC[i.to_sym].nil? ? i : DIC[i.to_sym] }
@@ -413,7 +415,8 @@ module Alpine
     f3: '',
     handbrake: '',
     most: '',
-    node: 'nodejs nodejs-npm',
+    node: 'nodejs',
+    npm: 'nodejs-npm',
     nnn: '',
     'zsh-syntax-highlighting': ''
   }.freeze
