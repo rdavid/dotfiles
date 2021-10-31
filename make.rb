@@ -558,7 +558,7 @@ class Installer
     # speedtest-cli depends on matplotlib.
     %w[
       glances matplotlib pss wheel rdiff_backup s_tui speedtest-cli tmuxp
-      youtube_dl
+      yt-dlp
     ].each do |p|
       chk = "python -c \"help('modules');\" | grep #{p} | wc -l | xargs"
       next if `#{chk}`.strip.eql? '1'
