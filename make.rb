@@ -557,8 +557,8 @@ class Installer
     # rdiff_backup depends on wheel.
     # speedtest-cli depends on matplotlib.
     %w[
-      glances matplotlib pss wheel rdiff_backup s_tui speedtest-cli tmuxp
-      yt-dlp
+      configobj click glances matplotlib pss pyotp pyperclip rdiff_backup s_tui
+      speedtest-cli tmuxp wheel yt-dlp
     ].each do |p|
       chk = "python -c \"help('modules');\" | grep #{p} | wc -l | xargs"
       next if `#{chk}`.strip.eql? '1'
