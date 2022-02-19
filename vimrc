@@ -9,6 +9,7 @@ scriptencoding utf-8
 set encoding=utf-8
 
 " General.
+set noexpandtab                 " Doesn't expand tab to spaces.
 set hidden                      " Hides buffers instead of closing them.
 set linebreak                   " Break lines at word (requires Wrap lines).
 set textwidth=79                " Line wrap (number of cols).
