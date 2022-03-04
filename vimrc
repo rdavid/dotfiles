@@ -117,6 +117,9 @@ cmap w!! w !sudo tee > /dev/null %
 autocmd BufRead scp://* :set bt=acwrite
 autocmd BufWritePost scp://* :set bt=acwrite
 
+" Treats redo files as shell scripts.
+autocmd BufEnter *.do :setlocal filetype=sh
+
 " If installed using Homebrew.
 set rtp+=/usr/local/opt/fzf
 
