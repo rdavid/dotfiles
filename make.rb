@@ -1,14 +1,14 @@
 #!/usr/bin/env ruby
 # frozen_string_literal: true
 
-# vi:ts=2 sw=2 tw=79 et lbr wrap
-# Copyright 2017 by David Rabkin
+# vi:et lbr noet sw=2 ts=2 tw=79 wrap
+# Copyright 2017-2022 David Rabkin
 #
 # This script creates symlinks from the home directory to any desired
 # dotfiles in ~/dotfiles. Also it installs needfull packages.
 #
 # For MacOS run without X and with the password for binary:
-#   make --no-xorg -pass pass
+#  make --no-xorg -pass pass
 
 require 'English'
 require 'git'
