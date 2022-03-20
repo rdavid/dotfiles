@@ -1,4 +1,4 @@
-# vi:ts=2 sw=2 tw=79 et lbr wrap
+# vi:et lbr noet sw=2 ts=2 tw=79 wrap
 # Copyright 2016 by David Rabkin
 
 # Cool man pager, viewer and editor.

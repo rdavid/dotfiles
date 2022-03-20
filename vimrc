@@ -1,5 +1,5 @@
-" vi:ts=2 sw=2 tw=79 et lbr wrap
-" Copyright 2016 by David Rabkin
+" vi:et lbr noet sw=2 ts=2 tw=79 wrap
+" Copyright 2016-2022 David Rabkin
 
 " This must be first, because it changes other options as side effect.
 set nocompatible

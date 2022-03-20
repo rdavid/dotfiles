@@ -1,159 +1,159 @@
 # shellcheck shell=sh
-# vi:ts=2 sw=2 tw=79 et lbr wrap
-# Copyright 2019 by David Rabkin
+# vi:et lbr noet sw=2 ts=2 tw=79 wrap
+# Copyright 2019-2022 David Rabkin
 # SC2039: In POSIX sh, 'local' is undefined.
 # shellcheck disable=SC2039
 
 # Simple calculator.
 calc() {
-  local result;
-  result="$(printf 'scale=10;%s\n' "$*" | bc --mathlib | tr -d '\\\n')"
-  if [[ "$result" == *.* ]]; then
-    printf '%s' "$result" |
-    sed -e 's/^\./0./'        `# add "0" for cases like ".5"` \
-        -e 's/^-\./-0./'      `# add "0" for cases like "-.5"`\
-        -e 's/0*$//;s/\.$//'  # remove trailing zeros
-  else
-    printf '%s' "$result"
-  fi
-  printf '\n'
+	local result;
+	result="$(printf 'scale=10;%s\n' "$*" | bc --mathlib | tr -d '\\\n')"
+	if [[ "$result" == *.* ]]; then
+		printf '%s' "$result" |
+		sed -e 's/^\./0./'				`# add "0" for cases like ".5"` \
+				-e 's/^-\./-0./'			`# add "0" for cases like "-.5"`\
+				-e 's/0*$//;s/\.$//'	# remove trailing zeros
+	else
+		printf '%s' "$result"
+	fi
+	printf '\n'
 }
 
 # fkill - kill processes - list only the ones you can kill.
 fkill() {
-  local pid
-  if [ "$UID" != '0' ]; then
-    pid=$(ps -f -u $UID | sed 1d | fzf -m | awk '{print $2}')
-  else
-    pid=$(ps -ef | sed 1d | fzf -m | awk '{print $2}')
-  fi
-  if [ "x$pid" != 'x' ]
-  then
-    echo "$pid" | xargs kill -"${1:-9}"
-  fi
+	local pid
+	if [ "$UID" != '0' ]; then
+		pid=$(ps -f -u $UID | sed 1d | fzf -m | awk '{print $2}')
+	else
+		pid=$(ps -ef | sed 1d | fzf -m | awk '{print $2}')
+	fi
+	if [ "x$pid" != 'x' ]
+	then
+		echo "$pid" | xargs kill -"${1:-9}"
+	fi
 }
 
 # fshow - git commit browser.
 fshow() {
-  git log --graph --color=always \
-      --format="%C(auto)%h%d %s %C(black)%C(bold)%cr" "$@" |
-  fzf --ansi --no-sort --reverse --tiebreak=index --bind=ctrl-s:toggle-sort \
-      --bind "ctrl-m:execute:
-        (grep -o '[a-f0-9]\{7\}' | head -1 |
-        xargs -I % sh -c 'git show --color=always % | less -R') << 'FZF-EOF'
-        {}
+	git log --graph --color=always \
+			--format="%C(auto)%h%d %s %C(black)%C(bold)%cr" "$@" |
+	fzf --ansi --no-sort --reverse --tiebreak=index --bind=ctrl-s:toggle-sort \
+			--bind "ctrl-m:execute:
+				(grep -o '[a-f0-9]\{7\}' | head -1 |
+				xargs -I % sh -c 'git show --color=always % | less -R') << 'FZF-EOF'
+				{}
 FZF-EOF"
 }
 
 cd() {
-  if [[ "$#" != 0 ]]; then
-    builtin cd "$@" || return;
-    return
-  fi
-  while true; do
-    local lsd
-    local dir
-    # shellcheck disable=SC2010
-    lsd=$(echo '..' && ls -p | grep '/$' | sed 's;/$;;')
-    # shellcheck disable=SC2016
-    dir="$(printf '%s\n' "${lsd[@]}" |
-      fzf --reverse --preview '
-          __cd_nxt="$(echo {})";
-          __cd_path="$(echo $(pwd)/${__cd_nxt} | sed "s;//;/;")";
-          echo $__cd_path;
-          echo;
-          ls -p "${__cd_path}";
-        ')"
-    [[ ${#dir} != 0 ]] || return 0
-    builtin cd "$dir" &> /dev/null || return
-  done
+	if [[ "$#" != 0 ]]; then
+		builtin cd "$@" || return;
+		return
+	fi
+	while true; do
+		local lsd
+		local dir
+		# shellcheck disable=SC2010
+		lsd=$(echo '..' && ls -p | grep '/$' | sed 's;/$;;')
+		# shellcheck disable=SC2016
+		dir="$(printf '%s\n' "${lsd[@]}" |
+			fzf --reverse --preview '
+					__cd_nxt="$(echo {})";
+					__cd_path="$(echo $(pwd)/${__cd_nxt} | sed "s;//;/;")";
+					echo $__cd_path;
+					echo;
+					ls -p "${__cd_path}";
+				')"
+		[[ ${#dir} != 0 ]] || return 0
+		builtin cd "$dir" &> /dev/null || return
+	done
 }
 
 # Select a docker container to start and attach to
 da() {
-  local cid
-  cid=$(docker ps -a | sed 1d | fzf -1 -q "$1" | awk '{print $1}')
-  [ -n "$cid" ] && docker start "$cid" && docker attach "$cid"
+	local cid
+	cid=$(docker ps -a | sed 1d | fzf -1 -q "$1" | awk '{print $1}')
+	[ -n "$cid" ] && docker start "$cid" && docker attach "$cid"
 }
 
 # Select a running docker container to stop
 ds() {
-  local cid
-  cid=$(docker ps | sed 1d | fzf -q "$1" | awk '{print $1}')
-  [ -n "$cid" ] && docker stop "$cid"
+	local cid
+	cid=$(docker ps | sed 1d | fzf -q "$1" | awk '{print $1}')
+	[ -n "$cid" ] && docker stop "$cid"
 }
 
 # Removes any file besides mp3, m4a, flac. Removes empty directories.
 mp3only() {
-  find . -type f \
-    ! \( -name '*.mp3' -o -name '*.m4a' -o -name '*.flac' \)
-  keep=$(stty -g)
-  stty raw -echo; ans=$(head -c 1); stty "$keep"
-  printf '\n'
-  if ! printf '%s' "$ans" | grep -iq '^y'; then
-    return
-  fi
-  find . -type f \
-    ! \( -name '*.mp3' -o -name '*.m4a' -o -name '*.flac' \) \
-    -exec rm -f {} +
-  find . -type d -empty -delete
-  printf '\nDone.\n'
+	find . -type f \
+		! \( -name '*.mp3' -o -name '*.m4a' -o -name '*.flac' \)
+	keep=$(stty -g)
+	stty raw -echo; ans=$(head -c 1); stty "$keep"
+	printf '\n'
+	if ! printf '%s' "$ans" | grep -iq '^y'; then
+		return
+	fi
+	find . -type f \
+		! \( -name '*.mp3' -o -name '*.m4a' -o -name '*.flac' \) \
+		-exec rm -f {} +
+	find . -type d -empty -delete
+	printf '\nDone.\n'
 }
 
 cheat() {
-  curl "cht.sh/$1"
+	curl "cht.sh/$1"
 }
 
 timestamp() {
-  while IFS= read -r line; do
-    printf '%s %s\n' "$(date '+%Y%m%d%H%M%S')" "$line";
-  done
+	while IFS= read -r line; do
+		printf '%s %s\n' "$(date '+%Y%m%d%H%M%S')" "$line";
+	done
 }
 
 qr() {
-  qrencode "$1" -t ANSIUTF8 -o -;
+	qrencode "$1" -t ANSIUTF8 -o -;
 }
 
 pdf2jpg() {
-  for i in *.pdf; do sips -s format jpeg "$i" --out "$i.jpg"; done
+	for i in *.pdf; do sips -s format jpeg "$i" --out "$i.jpg"; done
 }
 
 pdf2png() {
-  if ! command -v pdftoppm 2>/dev/null; then
-    printf 'Install pdftoppm.\n'
-    return
-  fi
-  # shellcheck disable=SC2039
-  find . -type f -name '*.pdf' -print0 |
-    while IFS= read -r -d '' file; do
-      printf 'Convert %s.\n' "$file"
-      pdftoppm "${file}" "${file%.*}" -png
-    done
+	if ! command -v pdftoppm 2>/dev/null; then
+		printf 'Install pdftoppm.\n'
+		return
+	fi
+	# shellcheck disable=SC2039
+	find . -type f -name '*.pdf' -print0 |
+		while IFS= read -r -d '' file; do
+			printf 'Convert %s.\n' "$file"
+			pdftoppm "${file}" "${file%.*}" -png
+		done
 }
 
 vid2aud() {
-  if ! command -v ffmpeg >/dev/null 2>&1; then
-    printf 'Install ffmpeg.\n'
-    return
-  fi
-  # shellcheck disable=SC2039
-  find . -type f -maxdepth 1 -print0\
-    \( -name \*.mp4 -o -name \*.m4v -o -name \*.avi -o -name \*.mkv \) |
-    xargs -0 |
-    while read -r -d ' ' src; do
-      src=$(basename -- "$src")
-      dst=${src%.*}.mp3
-      printf 'Convert %s -> %s.\n' "$src" "$dst"
-      ffmpeg -nostdin -i "$src" -vn -ar 44100 -ac 2 -ab 320k -f mp3 "$dst"
-    done
+	if ! command -v ffmpeg >/dev/null 2>&1; then
+		printf 'Install ffmpeg.\n'
+		return
+	fi
+	# shellcheck disable=SC2039
+	find . -type f -maxdepth 1 -print0\
+		\( -name \*.mp4 -o -name \*.m4v -o -name \*.avi -o -name \*.mkv \) |
+		xargs -0 |
+		while read -r -d ' ' src; do
+			src=$(basename -- "$src")
+			dst=${src%.*}.mp3
+			printf 'Convert %s -> %s.\n' "$src" "$dst"
+			ffmpeg -nostdin -i "$src" -vn -ar 44100 -ac 2 -ab 320k -f mp3 "$dst"
+		done
 }
 
 heic2jpg() {
-  if ! command -v magick >/dev/null 2>&1; then
-    printf 'Install imagemagick.\n'
-    return
-  fi
-  magick mogrify -monitor -format jpg *.HEIC
+	if ! command -v magick >/dev/null 2>&1; then
+		printf 'Install imagemagick.\n'
+		return
+	fi
+	magick mogrify -monitor -format jpg *.HEIC
 }
 
 ytda() {
