@@ -1,8 +1,24 @@
 # shellcheck shell=sh
 # vi:et lbr noet sw=2 ts=2 tw=79 wrap
 # Copyright 2019-2022 David Rabkin
-# SC2039: In POSIX sh, 'local' is undefined.
-# shellcheck disable=SC2039
+# SC3043: In POSIX sh, 'local' is undefined.
+# shellcheck disable=SC3043
+
+# Checks if applications are installed. Loops over the arguments, each one is an
+# application name.
+validate_cmd() {
+	if [ -z "${1-}" ] || [ $# -eq 0 ]; then
+		printf 'Usage: validate_cmd cmd1 cmd2...\n'
+		return 1
+	fi
+	local a
+	for a do
+		if ! command -v "$a" >/dev/null 2>&1; then
+			printf 'Install %s.\n' "$a"
+			return 1
+		fi
+	done
+}
 
 # Simple calculator.
 calc() {
@@ -50,7 +66,7 @@ cd() {
 		builtin cd "$@" || return;
 		return
 	fi
-	while true; do
+	while :; do
 		local lsd
 		local dir
 		# shellcheck disable=SC2010
@@ -101,6 +117,7 @@ mp3only() {
 }
 
 cheat() {
+	validate_cmd curl || return 1
 	curl "cht.sh/$1"
 }
 
@@ -119,10 +136,7 @@ pdf2jpg() {
 }
 
 pdf2png() {
-	if ! command -v pdftoppm 2>/dev/null; then
-		printf 'Install pdftoppm.\n'
-		return
-	fi
+	validate_cmd pdftoppm || return 1
 	# shellcheck disable=SC2039
 	find . -type f -name '*.pdf' -print0 |
 		while IFS= read -r -d '' file; do
@@ -132,10 +146,7 @@ pdf2png() {
 }
 
 vid2aud() {
-	if ! command -v ffmpeg >/dev/null 2>&1; then
-		printf 'Install ffmpeg.\n'
-		return
-	fi
+	validate_cmd ffmpeg || return 1
 	# shellcheck disable=SC2039
 	find . -type f -maxdepth 1 -print0\
 		\( -name \*.mp4 -o -name \*.m4v -o -name \*.avi -o -name \*.mkv \) |
@@ -149,19 +160,17 @@ vid2aud() {
 }
 
 heic2jpg() {
-	if ! command -v magick >/dev/null 2>&1; then
-		printf 'Install imagemagick.\n'
-		return
-	fi
-	magick mogrify -monitor -format jpg *.HEIC
+	validate_cmd magick || return 1
+	magick mogrify -monitor -format jpg ./*.HEIC
 }
 
 ytda() {
+	validate_cmd yt-dlp renamr || return 1
 	yt-dlp \
 		--output "%(uploader)s-%(upload_date)s-%(title)s.%(ext)s" \
 		--format bestvideo+bestaudio \
 		--merge-output-format mp4 \
 		--add-metadata \
-		"$@"
+		"$@" && \
 	renamr -a
 }
