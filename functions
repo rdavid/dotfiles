@@ -161,7 +161,7 @@ vid2aud() {
 
 heic2jpg() {
 	validate_cmd magick || return 1
-	magick mogrify -monitor -format jpg ./*.HEIC
+	magick mogrify -monitor -format jpg ./*.[hH][eE][iI][cC]
 }
 
 ytda() {
