@@ -1,8 +1,5 @@
-# Dotfiles
+# Dotfiles [![Hits-of-Code](https://hitsofcode.com/github/rdavid/dotfiles?branch=master)](https://hitsofcode.com/view/github/rdavid/dotfiles?branch=master) [![License](https://img.shields.io/badge/license-0BSD-green)](https://github.com/rdavid/dotfiles/blob/master/LICENSE)
 My dotfiles.
-
-[![Hits-of-Code](https://hitsofcode.com/github/rdavid/dotfiles?branch=master)](https://hitsofcode.com/view/github/rdavid/dotfiles?branch=master)
-[![License](https://img.shields.io/badge/license-0BSD-green)](https://github.com/rdavid/dotfiles/blob/master/LICENSE)
 
 * [About](#about)
 * [Installation](#installation)
