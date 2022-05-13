@@ -537,16 +537,24 @@ class Installer
     # Clones repositories out from GitHub.
     [
       {
+        src: 'https://github.com/w0rp/ale.git',
+        dst: File.join(@ndir, 'vim', 'pack', 'git-plugins', 'start', 'ale')
+      },
+      {
+        src: 'https://github.com/vivien/i3blocks-contrib',
+        dst: File.join(@ndir, 'i3blocks-contrib')
+      },
+      {
         src: 'https://github.com/robbyrussell/oh-my-zsh',
         dst: File.join(@ndir, 'oh-my-zsh')
       },
       {
-        src: 'https://github.com/tmux-plugins/tpm',
-        dst: File.join(@ndir, 'tmux', 'plugins', 'tpm')
+        src: 'https://github.com/vim-syntastic/syntastic',
+        dst: File.join(@ndir, 'vim', 'bundle', 'syntastic')
       },
       {
-        src: 'https://github.com/w0rp/ale.git',
-        dst: File.join(@ndir, 'vim', 'pack', 'git-plugins', 'start', 'ale')
+        src: 'https://github.com/tmux-plugins/tpm',
+        dst: File.join(@ndir, 'tmux', 'plugins', 'tpm')
       }
     ].each do |i|
       Git.clone(i[:src], i[:dst]) unless Dir.exist?(i[:dst])

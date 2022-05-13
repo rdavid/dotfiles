@@ -2,6 +2,7 @@
 bin/
 conky/conky
 i3/i3
+i3blocks-contrib/
 kitty/kitty
 mc/ini
 mc/mc
@@ -14,5 +15,6 @@ tmux/plugins/tpm/
 tmux/tmux
 vim/.netrwhist
 vim/pack
+vim/bundle/
 vifm/vifminfo
 
