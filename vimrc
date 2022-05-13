@@ -63,9 +63,9 @@ filetype indent on             " Enables filetype-specific indenting.
 filetype plugin on             " Enables filetype-specific plugins.
 colorscheme zenburn
 
-" Highlights for text that goes over the 80 column limit.
+" Highlights for text that goes over the 79 column limit.
 highlight OverLength ctermbg=black ctermfg=white guibg=#592929
-match OverLength /\%81v.\+/
+match OverLength /\%80v.\+/
 
 set pastetoggle=<F2>            " Enables clear paste.
 let mapleader=","               " Leader is comma.
@@ -89,6 +89,7 @@ nmap <leader>sw<left>  :topleft  vnew<CR>
 nmap <leader>sw<right> :botright vnew<CR>
 nmap <leader>sw<up>    :topleft  new<CR>
 nmap <leader>sw<down>  :botright new<CR>
+
 " Buffer.
 nmap <leader>s<left>   :leftabove  vsplit<CR>
 nmap <leader>s<right>  :rightbelow vsplit<CR>
@@ -107,6 +108,7 @@ nmap <leader>S $vi{:sort<CR>
 silent !mkdir -p ~/.vim/{backup,swp}/
 set backupdir=~/.vim/backup//
 set directory=~/.vim/swp//
+
 " Except crontab, which will complain that it can't see any changes.
 au FileType crontab setlocal bkc=yes
 
