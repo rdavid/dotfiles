@@ -1,9 +1,0 @@
-[submodule "vim/bundle/syntastic"]
-	path = vim/bundle/syntastic
-	url = https://github.com/scrooloose/syntastic.git
-[submodule "vim/bundle/vim-fugitive"]
-	path = vim/bundle/vim-fugitive
-	url = https://github.com/tpope/vim-fugitive
-[submodule "i3blocks-contrib"]
-	path = i3blocks-contrib
-	url = https://github.com/vivien/i3blocks-contrib
