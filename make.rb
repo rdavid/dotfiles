@@ -465,6 +465,7 @@ class CurrentOS
 end
 
 # Actually does the job.
+# rubocop:disable Metrics/ClassLength
 class Installer
   def initialize
     @os = OS.new(Configuration.new).extend(CurrentOS.get)
@@ -610,6 +611,7 @@ class Installer
     puts('Bye-bye.')
   end
 end
+# rubocop:enable Metrics/ClassLength
 
 PidFile.new
 Installer.new.do
