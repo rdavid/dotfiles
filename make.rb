@@ -60,10 +60,10 @@ class OS
     @pkgs = %w[
       atop bat boxes cairo cmake cmatrix cmus cowsay cppcheck curl ctags
       dos2unix exa f3 fdupes ffmpeg figlet fortune fzf gawk git-delta gnupg
-      hadolint handbrake htop imagemagick lazydocker lazygit librsync-dev lynx
-      mc mosh most ncdu neofetch nnn node npm python3 python-is-python3 qrencode
-      redo ripgrep ruby-dev shellcheck shfmt syncthing tmux tree vifm vim vivid
-      wget zsh zsh-syntax-highlighting yamllint
+      goredo hadolint handbrake htop imagemagick lazydocker lazygit
+      librsync-dev lynx mc mosh most ncdu neofetch nnn node npm python3
+      python-is-python3 qrencode ripgrep ruby-dev shellcheck shfmt syncthing
+      tmux tree vifm vim vivid wget zsh zsh-syntax-highlighting yamllint
     ]
 
     # List of files/folders to symlink in homedir.
@@ -123,14 +123,15 @@ module MacOS
     atop: ''
   }.freeze
 
-  def self.pkgs(mod)
+  def self.pkgs(mod) # rubocop:disable Metrics/MethodLength
     (
       mod.pkgs << %w[
         aerial appcleaner coreutils disk-inventory-x dropbox docker feh firefox
         hadolint ilya-birman-typography-layout iterm2 google-chrome keepassxc
-        keepingyouawake kitty launchbar librsync lolcat microsoft-remote-desktop
-        mpv nmap nvalt plex plexamp spectacle spotify sublime-text telegram
-        vanilla virtualbox visual-studio-code watch xquartz
+        keepingyouawake kitty launchbar librsync lolcat
+        microsoft-remote-desktop mpv nmap nvalt plex plexamp spectacle spotify
+        sublime-text telegram vanilla virtualbox visual-studio-code watch
+        xquartz
       ]
     ).flatten!
       .map! { |i| DIC[i.to_sym].nil? ? i : DIC[i.to_sym] }
