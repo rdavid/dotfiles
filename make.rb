@@ -342,7 +342,8 @@ module RedHat
     imagemagick: 'ImageMagick',
     redo: '',
     shellcheck: 'ShellCheck',
-    'visual-studio-code': 'code'
+    'visual-studio-code': 'code',
+    vivid: ''
   }.freeze
 
   def self.pkgs(mod)

@@ -8,7 +8,9 @@ alias ...='cd ../..'
 alias ~='cd ~' # `cd` is probably faster to type though
 alias -- -='cd -'
 alias vi='vim'
-export LS_COLORS="$(vivid generate solarized-light)"
+if command -v vivid >/dev/null 2>&1; then
+	export LS_COLORS="$(vivid generate solarized-light)"
+fi
 if command -v exa >/dev/null 2>&1; then
 	# The order is important.
 	alias ls='exa --group-directories-first'
