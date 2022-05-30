@@ -61,9 +61,10 @@ class OS
       atop bat boxes cairo cmake cmatrix cmus cowsay cppcheck curl ctags
       dos2unix exa f3 fdupes ffmpeg figlet fortune fzf gawk git-delta gnupg
       goredo hadolint handbrake htop imagemagick lazydocker lazygit
-      librsync-dev lynx mc mosh most ncdu neofetch nnn node npm python3
-      python-is-python3 qrencode ripgrep ruby-dev shellcheck shfmt syncthing
-      tmux tree vifm vim vivid wget zsh zsh-syntax-highlighting yamllint
+      librsync-dev lynx mc mosh most ncdu neofetch nnn node npm pinentry
+      python3 python-is-python3 qrencode ripgrep ruby-dev shellcheck shfmt
+      syncthing tmux tree vifm vim vivid wget zsh zsh-syntax-highlighting
+      yamllint
     ]
 
     # List of files/folders to symlink in homedir.
