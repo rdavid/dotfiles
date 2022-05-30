@@ -50,6 +50,7 @@ export PATH="\
 /bin:\
 /sbin:\
 /usr/local/go/bin:\
+$HOME/.cargo/bin:\
 $HOME/src/toolbox/app:\
 $HOME/bin:\
 $(python -m site --user-base)/bin"
