@@ -174,3 +174,10 @@ ytda() {
 		"$@" && \
 	renamr -a
 }
+
+pingo() {
+	ping "$1" 2>&1 | \
+		while read -r pong; do
+			printf '%s %s.\n' "$(date +"%Y%m%d-%H:%M:%S")" "$pong"
+		done
+}
