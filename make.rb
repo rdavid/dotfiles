@@ -300,8 +300,7 @@ module Debian
     'git-delta': '',
     lazydocker: '',
     lazygit: '',
-    node: 'nodejs',
-    redo: ''
+    node: 'nodejs'
   }.freeze
 
   def self.pkgs(mod)
@@ -339,8 +338,8 @@ module RedHat
     'font-awesome': 'fontawesome-fonts',
     fortune: 'fortune-mod',
     'google-chrome': 'google-chrome-stable',
+    goredo: '',
     imagemagick: 'ImageMagick',
-    redo: '',
     shellcheck: 'ShellCheck',
     'visual-studio-code': 'code',
     vivid: ''
