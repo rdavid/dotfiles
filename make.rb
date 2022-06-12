@@ -190,10 +190,21 @@ module FreeBSD
       .map! { |i| DIC[i.to_sym].nil? ? i : DIC[i.to_sym] }
   end
 
+  def self.prec(mod)
+    mod.prec << %(
+      sudo freebsd-update fetch install
+      sudo pkg update
+      sudo pkg upgrade --yes
+      sudo portsnap fetch update
+      sudo pkg clean --all --yes
+    )
+  end
+
   def self.extended(mod)
     pkgs(mod)
+    prec(mod)
     mod.sudo << 'sudo'
-    mod.inst << 'sudo pkg install -y %s'
+    mod.inst << 'sudo pkg install --yes %s'
     mod.test << 'pkg info %s >/dev/null 2>&1'
   end
 end
