@@ -350,8 +350,16 @@ module RedHat
     fortune: 'fortune-mod',
     'google-chrome': 'google-chrome-stable',
     goredo: '',
-    imagemagick: 'ImageMagick',
-    shellcheck: 'ShellCheck',
+    imagemagick: 'GraphicsMagick',
+    lolcat: '',
+    mosh: '',
+    most: '',
+    ncdu: '',
+    neofetch: '',
+    nnn: '',
+    'python-is-python3': '',
+    shellcheck: '',
+    syncthing: '',
     'visual-studio-code': 'code',
     vivid: ''
   }.freeze
