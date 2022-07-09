@@ -45,6 +45,7 @@ export PATH="\
 /usr/local/bin:\
 /usr/local/sbin:\
 /opt/local/bin/:\
+/opt/homebrew/bin:\
 /usr/bin:\
 /usr/sbin:\
 /bin:\
@@ -61,20 +62,28 @@ $(python -m site --user-base)/bin"
 case $(uname -a) in
   *Microsoft*)
     unsetopt BG_NICE
-    MC='/usr/lib/mc/mc-wrapper.sh'
+    MC=/usr/lib/mc/mc-wrapper.sh
     ;;
   *)
     case "$OSTYPE" in
       darwin*)
-        MC='/usr/local/Cellar/midnight-commander/4.8.22/libexec/mc/mc-wrapper.sh'
+        MC=/usr/local/Cellar/midnight-commander/4.8.22/libexec/mc/mc-wrapper.sh
         export DISPLAY=:0
         export LC_ALL=en_US.UTF-8
         export LANG=en_US.UTF-8
-        export FZF_PATH='/usr/local/opt/fzf/shell'
-        export PATH="$PATH:/Library/TeX/texbin"
+        export PATH="$PATH":/Library/TeX/texbin
+        if [ -d /usr/local/opt/fzf/shell ]; then
+          export FZF_PATH=/usr/local/opt/fzf/shell
+          PATH="$PATH":/usr/local/opt/fzf/bin
+        elif [ -d /opt/homebrew/Cellar/fzf/0.30.0/shell ]; then
+          export FZF_PATH=/opt/homebrew/Cellar/fzf/0.30.0/shell
+          PATH="$PATH":/opt/homebrew/Cellar/fzf/0.30.0/bin
+        else
+          printf >&2 'Unable to find FZF_PATH.\n'
+        fi
         ;;
       linux*)
-        MC='/usr/lib/mc/mc-wrapper.sh'
+        MC=/usr/lib/mc/mc-wrapper.sh
         export DISPLAY=:0
         export LC_ALL=en_US.UTF-8
         export LANG=en_US.UTF-8
@@ -82,30 +91,35 @@ case $(uname -a) in
         export MANPATH="/home/linuxbrew/.linuxbrew/share/man:$MANPATH"
         export INFOPATH="/home/linuxbrew/.linuxbrew/share/info:$INFOPATH"
         if [ -f /etc/redhat-release ]; then
-          export FZF_PATH='/usr/share/fzf/shell'
+          export FZF_PATH=/usr/share/fzf/shell
+          PATH="$PATH":/usr/share/fzf/bin
         elif [ -f /etc/arch-release ]; then
-          export FZF_PATH='/usr/share/fzf'
+          export FZF_PATH=/usr/share/fzf
+          PATH="$PATH":/usr/share/fzf/bin
         else
-          export FZF_PATH='/usr/share/doc/fzf/examples'
+          export FZF_PATH=/usr/share/doc/fzf/examples
+          PATH="$PATH":/usr/share/doc/fzf/bin
         fi
         ;;
       freebsd*)
-        MC='/usr/local/libexec/mc/mc-wrapper.sh'
-        export FZF_PATH='/usr/local/share/examples/fzf/shell'
+        MC=/usr/local/libexec/mc/mc-wrapper.sh
+        export FZF_PATH=/usr/local/share/examples/fzf/shell
+        PATH="$PATH":/usr/local/share/examples/fzf/bin
         ;;
       openbsd*)
-        MC='/usr/local/libexec/mc/mc-wrapper.sh'
+        MC=/usr/local/libexec/mc/mc-wrapper.sh
         export DISPLAY=:0
         export LC_ALL=en_US.UTF-8
         export LANG=en_US.UTF-8
         alias ls='gls --color'
-        export FZF_PATH='/usr/local/share/examples/fzf/shell'
+        export FZF_PATH=/usr/local/share/examples/fzf/shell
+        PATH="$PATH":/usr/local/share/examples/fzf/bin
         ;;
       msys*)
-        MC='/usr/lib/mc/mc-wrapper.sh'
+        MC=/usr/lib/mc/mc-wrapper.sh
         ;;
       *)
-        echo "unknown: $OSTYPE"
+        printf 'Unknown OS: %s.\n' "$OSTYPE"
         ;;
     esac
 esac
@@ -138,3 +152,6 @@ else
 fi
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+if command -v rbenv >/dev/null 2>&1; then
+  eval "$(rbenv init - zsh)"
+fi
