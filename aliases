@@ -2,16 +2,21 @@
 # vi:et lbr noet sw=2 ts=2 tw=79 wrap
 # Copyright 2019-2022 David Rabkin
 
+# Checks whether all commands exits.
+cmd_exists() {
+	command -v "$1" >/dev/null 2>&1
+}
+
 # Easier navigation: .., ..., ~ and -
 alias ..='cd ..'
 alias ...='cd ../..'
 alias ~='cd ~' # `cd` is probably faster to type though
 alias -- -='cd -'
 alias vi='vim'
-if command -v vivid >/dev/null 2>&1; then
+if cmd_exists vivid; then
 	export LS_COLORS="$(vivid generate solarized-light)"
 fi
-if command -v exa >/dev/null 2>&1; then
+if cmd_exists exa; then
 	# The order is important.
 	alias ls='exa --group-directories-first'
 	alias l='ls --classify --grid --long'
@@ -29,7 +34,7 @@ else
 	alias l='ls -lFh'
 fi
 alias la='l -a'
-if command -v bat >/dev/null 2>&1; then
+if cmd_exists bat; then
 	alias cat='bat --style=plain'
 fi
 
@@ -51,3 +56,10 @@ alias src="source $HOME/.zshrc"
 alias rsync='rsync -zvhr --progress'
 alias cmatrix='cmatrix -a -b -u 6 -C blue'
 alias grbt='gcam tmp && gp && grb -i HEAD~5 && gp origin +master'
+if cmd_exists brew; then
+	alias bu="\
+brew update && \
+brew upgrade && \
+brew upgrade --cask --greedy && \
+brew cleanup"
+fi
