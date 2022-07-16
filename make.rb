@@ -167,7 +167,7 @@ module MacOS
       brew ls --versions %s >/dev/null 2>&1|| \
         brew cask ls --versions %s >/dev/null 2>&1
     )
-    mod.inst << 'brew install %s; brew install --cask %s'
+    mod.inst << 'brew install %s || brew install --cask %s'
   end
 end
 
