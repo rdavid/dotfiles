@@ -53,7 +53,14 @@ alias src-tmux="tmux source-file $HOME/.tmux.conf"
 
 # shellcheck disable=SC2139
 alias src="source $HOME/.zshrc"
-alias rsync='rsync -zvhr --progress'
+alias rsync="\
+rsync \
+--human-readable \
+--progress \
+--recursive \
+--timeout=60 \
+--verbose\
+"
 alias cmatrix='cmatrix -a -b -u 6 -C blue'
 alias grbt='gcam tmp && gp && grb -i HEAD~5 && gp origin +master'
 if cmd_exists brew; then
@@ -61,5 +68,6 @@ if cmd_exists brew; then
 brew update && \
 brew upgrade && \
 brew upgrade --cask --greedy && \
-brew cleanup"
+brew cleanup\
+"
 fi
