@@ -62,7 +62,6 @@ rsync \
 --verbose\
 "
 alias cmatrix='cmatrix -a -b -u 6 -C blue'
-alias grbt='gcam tmp && gp && grb -i HEAD~5 && gp origin +master'
 if cmd_exists brew; then
 	alias bu="\
 brew update && \
