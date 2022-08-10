@@ -181,3 +181,10 @@ pingo() {
 			printf '%s %s.\n' "$(date +"%Y%m%d-%H:%M:%S")" "$pong"
 		done
 }
+
+grbt() {
+	git commit --all --message tmp &&
+	git push &&
+	git rebase --interactive HEAD~5 &&
+	git push origin +$(git rev-parse --abbrev-ref HEAD)
+}
