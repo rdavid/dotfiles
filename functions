@@ -88,7 +88,7 @@ cd() {
 # Select a docker container to start and attach to
 da() {
 	local cid
-	cid=$(docker ps -a | sed 1d | fzf -1 -q "$1" | awk '{print $1}')
+	cid=$(docker ps -a | sed 1d | fzf -1 -q "$1" | awk '{ print $1 }')
 	[ -n "$cid" ] && docker start "$cid" && docker attach "$cid"
 }
 
@@ -102,29 +102,23 @@ ds() {
 # Removes any file besides mp3, m4a, flac. Removes empty directories.
 mp3only() {
 	find . -type f \
-		! \( -name '*.mp3' -o -name '*.m4a' -o -name '*.flac' \)
+		! \( -name \*.mp3 -o -name \*.m4a -o -name \*.flac \)
 	keep=$(stty -g)
 	stty raw -echo; ans=$(head -c 1); stty "$keep"
-	printf '\n'
-	if ! printf '%s' "$ans" | grep -iq '^y'; then
+	printf \\n
+	if ! printf %s "$ans" | grep -iq '^y'; then
 		return
 	fi
 	find . -type f \
-		! \( -name '*.mp3' -o -name '*.m4a' -o -name '*.flac' \) \
+		! \( -name \*.mp3 -o -name \*.m4a -o -name \*.flac \) \
 		-exec rm -f {} +
 	find . -type d -empty -delete
-	printf '\nDone.\n'
+	printf \\nDone.\\n
 }
 
 cheat() {
 	validate_cmd curl || return 1
 	curl "cht.sh/$1"
-}
-
-timestamp() {
-	while IFS= read -r line; do
-		printf '%s %s\n' "$(date '+%Y%m%d%H%M%S')" "$line";
-	done
 }
 
 qr() {
@@ -138,7 +132,7 @@ pdf2jpg() {
 pdf2png() {
 	validate_cmd pdftoppm || return 1
 	# shellcheck disable=SC2039
-	find . -type f -name '*.pdf' -print0 |
+	find . -type f -name \*.pdf -print0 |
 		while IFS= read -r -d '' file; do
 			printf 'Convert %s.\n' "$file"
 			pdftoppm "${file}" "${file%.*}" -png
