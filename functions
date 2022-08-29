@@ -177,8 +177,14 @@ pingo() {
 }
 
 grbt() {
+	validate_cmd git || return 1
 	git commit --all --message tmp &&
 	git push &&
 	git rebase --interactive HEAD~5 &&
 	git push origin +$(git rev-parse --abbrev-ref HEAD)
+}
+
+tolower() {
+	validate_cmd rename || return 1
+	rename -f 'y/A-Z/a-z/' ./*
 }
