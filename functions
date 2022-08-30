@@ -22,24 +22,24 @@ validate_cmd() {
 
 # Simple calculator.
 calc() {
-	local result;
+	local result
 	result="$(printf 'scale=10;%s\n' "$*" | bc --mathlib | tr -d '\\\n')"
-	if [[ "$result" == *.* ]]; then
-		printf '%s' "$result" |
+	if [ "$result" = '*.*' ]; then
+		printf %s "$result" |
 		sed -e 's/^\./0./'				`# add "0" for cases like ".5"` \
 				-e 's/^-\./-0./'			`# add "0" for cases like "-.5"`\
 				-e 's/0*$//;s/\.$//'	# remove trailing zeros
 	else
-		printf '%s' "$result"
+		printf %s "$result"
 	fi
-	printf '\n'
+	printf \\n
 }
 
 # fkill - kill processes - list only the ones you can kill.
 fkill() {
 	local pid
-	if [ "$UID" != '0' ]; then
-		pid=$(ps -f -u $UID | sed 1d | fzf -m | awk '{print $2}')
+	if [ "$(id -u)" != '0' ]; then
+		pid=$(ps -f -u "$(id -u)" | sed 1d | fzf -m | awk '{print $2}')
 	else
 		pid=$(ps -ef | sed 1d | fzf -m | awk '{print $2}')
 	fi
@@ -62,7 +62,7 @@ FZF-EOF"
 }
 
 cd() {
-	if [[ "$#" != 0 ]]; then
+	if [ ! "$#" = 0 ]; then
 		builtin cd "$@" || return;
 		return
 	fi
@@ -72,7 +72,7 @@ cd() {
 		# shellcheck disable=SC2010
 		lsd=$(echo '..' && ls -p | grep '/$' | sed 's;/$;;')
 		# shellcheck disable=SC2016
-		dir="$(printf '%s\n' "${lsd[@]}" |
+		dir="$(printf %s\\n "${lsd[@]}" |
 			fzf --reverse --preview '
 					__cd_nxt="$(echo {})";
 					__cd_path="$(echo $(pwd)/${__cd_nxt} | sed "s;//;/;")";
@@ -80,8 +80,8 @@ cd() {
 					echo;
 					ls -p "${__cd_path}";
 				')"
-		[[ ${#dir} != 0 ]] || return 0
-		builtin cd "$dir" &> /dev/null || return
+		[ ! ${#dir} = 0 ] || return 0
+		builtin cd "$dir" >/dev/null 2>&1 || return
 	done
 }
 
@@ -133,7 +133,7 @@ pdf2png() {
 	validate_cmd pdftoppm || return 1
 	# shellcheck disable=SC2039
 	find . -type f -name \*.pdf -print0 |
-		while IFS= read -r -d '' file; do
+		while IFS= read -r file; do
 			printf 'Convert %s.\n' "$file"
 			pdftoppm "${file}" "${file%.*}" -png
 		done
@@ -145,7 +145,7 @@ vid2aud() {
 	find . -type f -maxdepth 1 -print0\
 		\( -name \*.mp4 -o -name \*.m4v -o -name \*.avi -o -name \*.mkv \) |
 		xargs -0 |
-		while read -r -d ' ' src; do
+		while read -r src; do
 			src=$(basename -- "$src")
 			dst=${src%.*}.mp3
 			printf 'Convert %s -> %s.\n' "$src" "$dst"
@@ -181,7 +181,7 @@ grbt() {
 	git commit --all --message tmp &&
 	git push &&
 	git rebase --interactive HEAD~5 &&
-	git push origin +$(git rev-parse --abbrev-ref HEAD)
+	git push origin +"$(git rev-parse --abbrev-ref HEAD)"
 }
 
 tolower() {
