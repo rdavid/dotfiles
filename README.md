@@ -9,9 +9,10 @@ My dotfiles.
 Hi, I'm [David Rabkin](http://cv.rabkin.co.il). This is my dotfiles.
 
 ## Installation
-
-    git clone https://github.com/rdavid/dotfiles.git ~/dotfiles
-    cd ~/dotfiles && ./make.sh
-
+```sh
+git clone https://github.com/rdavid/dotfiles.git ~/dotfiles &&
+cd ~/dotfiles &&
+./make.sh
+```
 ## License
 The scripts are copyright [David Rabkin](http://cv.rabkin.co.il) and available under a [Zero-Claus BSD license](https://github.com/rdavid/dotfiles/blob/master/LICENSE).
