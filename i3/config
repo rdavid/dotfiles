@@ -1,5 +1,5 @@
 # vi:ts=2 sw=2 tw=79 et lbr wrap
-# Copyright 2017 David Rabkin
+# Copyright 2017-2022 David Rabkin
 # i3 config file (v4)
 
 # Font for window titles. Will also be used by the bar unless a different font
