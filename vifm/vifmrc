@@ -1,5 +1,5 @@
 " vi:ts=2 sw=2 tw=79 et lbr wrap
-" Copyright 2019 David Rabkin
+" Copyright 2019-2022 David Rabkin
 
 " Removes confirmation for deletion into trash as well as permanent.
 set confirm-=delete,permdelete
