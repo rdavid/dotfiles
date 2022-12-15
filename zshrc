@@ -5,9 +5,9 @@
 export PAGER=most
 export VISUAL=vim
 export EDITOR=vim
-export HISTCONTROL='ignoredups'
-export HISTIGNORE='make.sh:youtube-dl'
-export HIST_STAMPS='yyyy-mm-dd'
+export HISTCONTROL=ignoredups
+export HISTIGNORE=make:youtube-dl
+export HIST_STAMPS=yyyymmdd
 export BAT_PAGER=less
 export BAT_THEME=zenburn
 
@@ -18,8 +18,9 @@ export ZSH_THEME=minimal
 # Uncomment the following line to change how often to auto-update (in days).
 export UPDATE_ZSH_DAYS=30
 
-# Uncomment the following line to display red dots whilst waiting for completion.
-COMPLETION_WAITING_DOTS='true'
+# Uncomment the following line to display red dots whilst waiting for
+# completion.
+COMPLETION_WAITING_DOTS=true
 
 GPG_TTY="$(tty)"
 export GPG_TTY
