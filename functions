@@ -9,15 +9,15 @@
 
 # Simple calculator.
 calc() {
-	local result
-	result="$(printf 'scale=10;%s\n' "$*" | bc --mathlib | tr -d '\\\n')"
-	if [ "$result" = '*.*' ]; then
-		printf %s "$result" |
-		sed -e 's/^\./0./'				`# add "0" for cases like ".5"` \
-				-e 's/^-\./-0./'			`# add "0" for cases like "-.5"`\
-				-e 's/0*$//;s/\.$//'	# remove trailing zeros
+	local res
+	res="$(printf 'scale=10;%s\n' "$*" | bc --mathlib | tr -d '\\\n')"
+	if [ "$res" = \*.\* ]; then
+		printf %s "$res" |
+		sed -e 's/^\./0./'        `# add "0" for cases like ".5"` \
+				-e 's/^-\./-0./'      `# add "0" for cases like "-.5"`\
+				-e 's/0*$//;s/\.$//'   # remove trailing zeros
 	else
-		printf %s "$result"
+		printf %s "$res"
 	fi
 	printf \\n
 }
@@ -54,10 +54,11 @@ cd() {
 		return
 	fi
 	while :; do
-		local lsd
-		local dir
+		local dir lsd
+
 		# shellcheck disable=SC2010
 		lsd=$(echo '..' && ls -p | grep '/$' | sed 's;/$;;')
+
 		# shellcheck disable=SC2016
 		dir="$(printf %s\\n "${lsd[@]}" |
 			fzf --reverse --preview '
@@ -75,7 +76,7 @@ cd() {
 # Select a docker container to start and attach to
 da() {
 	local cid
-	cid=$(docker ps -a | sed 1d | fzf -1 -q "$1" | awk '{ print $1 }')
+	cid=$(docker ps -a | sed 1d | fzf -1 -q "$1" | awk '{print $1}')
 	[ -n "$cid" ] && docker start "$cid" && docker attach "$cid"
 }
 
@@ -88,10 +89,13 @@ ds() {
 
 # Removes any file besides mp3, m4a, flac. Removes empty directories.
 mp3only() {
+	local ans keep
 	find . -type f \
 		! \( -name \*.mp3 -o -name \*.m4a -o -name \*.flac \)
 	keep=$(stty -g)
-	stty raw -echo; ans=$(head -c 1); stty "$keep"
+	stty raw -echo
+	ans=$(head -c 1)
+	stty "$keep"
 	printf \\n
 	if ! printf %s "$ans" | grep -iq '^y'; then
 		return
@@ -109,10 +113,12 @@ cheat() {
 }
 
 qr() {
+	cmd_exists qrencode || return 1
 	qrencode "$1" -t ANSIUTF8 -o -;
 }
 
 pdf2jpg() {
+	cmd_exists sips || return 1
 	for i in *.pdf; do sips -s format jpeg "$i" --out "$i.jpg"; done
 }
 
@@ -135,6 +141,7 @@ vid2aud() {
 		\( -name \*.mp4 -o -name \*.m4v -o -name \*.avi -o -name \*.mkv \) |
 		xargs -0 |
 		while read -r src; do
+			local dst src
 			src=$(basename -- "$src")
 			dst=${src%.*}.mp3
 			printf Convert\ %s->%s.\\n "$src" "$dst"
@@ -142,11 +149,13 @@ vid2aud() {
 		done
 }
 
+# Converts Apple HEIC's files to JPEG.
 heic2jpg() {
 	cmd_exists magick || return 1
 	magick mogrify -monitor -format jpg ./*.[hH][eE][iI][cC]
 }
 
+# Downloads a video from YouTube.
 ytda() {
 	cmd_exists yt-dlp renamr || return 1
 	yt-dlp \
@@ -154,22 +163,25 @@ ytda() {
 		--format bestvideo+bestaudio \
 		--merge-output-format mp4 \
 		--add-metadata \
-		"$@" && \
-	renamr -a
+		"$@" &&
+		renamr -a
 }
 
+# Adds timestamps to ping command output.
 pingo() {
 	ping "$1" 2>&1 | while read -r pong; do log "$pong"; done
 }
 
+# Creates temporary commit, rebases it and pushes.
 grbt() {
 	cmd_exists git || return 1
 	git commit --all --message tmp &&
-	git push &&
-	git rebase --interactive HEAD~5 &&
-	git push origin +"$(git rev-parse --abbrev-ref HEAD)"
+		git push &&
+			git rebase --interactive HEAD~5 &&
+				git push origin +"$(git rev-parse --abbrev-ref HEAD)"
 }
 
+# Renames files in current directory to lower case.
 tolower() {
 	cmd_exists rename || return 1
 	rename -f 'y/A-Z/a-z/' ./*
