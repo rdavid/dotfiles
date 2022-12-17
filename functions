@@ -4,21 +4,8 @@
 # SC3043: In POSIX sh, 'local' is undefined.
 # shellcheck disable=SC3043
 
-# Checks if applications are installed. Loops over the arguments, each one is an
-# application name.
-validate_cmd() {
-	if [ -z "${1-}" ] || [ $# -eq 0 ]; then
-		printf 'Usage: validate_cmd cmd1 cmd2...\n'
-		return 1
-	fi
-	local a
-	for a do
-		if ! command -v "$a" >/dev/null 2>&1; then
-			printf 'Install %s.\n' "$a"
-			return 1
-		fi
-	done
-}
+# shellcheck disable=SC1091
+. base.sh
 
 # Simple calculator.
 calc() {
@@ -117,7 +104,7 @@ mp3only() {
 }
 
 cheat() {
-	validate_cmd curl || return 1
+	cmd_exists curl || return 1
 	curl "cht.sh/$1"
 }
 
@@ -130,17 +117,19 @@ pdf2jpg() {
 }
 
 pdf2png() {
-	validate_cmd pdftoppm || return 1
+	cmd_exists pdftoppm || return 1
+
 	# shellcheck disable=SC2039
 	find . -type f -name \*.pdf -print0 |
 		while IFS= read -r file; do
-			printf 'Convert %s.\n' "$file"
+			printf Convert\ %s.\\n "$file"
 			pdftoppm "${file}" "${file%.*}" -png
 		done
 }
 
 vid2aud() {
-	validate_cmd ffmpeg || return 1
+	cmd_exists ffmpeg || return 1
+
 	# shellcheck disable=SC2039
 	find . -type f -maxdepth 1 -print0\
 		\( -name \*.mp4 -o -name \*.m4v -o -name \*.avi -o -name \*.mkv \) |
@@ -148,18 +137,18 @@ vid2aud() {
 		while read -r src; do
 			src=$(basename -- "$src")
 			dst=${src%.*}.mp3
-			printf 'Convert %s -> %s.\n' "$src" "$dst"
+			printf Convert\ %s->%s.\\n "$src" "$dst"
 			ffmpeg -nostdin -i "$src" -vn -ar 44100 -ac 2 -ab 320k -f mp3 "$dst"
 		done
 }
 
 heic2jpg() {
-	validate_cmd magick || return 1
+	cmd_exists magick || return 1
 	magick mogrify -monitor -format jpg ./*.[hH][eE][iI][cC]
 }
 
 ytda() {
-	validate_cmd yt-dlp renamr || return 1
+	cmd_exists yt-dlp renamr || return 1
 	yt-dlp \
 		--output "%(uploader)s-%(upload_date)s-%(title)s.%(ext)s" \
 		--format bestvideo+bestaudio \
@@ -170,14 +159,11 @@ ytda() {
 }
 
 pingo() {
-	ping "$1" 2>&1 | \
-		while read -r pong; do
-			printf '%s %s.\n' "$(date +"%Y%m%d-%H:%M:%S")" "$pong"
-		done
+	ping "$1" 2>&1 | while read -r pong; do log "$pong"; done
 }
 
 grbt() {
-	validate_cmd git || return 1
+	cmd_exists git || return 1
 	git commit --all --message tmp &&
 	git push &&
 	git rebase --interactive HEAD~5 &&
@@ -185,6 +171,6 @@ grbt() {
 }
 
 tolower() {
-	validate_cmd rename || return 1
+	cmd_exists rename || return 1
 	rename -f 'y/A-Z/a-z/' ./*
 }
