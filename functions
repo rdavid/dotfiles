@@ -141,37 +141,3 @@ vid2aud() {
 			ffmpeg -nostdin -i "$src" -vn -ar 44100 -ac 2 -ab 320k -f mp3 "$dst"
 		done
 }
-
-# Converts Apple HEIC's files to JPEG.
-heic2jpg() {
-	magick mogrify -monitor -format jpg ./*.[hH][eE][iI][cC]
-}
-
-# Downloads a video from YouTube.
-ytda() {
-	yt-dlp \
-		--output "%(uploader)s-%(upload_date)s-%(title)s.%(ext)s" \
-		--format bestvideo+bestaudio \
-		--merge-output-format mp4 \
-		--add-metadata \
-		"$@" &&
-		renamr -a
-}
-
-# Adds timestamps to ping command output.
-pingo() {
-	ping "$1" 2>&1 | while read -r pong; do log "$pong"; done
-}
-
-# Creates temporary commit, rebases it and pushes.
-grbt() {
-	git commit --all --message tmp &&
-		git push &&
-			git rebase --interactive HEAD~5 &&
-				git push origin +"$(git rev-parse --abbrev-ref HEAD)"
-}
-
-# Renames files in current directory to lower case.
-tolower() {
-	rename -f 'y/A-Z/a-z/' ./*
-}
