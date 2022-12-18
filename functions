@@ -73,14 +73,14 @@ cd() {
 	done
 }
 
-# Select a docker container to start and attach to
+# Selects a docker container to start and attach to.
 da() {
 	local cid
 	cid=$(docker ps -a | sed 1d | fzf -1 -q "$1" | awk '{print $1}')
 	[ -n "$cid" ] && docker start "$cid" && docker attach "$cid"
 }
 
-# Select a running docker container to stop
+# Selects a running docker container to stop.
 ds() {
 	local cid
 	cid=$(docker ps | sed 1d | fzf -q "$1" | awk '{print $1}')
@@ -108,24 +108,19 @@ mp3only() {
 }
 
 cheat() {
-	cmd_exists curl || return 1
-	curl "cht.sh/$1"
+	curl cht.sh/"$1"
 }
 
 qr() {
-	cmd_exists qrencode || return 1
 	qrencode "$1" -t ANSIUTF8 -o -;
 }
 
 pdf2jpg() {
-	cmd_exists sips || return 1
 	for i in *.pdf; do sips -s format jpeg "$i" --out "$i.jpg"; done
 }
 
+# shellcheck disable=SC2039
 pdf2png() {
-	cmd_exists pdftoppm || return 1
-
-	# shellcheck disable=SC2039
 	find . -type f -name \*.pdf -print0 |
 		while IFS= read -r file; do
 			printf Convert\ %s.\\n "$file"
@@ -133,10 +128,8 @@ pdf2png() {
 		done
 }
 
+# shellcheck disable=SC2039
 vid2aud() {
-	cmd_exists ffmpeg || return 1
-
-	# shellcheck disable=SC2039
 	find . -type f -maxdepth 1 -print0\
 		\( -name \*.mp4 -o -name \*.m4v -o -name \*.avi -o -name \*.mkv \) |
 		xargs -0 |
@@ -151,13 +144,11 @@ vid2aud() {
 
 # Converts Apple HEIC's files to JPEG.
 heic2jpg() {
-	cmd_exists magick || return 1
 	magick mogrify -monitor -format jpg ./*.[hH][eE][iI][cC]
 }
 
 # Downloads a video from YouTube.
 ytda() {
-	cmd_exists yt-dlp renamr || return 1
 	yt-dlp \
 		--output "%(uploader)s-%(upload_date)s-%(title)s.%(ext)s" \
 		--format bestvideo+bestaudio \
@@ -174,7 +165,6 @@ pingo() {
 
 # Creates temporary commit, rebases it and pushes.
 grbt() {
-	cmd_exists git || return 1
 	git commit --all --message tmp &&
 		git push &&
 			git rebase --interactive HEAD~5 &&
@@ -183,6 +173,5 @@ grbt() {
 
 # Renames files in current directory to lower case.
 tolower() {
-	cmd_exists rename || return 1
 	rename -f 'y/A-Z/a-z/' ./*
 }
