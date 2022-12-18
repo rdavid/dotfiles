@@ -22,6 +22,50 @@ calc() {
 	printf \\n
 }
 
+# Improves change directory command.
+cd() {
+	if [ ! "$#" = 0 ]; then
+		builtin cd "$@" || return;
+		return
+	fi
+	while :; do
+		local dir lsd
+
+		# shellcheck disable=SC2010
+		lsd=$(echo '..' && ls -p | grep '/$' | sed 's;/$;;')
+
+		# shellcheck disable=SC2016
+		dir="$(printf %s\\n "${lsd[@]}" |
+			fzf --reverse --preview '
+					__cd_nxt="$(echo {})";
+					__cd_path="$(echo $(pwd)/${__cd_nxt} | sed "s;//;/;")";
+					echo $__cd_path;
+					echo;
+					ls -p "${__cd_path}";
+				')"
+		[ ! ${#dir} = 0 ] || return 0
+		builtin cd "$dir" >/dev/null 2>&1 || return
+	done
+}
+
+cheat() {
+	curl cht.sh/"$1"
+}
+
+# Selects a docker container to start and attach to.
+da() {
+	local cid
+	cid=$(docker ps -a | sed 1d | fzf -1 -q "$1" | awk '{print $1}')
+	[ -n "$cid" ] && docker start "$cid" && docker attach "$cid"
+}
+
+# Selects a running docker container to stop.
+ds() {
+	local cid
+	cid=$(docker ps | sed 1d | fzf -q "$1" | awk '{print $1}')
+	[ -n "$cid" ] && docker stop "$cid"
+}
+
 # fkill - kill processes - list only the ones you can kill.
 fkill() {
 	local pid
@@ -48,45 +92,6 @@ fshow() {
 FZF-EOF"
 }
 
-cd() {
-	if [ ! "$#" = 0 ]; then
-		builtin cd "$@" || return;
-		return
-	fi
-	while :; do
-		local dir lsd
-
-		# shellcheck disable=SC2010
-		lsd=$(echo '..' && ls -p | grep '/$' | sed 's;/$;;')
-
-		# shellcheck disable=SC2016
-		dir="$(printf %s\\n "${lsd[@]}" |
-			fzf --reverse --preview '
-					__cd_nxt="$(echo {})";
-					__cd_path="$(echo $(pwd)/${__cd_nxt} | sed "s;//;/;")";
-					echo $__cd_path;
-					echo;
-					ls -p "${__cd_path}";
-				')"
-		[ ! ${#dir} = 0 ] || return 0
-		builtin cd "$dir" >/dev/null 2>&1 || return
-	done
-}
-
-# Selects a docker container to start and attach to.
-da() {
-	local cid
-	cid=$(docker ps -a | sed 1d | fzf -1 -q "$1" | awk '{print $1}')
-	[ -n "$cid" ] && docker start "$cid" && docker attach "$cid"
-}
-
-# Selects a running docker container to stop.
-ds() {
-	local cid
-	cid=$(docker ps | sed 1d | fzf -q "$1" | awk '{print $1}')
-	[ -n "$cid" ] && docker stop "$cid"
-}
-
 # Removes any file besides mp3, m4a, flac. Removes empty directories.
 mp3only() {
 	local ans keep
@@ -107,14 +112,6 @@ mp3only() {
 	printf \\nDone.\\n
 }
 
-cheat() {
-	curl cht.sh/"$1"
-}
-
-qr() {
-	qrencode "$1" -t ANSIUTF8 -o -;
-}
-
 pdf2jpg() {
 	for i in *.pdf; do sips -s format jpeg "$i" --out "$i.jpg"; done
 }
@@ -126,6 +123,10 @@ pdf2png() {
 			printf Convert\ %s.\\n "$file"
 			pdftoppm "${file}" "${file%.*}" -png
 		done
+}
+
+qr() {
+	qrencode "$1" -t ANSIUTF8 -o -;
 }
 
 # shellcheck disable=SC2039
