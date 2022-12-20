@@ -5,19 +5,19 @@
 # This script preparies ruby environment to run make.rb.
 # Installs needfull software.
 
-BSH=/usr/local/bin/base.sh
-[ -r "$BSH" ] || {
+if [ -r /usr/local/bin/base.sh ]; then
+	# shellcheck disable=SC1091
+	. base.sh
+else
 	REL=v0.9.20221213
 	SRC=https://github.com/rdavid/shellbase/releases/download/$REL/base.sh
 	if ! command -v curl >/dev/null 2>&1; then
 		printf >&2 'Install curl to continue.'
 		exit 1
 	fi
-	curl --location --output $BSH --silent $SRC
-}
+	eval "$(curl --location --silent $SRC)"
+fi
 
-# shellcheck disable=SC1091
-. base.sh
 platform="$(uname)"
 readonly \
 	gems='colorize english git i18n os pidfile' \
