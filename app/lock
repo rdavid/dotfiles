@@ -1,0 +1,12 @@
+#!/bin/sh
+# vi:et lbr noet sw=2 ts=2 tw=79 wrap
+# Copyright 2021-2022 David Rabkin
+# shellcheck disable=SC1091,SC2034 # File not following, appears unused.
+readonly \
+	BASE_APP_VERSION=0.9.20221223 \
+	IMG="$HOME"/dotfiles/pic/bg.jpg \
+	TMP=/tmp/screen.png
+. base.sh
+validate_cmd i3lock
+file_exists "$TMP" || { validate_cmd convert; convert "$IMG" "$TMP";}
+i3lock --image="$TMP" --tiling
