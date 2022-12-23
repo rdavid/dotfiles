@@ -176,7 +176,7 @@ bar {
     status_command i3blocks -c ~/.i3/i3blocks.conf
 }
 
-bindsym Mod1+Shift+x exec ~/dotfiles/app/lock.sh
+bindsym Mod1+Shift+x exec ~/dotfiles/app/lock
 
 # IP network configuration GUI applet.
 exec --no-startup-id nm-applet
@@ -188,7 +188,7 @@ exec --no-startup-id blueman-applet
 exec --no-startup-id feh --bg-fill ~/dotfiles/pic/bg.jpg
 
 # Screen locker.
-exec --no-startup-id xautolock -time 15 -locker ~/dotfiles/app/lock.sh
+exec --no-startup-id xautolock -time 15 -locker ~/dotfiles/app/lock
 
 # Language switcher.
 exec "setxkbmap -layout 'us,il,ru'"
