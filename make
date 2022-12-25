@@ -39,6 +39,8 @@ for p in $pkgs; do
 			brew install "$p"
 		elif [ "$platform" = FreeBSD ]; then
 			sudo pkg install "$p" devel/ruby-gems
+		elif [ "$platform" = OpenBSD ]; then
+			doas pkg_add install "$p"
 		fi
 		log "$p" is installed.
 	}
