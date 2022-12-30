@@ -45,10 +45,6 @@ cd() {
 	done
 }
 
-cheat() {
-	curl cht.sh/"$1"
-}
-
 # Selects a docker container to start and attach to.
 da() {
 	local cid
