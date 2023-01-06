@@ -1,15 +1,14 @@
 #!/bin/sh
 # vi:et lbr noet sw=2 ts=2 tw=79 wrap
-# Copyright 2018-2022 David Rabkin
+# Copyright 2018-2023 David Rabkin
 #
 # This script preparies ruby environment to run make.rb.
 # Installs needfull software.
-
 if [ -r /usr/local/bin/base.sh ]; then
 	# shellcheck disable=SC1091
 	. base.sh
 else
-	REL=v0.9.20221213
+	REL=v0.9.20230102
 	SRC=https://github.com/rdavid/shellbase/releases/download/$REL/base.sh
 	if ! command -v curl >/dev/null 2>&1; then
 		printf >&2 'Install curl to continue.'
@@ -17,7 +16,6 @@ else
 	fi
 	eval "$(curl --location --silent $SRC)"
 fi
-
 platform="$(uname)"
 readonly \
 	gems='colorize english git i18n os pidfile' \
