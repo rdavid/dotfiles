@@ -2,13 +2,13 @@
 # frozen_string_literal: true
 
 # vi:et lbr noet sw=2 ts=2 tw=79 wrap
-# Copyright 2017-2022 David Rabkin
+# Copyright 2017-2023 David Rabkin
 #
 # This script creates symlinks from the home directory to any desired
 # dotfiles in ~/dotfiles. Also it installs needfull packages.
 #
 # For MacOS run without X and with the password for binary:
-#  make --no-xorg -pass pass
+#  install.rb --no-xorg -pass pass
 
 require 'English'
 require 'git'
@@ -28,7 +28,7 @@ class Configuration
     ARGV << '-h' if ARGV.empty?
     @options = {}
     OptionParser.new do |o|
-      o.banner = 'Usage: make.rb [options].'
+      o.banner = 'Usage: install.rb [options].'
       DIC.each { |f, p, d, k| o.on(f, p, d) { |i| @options[k] = i } }
     end.parse!
     raise 'Xorg option is not given' if xorg?.nil?
