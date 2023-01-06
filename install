@@ -2,7 +2,7 @@
 # vi:et lbr noet sw=2 ts=2 tw=79 wrap
 # Copyright 2018-2023 David Rabkin
 #
-# This script preparies ruby environment to run make.rb.
+# This script preparies ruby environment to run install.rb.
 # Installs needfull software.
 if [ -r /usr/local/bin/base.sh ]; then
 	# shellcheck disable=SC1091
@@ -56,5 +56,5 @@ for g in $gems; do
 	}
 done
 
-# Runs Ruby's make.
-"$(dirname "$0")"/make.rb "$@"
+# Runs Ruby's install.
+"$(dirname "$0")"/install.rb "$@"
