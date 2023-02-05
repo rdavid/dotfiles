@@ -63,7 +63,8 @@ class OS
       goredo hadolint handbrake htop imagemagick lazydocker lazygit
       librsync-dev lynx mosh most ncdu neofetch nnn node npm pinentry python3
       python-is-python3 qrencode ripgrep ruby-dev shellcheck shfmt syncthing
-      tmux tree vifm vim vivid wget zsh zsh-syntax-highlighting yamllint
+      thefuck tmux tree vifm vim vivid wget zsh zsh-syntax-highlighting
+      yamllint
     ]
 
     # List of files/folders to symlink in homedir.

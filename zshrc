@@ -153,3 +153,4 @@ fi
 # shellcheck disable=SC1090 # File not following.
 [ -f ~/.fzf.zsh ] && . ~/.fzf.zsh
 command -v rbenv >/dev/null 2>&1 && eval "$(rbenv init - zsh)"
+command -v thefuck >/dev/null 2>&1 && eval $(thefuck --alias)
