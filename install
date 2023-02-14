@@ -5,10 +5,10 @@
 # This script preparies ruby environment to run install.rb.
 # Installs needfull software.
 if [ -r /usr/local/bin/base.sh ]; then
-	# shellcheck disable=SC1091
+	# shellcheck disable=SC1091 # File not following.
 	. base.sh
 else
-	REL=v0.9.20230102
+	REL=v0.9.20230212
 	SRC=https://github.com/rdavid/shellbase/releases/download/$REL/base.sh
 	if ! command -v curl >/dev/null 2>&1; then
 		printf >&2 'Install curl to continue.'
