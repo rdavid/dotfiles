@@ -1,72 +1,66 @@
 # shellcheck shell=sh
 # vi:et lbr noet sw=2 ts=2 tw=79 wrap
-# Copyright 2019-2022 David Rabkin
+# Copyright 2019-2023 David Rabkin
 
 # Checks whether all commands exits.
 cmd_exists() {
 	command -v "$1" >/dev/null 2>&1
 }
 
-# Easier navigation: .., ..., ~ and -
-alias ..='cd ..'
-alias ...='cd ../..'
-alias ~='cd ~' # `cd` is probably faster to type though
-alias -- -='cd -'
-alias vi='vim'
+alias vi=vim
 if cmd_exists vivid; then
-	export LS_COLORS="$(vivid generate solarized-light)"
+	LS_COLORS="$(vivid generate solarized-light)"
+	export LS_COLORS
 fi
 if cmd_exists exa; then
 	# The order is important.
-	alias ls='exa --group-directories-first'
+	# shellcheck disable=SC2262 # Can't be defined.
+	alias ls=exa\ --group-directories-first
 	alias l='ls --classify --grid --long'
 else
 	# Detects which `ls` flavor is in use.
 	if ls --color > /dev/null 2>&1; then # GNU `ls`
-		colorflag='--color'
+		colorflag=--color
 	else # OS X `ls`
-		colorflag='-G'
+		colorflag=-G
 	fi
 
 	# The order is important.
 	# shellcheck disable=SC2139
-	alias ls="ls ${colorflag}"
-	alias l='ls -lFh'
+	alias ls="ls $colorflag"
+	alias l=ls\ -lFh
 fi
-alias la='l -a'
+alias la=l\ -a
 if cmd_exists bat; then
-	alias cat='bat --style=plain'
+	alias cat=bat\ --style=plain
 fi
 
 # Always enables colored `grep` output.
-alias grep='grep --color=auto'
-alias fgrep='fgrep --color=auto'
-alias egrep='egrep --color=auto'
-alias h='history'
-alias untar='tar -zxvf'
-alias ipe='curl ipinfo.io/ip'
-alias ipi='ipconfig getifaddr en0'
-alias c='clear'
+alias grep=grep\ --color=auto
+alias h=history
+alias untar=tar\ -zxvf
+alias ipe=curl\ ipinfo.io/ip
+alias c=clear
 
 # shellcheck disable=SC2139
 alias src-tmux="tmux source-file $HOME/.tmux.conf"
 
 # shellcheck disable=SC2139
 alias src="source $HOME/.zshrc"
-alias rsync="\
+alias rsync='\
 rsync \
 --human-readable \
 --progress \
 --recursive \
 --timeout=60 \
 --verbose\
-"
+'
 alias cmatrix='cmatrix -a -b -u 6 -C blue'
 if cmd_exists brew; then
-	alias bu="\
+	alias bu='\
 brew update && \
 brew upgrade && \
 brew upgrade --cask --greedy && \
 brew cleanup\
-"
+'
 fi

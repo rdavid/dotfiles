@@ -1,6 +1,6 @@
 # shellcheck shell=sh
 # vi:et lbr noet sw=2 ts=2 tw=79 wrap
-# Copyright 2019-2022 David Rabkin
+# Copyright 2019-2023 David Rabkin
 # shellcheck disable=SC3043,SC1091 # local is undefined.
 . base.sh
 
@@ -31,7 +31,7 @@ cd() {
 		# shellcheck disable=SC2010
 		lsd=$(echo '..' && ls -p | grep '/$' | sed 's;/$;;')
 
-		# shellcheck disable=SC2016
+		# shellcheck disable=SC2016,SC3054 # Don't expand, arrays are undefined.
 		dir="$(printf %s\\n "${lsd[@]}" |
 			fzf --reverse --preview '
 					__cd_nxt="$(echo {})";
