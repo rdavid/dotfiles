@@ -1,0 +1,22 @@
+---
+name: linters
+'on': [push]
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: ludeeus/action-shellcheck@master
+        with:
+          additional_files: >-
+            aliases
+            functions
+            install
+          ignore_paths: >-
+            ./app/z.sh
+            ./fzf.bash
+            ./fzf.zsh
+      - uses: ibiqlik/action-yamllint@v3
+        with:
+          file_or_dir: .github/workflows/*.yml
+          strict: true
