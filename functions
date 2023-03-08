@@ -10,9 +10,9 @@ calc() {
 	res="$(printf 'scale=10;%s\n' "$*" | bc --mathlib | tr -d '\\\n')"
 	if [ "$res" = \*.\* ]; then
 		printf %s "$res" |
-		sed -e 's/^\./0./'        `# add "0" for cases like ".5"` \
-				-e 's/^-\./-0./'      `# add "0" for cases like "-.5"`\
-				-e 's/0*$//;s/\.$//'   # remove trailing zeros
+			sed -e 's/^\./0./' `# add "0" for cases like ".5"` \
+				-e 's/^-\./-0./' `# add "0" for cases like "-.5"` \
+				-e 's/0*$//;s/\.$//' # remove trailing zeros
 	else
 		printf %s "$res"
 	fi
@@ -22,7 +22,7 @@ calc() {
 # Improves change directory command.
 cd() {
 	if [ ! "$#" = 0 ]; then
-		builtin cd "$@" || return;
+		builtin cd "$@" || return
 		return
 	fi
 	while :; do
@@ -67,8 +67,7 @@ fkill() {
 	else
 		pid=$(ps -ef | sed 1d | fzf -m | awk '{print $2}')
 	fi
-	if [ "x$pid" != 'x' ]
-	then
+	if [ "x$pid" != 'x' ]; then
 		echo "$pid" | xargs kill -"${1:-9}"
 	fi
 }
@@ -76,8 +75,8 @@ fkill() {
 # fshow - git commit browser.
 fshow() {
 	git log --graph --color=always \
-			--format="%C(auto)%h%d %s %C(black)%C(bold)%cr" "$@" |
-	fzf --ansi --no-sort --reverse --tiebreak=index --bind=ctrl-s:toggle-sort \
+		--format="%C(auto)%h%d %s %C(black)%C(bold)%cr" "$@" |
+		fzf --ansi --no-sort --reverse --tiebreak=index --bind=ctrl-s:toggle-sort \
 			--bind "ctrl-m:execute:
 				(grep -o '[a-f0-9]\{7\}' | head -1 |
 				xargs -I % sh -c 'git show --color=always % | less -R') << 'FZF-EOF'
