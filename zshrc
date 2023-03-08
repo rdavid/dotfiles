@@ -37,11 +37,11 @@ export CDPATH=:~
 # ~/.oh-my-zsh/custom/plugins/. Example format: plugins=(git textmate ruby)
 # Add wisely, as too many plugins slow down shell startup.
 # shellcheck disable=SC3030 # Arrays are undefined.
-export plugins=( \
-	archlinux battery brew catimg colored-man-pages colorize common-aliases \
-	compleat debian docker docker-compose gem git git-extras git-flow github \
-	golang history lol macos pip python rsync ruby sudo tmux vi-mode \
-	web-search yarn z \
+export plugins=(
+	archlinux battery brew catimg colored-man-pages colorize common-aliases
+	compleat debian docker docker-compose gem git git-extras git-flow github
+	golang history lol macos pip python rsync ruby sudo tmux vi-mode
+	web-search yarn z
 )
 autoload zmv
 PATH="\
@@ -70,63 +70,63 @@ for f in \
 	"$HOME"/dotfiles/aliases \
 	"$HOME"/dotfiles/functions; do . "$f"; done
 case $(uname -a) in
-	*Microsoft*)
-		unsetopt BG_NICE
+*Microsoft*)
+	unsetopt BG_NICE
+	;;
+*)
+	# shellcheck disable=SC3028 # OSTYPE is undefined.
+	case "$OSTYPE" in
+	darwin*)
+		export DISPLAY=:0 \
+			LANG=en_US.UTF-8 \
+			LC_ALL=en_US.UTF-8 \
+			PATH="$PATH":/Library/TeX/texbin
+		if [ -d /usr/local/opt/fzf/shell ]; then
+			export FZF_PATH=/usr/local/opt/fzf/shell
+			PATH="$PATH":/usr/local/opt/fzf/bin
+		elif [ -d /opt/homebrew/Cellar/fzf/0.30.0/shell ]; then
+			export FZF_PATH=/opt/homebrew/Cellar/fzf/0.30.0/shell
+			PATH="$PATH":/opt/homebrew/Cellar/fzf/0.30.0/bin
+		else
+			printf >&2 'Unable to find FZF_PATH.\n'
+		fi
 		;;
+	linux*)
+		export DISPLAY=:0 \
+			INFOPATH=/home/linuxbrew/.linuxbrew/share/info:"$INFOPATH" \
+			LANG=en_US.UTF-8 \
+			LC_ALL=en_US.UTF-8 \
+			MANPATH=/home/linuxbrew/.linuxbrew/share/man:"$MANPATH" \
+			PATH=/home/linuxbrew/.linuxbrew/bin:"$PATH"
+		if [ -f /etc/redhat-release ]; then
+			export FZF_PATH=/usr/share/fzf/shell
+			PATH="$PATH":/usr/share/fzf/bin
+		elif [ -f /etc/arch-release ]; then
+			export FZF_PATH=/usr/share/fzf
+			PATH="$PATH":/usr/share/fzf/bin
+		else
+			export FZF_PATH=/usr/share/doc/fzf/examples
+			PATH="$PATH":/usr/share/doc/fzf/bin
+		fi
+		;;
+	freebsd*)
+		export FZF_PATH=/usr/local/share/examples/fzf/shell
+		PATH="$PATH":/usr/local/share/examples/fzf/bin
+		;;
+	openbsd*)
+		export DISPLAY=:0 \
+			FZF_PATH=/usr/local/share/examples/fzf/shell \
+			LANG=en_US.UTF-8 \
+			LC_ALL=en_US.UTF-8 \
+			alias ls='gls --color'
+		PATH="$PATH":/usr/local/share/examples/fzf/bin
+		;;
+	msys*) ;;
 	*)
-		# shellcheck disable=SC3028 # OSTYPE is undefined.
-		case "$OSTYPE" in
-			darwin*)
-				export DISPLAY=:0 \
-					LANG=en_US.UTF-8 \
-					LC_ALL=en_US.UTF-8 \
-					PATH="$PATH":/Library/TeX/texbin
-				if [ -d /usr/local/opt/fzf/shell ]; then
-					export FZF_PATH=/usr/local/opt/fzf/shell
-					PATH="$PATH":/usr/local/opt/fzf/bin
-				elif [ -d /opt/homebrew/Cellar/fzf/0.30.0/shell ]; then
-					export FZF_PATH=/opt/homebrew/Cellar/fzf/0.30.0/shell
-					PATH="$PATH":/opt/homebrew/Cellar/fzf/0.30.0/bin
-				else
-					printf >&2 'Unable to find FZF_PATH.\n'
-				fi
-				;;
-			linux*)
-				export DISPLAY=:0 \
-					INFOPATH=/home/linuxbrew/.linuxbrew/share/info:"$INFOPATH" \
-					LANG=en_US.UTF-8 \
-					LC_ALL=en_US.UTF-8 \
-					MANPATH=/home/linuxbrew/.linuxbrew/share/man:"$MANPATH" \
-					PATH=/home/linuxbrew/.linuxbrew/bin:"$PATH"
-				if [ -f /etc/redhat-release ]; then
-					export FZF_PATH=/usr/share/fzf/shell
-					PATH="$PATH":/usr/share/fzf/bin
-				elif [ -f /etc/arch-release ]; then
-					export FZF_PATH=/usr/share/fzf
-					PATH="$PATH":/usr/share/fzf/bin
-				else
-					export FZF_PATH=/usr/share/doc/fzf/examples
-					PATH="$PATH":/usr/share/doc/fzf/bin
-				fi
-				;;
-			freebsd*)
-				export FZF_PATH=/usr/local/share/examples/fzf/shell
-				PATH="$PATH":/usr/local/share/examples/fzf/bin
-				;;
-			openbsd*)
-				export DISPLAY=:0 \
-					FZF_PATH=/usr/local/share/examples/fzf/shell \
-					LANG=en_US.UTF-8 \
-					LC_ALL=en_US.UTF-8 \
-				alias ls='gls --color'
-				PATH="$PATH":/usr/local/share/examples/fzf/bin
-				;;
-			msys*)
-				;;
-			*)
-				printf >&2 'Unknown OS: %s.\n' "$OSTYPE"
-				;;
-		esac
+		printf >&2 'Unknown OS: %s.\n' "$OSTYPE"
+		;;
+	esac
+	;;
 esac
 
 # Switches on vi command-line editing.
