@@ -68,7 +68,9 @@ for f in \
 	"$ZSH"/oh-my-zsh.sh \
 	"$HOME"/dotfiles/app/z.sh \
 	"$HOME"/dotfiles/aliases \
-	"$HOME"/dotfiles/functions; do . "$f"; done
+	"$HOME"/dotfiles/functions; do
+	. "$f"
+done
 case $(uname -a) in
 *Microsoft*)
 	unsetopt BG_NICE
