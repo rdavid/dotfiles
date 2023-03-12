@@ -10,7 +10,7 @@
 # Uses Unix shell framework shellbase:
 #  https://github.com/rdavid/shellbase/
 shellbase() {
-	local pkg rel=0.9.20230212
+	local pkg rel=0.9.20230312
 	local src=https://github.com/rdavid/shellbase/archive/refs/tags/v$rel.tar.gz
 	for pkg in curl tar; do
 		command -v $pkg >/dev/null 2>&1 || {
