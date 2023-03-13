@@ -6,9 +6,7 @@
 # shells, see more:
 #  https://stackoverflow.com/questions/18597697/posix-compliant-way-to-scope-variables-to-a-function-in-a-shell-script
 # shellcheck disable=SC3043 # Uses local variables.
-
-# Uses Unix shell framework shellbase:
-#  https://github.com/rdavid/shellbase/
+# Includes shellbase to the current execution.
 shellbase() {
 	local pkg rel=0.9.20230312
 	local src=https://github.com/rdavid/shellbase/archive/refs/tags/v$rel.tar.gz
@@ -36,8 +34,10 @@ shellbase() {
 	}
 }
 
+# Uses Unix shell framework shellbase:
+#  https://github.com/rdavid/shellbase/
 # shellcheck disable=SC1091,SC2015 # File not following, A && B || C.
-[ -r base.sh ] && . base.sh || shellbase
+[ -r /usr/local/bin/base.sh ] && . /usr/local/bin/base.sh || shellbase "$@"
 platform="$(uname)"
 readonly \
 	gems='colorize english git i18n os pidfile' \
