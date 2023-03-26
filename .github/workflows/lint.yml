@@ -6,10 +6,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - uses: ibiqlik/action-yamllint@v3
-        with:
-          file_or_dir: .github/workflows/*.yml
-          strict: true
       - uses: ludeeus/action-shellcheck@master
         with:
           additional_files: >-
@@ -22,3 +18,7 @@ jobs:
             ./fzf.zsh
       - uses: mfinelli/setup-shfmt@v2
       - run: shfmt -d aliases bashrc functions install zshrc
+      - uses: ibiqlik/action-yamllint@v3
+        with:
+          file_or_dir: .github/*.yml .github/workflows/*.yml
+          strict: true
