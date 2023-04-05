@@ -8,7 +8,7 @@
 # shellcheck disable=SC3043 # Uses local variables.
 # Includes shellbase to the current execution.
 shellbase() {
-	local pkg rel=0.9.20230312
+	local pkg rel=0.9.20230405
 	local src=https://github.com/rdavid/shellbase/archive/refs/tags/v$rel.tar.gz
 	for pkg in curl tar; do
 		command -v $pkg >/dev/null 2>&1 || {
