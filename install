@@ -33,7 +33,7 @@ shellbase() {
 		printf >&2 No\ shellbase.\\n
 		exit 3
 	}
-	log Shellbase is installed to the current shell session.
+	log shellbase "$BASE_VERSION" is installed to the current shell session.
 }
 
 # shellcheck disable=SC1091,SC2015 # File not following, A && B || C.
