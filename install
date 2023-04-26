@@ -8,7 +8,6 @@
 # shellcheck disable=SC3043 # Uses local variables.
 # Uses Unix shell framework shellbase:
 #  https://github.com/rdavid/shellbase/
-# Includes shellbase to the current execution.
 
 # Installs shellbase to the current shell session. Packages curl and tar are
 # required.
