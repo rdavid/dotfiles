@@ -151,6 +151,7 @@ module MacOS
       else
         link='https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh'
         /bin/bash -c "$(curl -fsSL $link)"
+        export PATH=/opt/homebrew/bin:"$PATH"
       fi
       brew update && brew upgrade && brew upgrade --cask && brew cleanup
     )
