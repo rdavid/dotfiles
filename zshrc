@@ -47,6 +47,7 @@ autoload zmv
 PATH="\
 /usr/local/opt/grep/libexec/gnubin:\
 /usr/local/opt/ruby/bin:\
+/usr/local/lib/ruby/gems/3.2.0/bin:\
 /usr/local/bin:\
 /usr/local/sbin:\
 /opt/local/bin/:\
