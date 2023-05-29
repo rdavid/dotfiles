@@ -312,7 +312,9 @@ module Debian
     'git-delta': '',
     lazydocker: '',
     lazygit: '',
-    node: 'nodejs'
+    node: 'nodejs',
+    vivid: '',
+    yq: ''
   }.freeze
 
   def self.pkgs(mod)
