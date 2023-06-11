@@ -12,17 +12,19 @@
 # Installs shellbase to the current shell session. Packages curl and tar are
 # required.
 shellbase() {
-	local pkg rel=0.9.20230505
+	local err pkg rel=0.9.20230606
 	local src=https://github.com/rdavid/shellbase/archive/refs/tags/v$rel.tar.gz
 	for pkg in curl tar; do
 		command -v $pkg >/dev/null 2>&1 || {
+			err=$?
 			printf >&2 Install\ %s.\\n $pkg
-			exit 1
+			exit $err
 		}
 	done
 	curl --fail --head --output /dev/null --silent $src || {
+		err=$?
 		printf >&2 '%s is unavailable.\n' $src
-		exit 2
+		exit $err
 	}
 	eval "$(
 		curl --location --silent $src |
@@ -30,7 +32,7 @@ shellbase() {
 	)"
 	[ -n "${BASE_VERSION+x}" ] || {
 		printf >&2 No\ shellbase.\\n
-		exit 3
+		exit 1
 	}
 	log shellbase "$BASE_VERSION" is installed to the current shell session.
 }
