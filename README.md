@@ -23,4 +23,4 @@ cd ~ &&
 ## License
 
 `dotfiles` are copyright [David Rabkin](http://cv.rabkin.co.il) and available
-under a [Zero-Claus BSD license](https://github.com/rdavid/dotfiles/blob/master/LICENSE).
+under a [Zero-Clause BSD license](https://github.com/rdavid/dotfiles/blob/master/LICENSE).
