@@ -1,0 +1,9 @@
+[default.extend-words]
+anual = "anual"
+doas = "doas"
+earch = "earch"
+ist = "ist"
+windo = "windo"
+
+[files]
+extend-exclude = ["install.rb"]
