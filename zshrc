@@ -7,7 +7,7 @@ export \
 	BAT_PAGER=less \
 	BAT_THEME=zenburn \
 	EDITOR=vim \
-	HIST_STAMPS=yyyymmdd-hh:mm:ss \
+	HIST_STAMPS=%Y%m%d-%H:%M:%S \
 	HISTCONTROL=ignoredups \
 	HISTIGNORE=install:youtube-dl \
 	PAGER=most \
