@@ -4,7 +4,7 @@ start_directory: $HOME
 windows:
   - window_name: mon
     panes:
-      - btop
+      - glances
   - window_name: sup
     layout: tiled
     panes:
@@ -15,7 +15,7 @@ windows:
     layout: tiled
     panes:
       -
-      - vifm
+      -
       - sleep 0.2 && exit
   - window_name: wrk
     layout: tiled
