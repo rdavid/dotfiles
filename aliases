@@ -64,3 +64,6 @@ brew upgrade --cask --greedy && \
 brew cleanup\
 '
 fi
+if cmd_exists bfs; then
+	alias find=bfs
+fi
