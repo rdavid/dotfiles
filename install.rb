@@ -58,7 +58,7 @@ class OS
 
     # Packages without Xorg to install.
     @pkgs = %w[
-      atop bat boxes cairo cmake cmatrix cmus cowsay cppcheck curl ctags
+      atop bat bfs boxes cairo cmake cmatrix cmus cowsay cppcheck curl ctags
       dos2unix exa f3 fdupes ffmpeg figlet fortune fzf gawk git-delta gnupg
       goredo hadolint handbrake htop imagemagick jq lazydocker lazygit
       librsync-dev lynx mosh most ncdu neofetch nnn node npm pinentry python3
