@@ -9,7 +9,7 @@
 
 ## About
 
-Hi, I'm [David Rabkin](http://cv.rabkin.co.il). There are my dotfiles.
+Hi, I'm [David Rabkin](http://cv.rabkin.co.il). These are my dotfiles.
 
 ## Installation
 
