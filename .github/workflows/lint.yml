@@ -19,7 +19,7 @@ jobs:
             ./app/z.sh
             ./fzf.bash
             ./fzf.zsh
-      - uses: mfinelli/setup-shfmt@v2
+      - uses: mfinelli/setup-shfmt@v3
       - run: shfmt -d aliases bashrc functions install zshrc
       - uses: crate-ci/typos@master
       - uses: ibiqlik/action-yamllint@v3
