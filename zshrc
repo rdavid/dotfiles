@@ -60,8 +60,7 @@ PATH="\
 $HOME/.cargo/bin:\
 $HOME/src/toolbox/app:\
 $HOME/bin:\
-/usr/local/opt/python@3.9/Frameworks/Python.framework/Versions/3.9/bin:\
-$(python -m site --user-base)/bin"
+"
 command -v go >/dev/null 2>&1 && PATH=$PATH:$(go env GOPATH)/bin
 export PATH
 

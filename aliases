@@ -67,3 +67,7 @@ fi
 if cmd_exists bfs; then
 	alias find=bfs
 fi
+if cmd_exists python3; then
+	# shellcheck disable=SC2139 # This expands when defined.
+	alias python="$(which python3)"
+fi
