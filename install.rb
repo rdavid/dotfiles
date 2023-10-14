@@ -593,18 +593,18 @@ class Installer
       configobj click glances matplotlib pss pyotp pyperclip rdiff_backup s_tui
       speedtest-cli tmuxp wheel yt-dlp
     ].each do |p|
-      chk = "python -c \"help('modules');\" | grep #{p} | wc -l | xargs"
+      chk = "python3 -c \"help('modules');\" | grep #{p} | wc -l | xargs"
       next if `#{chk}`.strip.eql? '1'
 
-      system("pip install --user #{p}")
+      system("pip3 install --user #{p}")
       puts("Unable to install #{p}.") unless $CHILD_STATUS.exitstatus.positive?
     end
 
     # Updates all Python packages.
-    system('pip list --outdated --format=freeze |'\
+    system('pip3 list --outdated --format=freeze |'\
            'grep -v \'^\-e\' |'\
            'cut -d = -f 1 |'\
-           'xargs -n1 pip install -U --user')
+           'xargs -n1 pip3 install -U --user')
     puts('Unable to update Python.') unless $CHILD_STATUS.exitstatus.positive?
 
     # Installs Ruby packages.
