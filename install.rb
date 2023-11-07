@@ -130,9 +130,9 @@ module MacOS
         aerial appcleaner coreutils disk-inventory-x dropbox docker feh firefox
         hadolint ilya-birman-typography-layout iterm2 google-chrome keepassxc
         keepingyouawake kitty launchbar librsync linearmouse lolcat
-        microsoft-remote-desktop mpv nmap nvalt plex plexamp spectacle spotify
-        sublime-text telegram vanilla virtualbox visual-studio-code watch
-        xquartz
+        microsoft-remote-desktop mpv nmap nvalt plex plexamp pygments spectacle
+        spotify sublime-text telegram vanilla virtualbox visual-studio-code
+        watch xquartz
       ]
     ).flatten!
       .map! { |i| DIC[i.to_sym].nil? ? i : DIC[i.to_sym] }
