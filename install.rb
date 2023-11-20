@@ -58,13 +58,13 @@ class OS
 
     # Packages without Xorg to install.
     @pkgs = %w[
-      atop bat bfs bottom boxes cairo cmake cmatrix cmus cowsay cppcheck curl
-      ctags dos2unix exa f3 fdupes ffmpeg figlet fortune fzf gawk git-delta
-      gnupg goredo hadolint handbrake htop imagemagick jq lazydocker lazygit
-      librsync-dev lynx mosh most ncdu neofetch nnn node npm pinentry python3
-      python-is-python3 qrencode ripgrep ruby-dev shellcheck shfmt syncthing
-      thefuck tmux tree vifm vim vivid wget zsh zsh-syntax-highlighting
-      yamllint yq
+      atop bat base64 bfs bottom boxes cairo cmake cmatrix cmus cowsay cppcheck
+      curl ctags dos2unix exa f3 fdupes ffmpeg figlet fortune fzf gawk
+      git-delta gnupg goredo hadolint handbrake htop imagemagick jq lazydocker
+      lazygit librsync-dev lynx mosh most ncdu neofetch nnn node npm pinentry
+      python3 python-is-python3 qrencode ripgrep ruby-dev shellcheck shfmt
+      syncthing thefuck tmux tree vifm vim vivid wget zsh
+      zsh-syntax-highlighting yamllint yq
     ]
 
     # List of files/folders to symlink in homedir.
@@ -261,6 +261,7 @@ end
 # Implements Arch Linux.
 module Arch
   DIC = {
+    base64: '',
     fortune: 'fortune-mod',
     'font-awesome': 'ttf-font-awesome',
     handbrake: '',
@@ -307,6 +308,7 @@ end
 module Debian
   DIC = {
     bat: '',
+    base64: '',
     cairo: 'libcairo2-dev',
     'font-awesome': 'fonts-font-awesome',
     'git-delta': '',
@@ -348,6 +350,7 @@ end
 # Implements RedHat Linux.
 module RedHat
   DIC = {
+    base64: '',
     cairo: 'cairo-devel',
     'font-awesome': 'fontawesome-fonts',
     fortune: 'fortune-mod',
@@ -434,6 +437,7 @@ end
 # Implements Alpine Linux.
 module Alpine
   DIC = {
+    base64: 'coreutils',
     bat: '',
     cmatrix: '',
     cowsay: '',
