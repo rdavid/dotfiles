@@ -590,11 +590,10 @@ class Installer
     end
     sudo = @os.sudo
 
-    # Installs Python packages,
-    # rdiff_backup depends on wheel.
-    # speedtest-cli depends on matplotlib.
+    # Installs Python packages. rdiff_backup depends on wheel. speedtest-cli
+    # depends on matplotlib.
     %w[
-      configobj click glances matplotlib pss pyotp pyperclip rdiff_backup s_tui
+      configobj click matplotlib pss pyotp pyperclip rdiff_backup s_tui
       speedtest-cli tmuxp wheel yt-dlp
     ].each do |p|
       chk = "python3 -c \"help('modules');\" | grep #{p} | wc -l | xargs"
