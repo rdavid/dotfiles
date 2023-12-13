@@ -15,7 +15,6 @@ require 'git'
 require 'fileutils'
 require 'optparse'
 require 'os'
-require 'pidfile'
 
 # Handles input parameters.
 class Configuration
@@ -640,5 +639,4 @@ class Installer
 end
 # rubocop:enable Metrics/ClassLength
 
-PidFile.new
 Installer.new.do
