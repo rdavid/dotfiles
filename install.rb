@@ -2,13 +2,13 @@
 # frozen_string_literal: true
 
 # vi:et lbr noet sw=2 ts=2 tw=79 wrap
-# Copyright 2017-2023 David Rabkin
+# Copyright 2017-2024 David Rabkin
 #
 # This script creates symlinks from the home directory to any desired
 # dotfiles in ~/dotfiles. Also it installs needfull packages.
 #
 # For MacOS run without X and with the password for binary:
-#  install.rb --no-xorg -pass pass
+#  install.rb --no-xorg --pass pass
 
 require 'English'
 require 'git'
@@ -130,8 +130,8 @@ module MacOS
         hadolint ilya-birman-typography-layout iterm2 google-chrome keepassxc
         keepingyouawake kitty launchbar librsync linearmouse lolcat
         microsoft-remote-desktop mpv nmap nvalt plex plexamp pygments spectacle
-        spotify sublime-text telegram vanilla virtualbox visual-studio-code
-        watch xquartz
+        spotify sublime-text telegram tmuxp vanilla virtualbox
+        visual-studio-code watch xquartz
       ]
     ).flatten!
       .map! { |i| DIC[i.to_sym].nil? ? i : DIC[i.to_sym] }
