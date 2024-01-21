@@ -58,6 +58,7 @@ PATH="\
 /sbin:\
 /usr/local/go/bin:\
 $HOME/.cargo/bin:\
+$HOME/.local/bin:\
 $HOME/src/toolbox/app:\
 $HOME/bin:\
 "
