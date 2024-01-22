@@ -1,8 +1,16 @@
 # shellcheck shell=sh
 # vi:et lbr noet sw=2 ts=2 tw=79 wrap
-# Copyright 2019-2023 David Rabkin
+# Copyright 2019-2024 David Rabkin
 # shellcheck disable=SC3043,SC1091 # local is undefined.
 . base.sh
+
+# Runs the given command and then plays a sound to signal completion.
+# Currently, it works on MacOS only.
+beep() {
+	afplay /System/Library/Sounds/Tink.aiff
+	caffeinate "$@" || :
+	afplay /System/Library/Sounds/Glass.aiff
+}
 
 # Simple calculator.
 calc() {
