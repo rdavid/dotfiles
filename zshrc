@@ -1,6 +1,6 @@
 # shellcheck shell=sh
 # vi:et lbr noet sw=2 ts=2 tw=79 wrap
-# Copyright 2016-2023 David Rabkin
+# Copyright 2016-2024 David Rabkin
 
 # Cool man pager, viewer and editor.
 export \
@@ -45,22 +45,22 @@ export plugins=(
 )
 autoload zmv
 PATH="\
+/bin:\
+/opt/homebrew/bin:\
+/opt/local/bin/:\
+/sbin:\
+/usr/bin:\
 /usr/local/opt/grep/libexec/gnubin:\
 /usr/local/opt/ruby/bin:\
 /usr/local/lib/ruby/gems/3.2.0/bin:\
 /usr/local/bin:\
 /usr/local/sbin:\
-/opt/local/bin/:\
-/opt/homebrew/bin:\
-/usr/bin:\
-/usr/sbin:\
-/bin:\
-/sbin:\
 /usr/local/go/bin:\
+/usr/sbin:\
 $HOME/.cargo/bin:\
 $HOME/.local/bin:\
-$HOME/src/toolbox/app:\
 $HOME/bin:\
+$HOME/src/toolbox/app:\
 "
 command -v go >/dev/null 2>&1 && PATH=$PATH:$(go env GOPATH)/bin
 export PATH
