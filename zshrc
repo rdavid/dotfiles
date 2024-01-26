@@ -44,13 +44,15 @@ export plugins=(
 	web-search yarn z
 )
 autoload zmv
+
+# Ensure that the GNUbin directory takes precedence over /usr/bin.
 PATH="\
 /bin:\
 /opt/homebrew/bin:\
 /opt/local/bin/:\
 /sbin:\
-/usr/bin:\
 /usr/local/opt/grep/libexec/gnubin:\
+/usr/bin:\
 /usr/local/opt/ruby/bin:\
 /usr/local/lib/ruby/gems/3.2.0/bin:\
 /usr/local/bin:\
