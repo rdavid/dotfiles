@@ -3,7 +3,13 @@
 :!toc-title:
 // URLs:
 :url-cv: http://cv.rabkin.co.il
+:url-goredo: http://www.goredo.cypherpunks.ru/Install.html
 :url-license: https://github.com/rdavid/dotfiles/blob/master/LICENSE
+:url-redo: http://cr.yp.to/redo.html
+:url-shellcheck: https://github.com/koalaman/shellcheck
+:url-shfmt: https://github.com/mvdan/sh
+:url-typos: https://github.com/crate-ci/typos
+:url-yamllint: https://github.com/adrienverge/yamllint
 
 = David Rabkin's dotfiles
 
@@ -26,6 +32,14 @@ cd ~ &&
   cd ./dotfiles &&
   ./install
 ----
+
+== Test
+
+The project uses Daniel J. Bernstein's build system {url-redo}[`redo`].
+You can install Sergey Matveev's {url-goredo}[`goredo`] implementation.
+`redo lint` applies the following linters to the source files:
+{url-shellcheck}[`shellcheck`], {url-shfmt}[`shfmt`], {url-typos}[`typos`],
+{url-yamllint}[`yamllint`].
 
 == License
 
