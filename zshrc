@@ -49,6 +49,7 @@ autoload zmv
 PATH="\
 /bin:\
 /opt/homebrew/bin:\
+/opt/homebrew/opt/grep/libexec/gnubin:\
 /opt/local/bin/:\
 /sbin:\
 /usr/local/opt/grep/libexec/gnubin:\
