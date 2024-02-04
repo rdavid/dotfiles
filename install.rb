@@ -127,8 +127,8 @@ module MacOS
     (
       mod.pkgs << %w[
         aerial appcleaner coreutils disk-inventory-x dropbox docker feh firefox
-        hadolint ilya-birman-typography-layout iterm2 google-chrome keepassxc
-        keepingyouawake kitty launchbar librsync linearmouse lolcat
+        gpg-suite hadolint ilya-birman-typography-layout iterm2 google-chrome
+        keepassxc keepingyouawake kitty launchbar librsync linearmouse lolcat
         microsoft-remote-desktop mpv nmap nvalt plex plexamp podman pygments
         spectacle spotify sublime-text telegram tmuxp vanilla virtualbox
         visual-studio-code watch xquartz
