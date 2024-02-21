@@ -47,23 +47,23 @@ autoload zmv
 
 # Ensure that the GNUbin directory takes precedence over /usr/bin.
 PATH="\
-/bin:\
-/opt/homebrew/bin:\
-/opt/homebrew/opt/grep/libexec/gnubin:\
-/opt/local/bin/:\
-/sbin:\
+$HOME/.cargo/bin:\
+$HOME/.local/bin:\
+$HOME/bin:\
+$HOME/src/toolbox/app:\
 /usr/local/opt/grep/libexec/gnubin:\
-/usr/bin:\
 /usr/local/opt/ruby/bin:\
 /usr/local/lib/ruby/gems/3.2.0/bin:\
 /usr/local/bin:\
 /usr/local/sbin:\
 /usr/local/go/bin:\
 /usr/sbin:\
-$HOME/.cargo/bin:\
-$HOME/.local/bin:\
-$HOME/bin:\
-$HOME/src/toolbox/app:\
+/usr/bin:\
+/opt/homebrew/bin:\
+/opt/homebrew/opt/grep/libexec/gnubin:\
+/opt/local/bin/:\
+/sbin:\
+/bin:\
 "
 command -v go >/dev/null 2>&1 && PATH=$PATH:$(go env GOPATH)/bin
 export PATH
