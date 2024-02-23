@@ -9,6 +9,7 @@
 :url-shellcheck: https://github.com/koalaman/shellcheck
 :url-shfmt: https://github.com/mvdan/sh
 :url-typos: https://github.com/crate-ci/typos
+:url-vale: https://vale.sh
 :url-yamllint: https://github.com/adrienverge/yamllint
 
 = David Rabkin's dotfiles
@@ -40,7 +41,7 @@ The project uses Daniel J. Bernstein's build system {url-redo}[`redo`].
 You can install Sergey Matveev's {url-goredo}[`goredo`] implementation.
 `redo lint` applies the following linters to the source files:
 {url-shellcheck}[`shellcheck`], {url-shfmt}[`shfmt`], {url-typos}[`typos`],
-{url-yamllint}[`yamllint`].
+{url-vale}[`vale`], {url-yamllint}[`yamllint`].
 
 == License
 
