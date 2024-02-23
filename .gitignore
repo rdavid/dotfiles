@@ -1,4 +1,10 @@
-.DS_Store
+.github/styles/.vale-config
+.github/styles/alex
+.github/styles/Google
+.github/styles/Joblint
+.github/styles/proselint
+.github/styles/Readability
+.github/styles/write-good
 .redo
 1
 bin
