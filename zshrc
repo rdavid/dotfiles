@@ -50,6 +50,7 @@ PATH="\
 $HOME/.cargo/bin:\
 $HOME/.local/bin:\
 $HOME/bin:\
+$HOME/Library/Python/3.9/bin:\
 $HOME/src/toolbox/app:\
 /usr/local/opt/grep/libexec/gnubin:\
 /usr/local/opt/ruby/bin:\
