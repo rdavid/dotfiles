@@ -58,11 +58,11 @@ $HOME/src/toolbox/app:\
 /usr/local/bin:\
 /usr/local/sbin:\
 /usr/local/go/bin:\
-/usr/sbin:\
-/usr/bin:\
 /opt/homebrew/bin:\
 /opt/homebrew/opt/grep/libexec/gnubin:\
 /opt/local/bin/:\
+/usr/sbin:\
+/usr/bin:\
 /sbin:\
 /bin:\
 "
