@@ -52,6 +52,7 @@ $HOME/.local/bin:\
 $HOME/bin:\
 $HOME/Library/Python/3.9/bin:\
 $HOME/src/toolbox/app:\
+/snap/bin:\
 /usr/local/opt/grep/libexec/gnubin:\
 /usr/local/opt/ruby/bin:\
 /usr/local/lib/ruby/gems/3.2.0/bin:\
