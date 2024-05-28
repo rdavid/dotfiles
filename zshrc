@@ -93,9 +93,9 @@ case $(uname -a) in
 		if [ -d /usr/local/opt/fzf/shell ]; then
 			export FZF_PATH=/usr/local/opt/fzf/shell
 			PATH="$PATH":/usr/local/opt/fzf/bin
-		elif [ -d /opt/homebrew/Cellar/fzf/0.46.1/shell ]; then
-			export FZF_PATH=/opt/homebrew/Cellar/fzf/0.46.1/shell
-			PATH="$PATH":/opt/homebrew/Cellar/fzf/0.46.1/bin
+		elif [ -d /opt/homebrew/Cellar/fzf/0.52.1/shell ]; then
+			export FZF_PATH=/opt/homebrew/Cellar/fzf/0.52.1/shell
+			PATH="$PATH":/opt/homebrew/Cellar/fzf/0.52.1/bin
 		else
 			printf >&2 'Unable to find FZF_PATH for Darwin.\n'
 		fi
