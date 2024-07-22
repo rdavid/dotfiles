@@ -2,9 +2,12 @@
 anual = "anual"
 doas = "doas"
 earch = "earch"
+fnd = "fnd"
 ist = "ist"
+odf = "odf"
 ove = "ove"
 windo = "windo"
+wrk = "wrk"
 
 [files]
 extend-exclude = ["install.rb"]
