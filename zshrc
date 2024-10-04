@@ -55,11 +55,10 @@ $HOME/src/toolbox/app:\
 /snap/bin:\
 /usr/local/opt/grep/libexec/gnubin:\
 /usr/local/opt/ruby/bin:\
-/usr/local/lib/ruby/gems/3.2.0/bin:\
 /usr/local/bin:\
 /usr/local/sbin:\
 /usr/local/go/bin:\
-/opt/homebrew/bin:\
+/opt/homebrew/bin:\§
 /opt/homebrew/opt/grep/libexec/gnubin:\
 /opt/local/bin/:\
 /usr/sbin:\
@@ -67,6 +66,7 @@ $HOME/src/toolbox/app:\
 /sbin:\
 /bin:\
 "
+command -v gem >/dev/null 2>&1 && PATH=$(gem environment gemdir)/bin:$PATH
 command -v go >/dev/null 2>&1 && PATH=$PATH:$(go env GOPATH)/bin
 export PATH
 
