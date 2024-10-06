@@ -130,8 +130,8 @@ module MacOS
         gpg-suite hadolint ilya-birman-typography-layout iterm2 google-chrome
         keepassxc keepingyouawake launchbar librsync linearmouse lolcat
         microsoft-remote-desktop mpv nmap nvalt plex plexamp podman poppler
-        pygments spectacle spotify sublime-text telegram tmuxp vanilla
-        virtualbox visual-studio-code watch whatsapp xquartz
+        pygments spectacle spotify sublime-text telegram tmuxp typos-cli
+        vanilla virtualbox visual-studio-code watch whatsapp xquartz
       ]
     ).flatten!
       .map! { |i| DIC[i.to_sym].nil? ? i : DIC[i.to_sym] }
