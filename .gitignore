@@ -17,6 +17,7 @@ lint
 mc/ini
 mc/mc
 node_modules
+ohmyzsh
 oh-my-zsh
 package-lock.json
 tags
