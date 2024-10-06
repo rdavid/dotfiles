@@ -10,4 +10,4 @@ windo = "windo"
 wrk = "wrk"
 
 [files]
-extend-exclude = ["install.rb"]
+extend-exclude = ["install.rb","ohmyzsh"]
