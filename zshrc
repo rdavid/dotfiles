@@ -1,6 +1,6 @@
 # shellcheck shell=sh
 # vi:et lbr noet sw=2 ts=2 tw=79 wrap
-# Copyright 2016-2024 David Rabkin
+# Copyright 2016-2025 David Rabkin
 
 # Cool man pager, viewer and editor.
 export \
@@ -94,9 +94,9 @@ case $(uname -a) in
 		if [ -d /usr/local/opt/fzf/shell ]; then
 			export FZF_PATH=/usr/local/opt/fzf/shell
 			PATH="$PATH":/usr/local/opt/fzf/bin
-		elif [ -d /opt/homebrew/Cellar/fzf/0.57.0/shell ]; then
-			export FZF_PATH=/opt/homebrew/Cellar/fzf/0.57.0/shell
-			PATH="$PATH":/opt/homebrew/Cellar/fzf/0.57.0/bin
+		elif [ -d /opt/homebrew/Cellar/fzf/0.58.0/shell ]; then
+			export FZF_PATH=/opt/homebrew/Cellar/fzf/0.58.0/shell
+			PATH="$PATH":/opt/homebrew/Cellar/fzf/0.58.0/bin
 		else
 			printf >&2 'Unable to find FZF_PATH for Darwin.\n'
 		fi
