@@ -3,7 +3,7 @@
 :!toc-title:
 // URLs:
 :url-cv: http://cv.rabkin.co.il
-:url-goredo: http://www.goredo.cypherpunks.ru/Install.html
+:url-goredo: http://www.goredo.cypherpunks.su/Install.html
 :url-license: https://github.com/rdavid/dotfiles/blob/master/LICENSE
 :url-redo: http://cr.yp.to/redo.html
 :url-shellcheck: https://github.com/koalaman/shellcheck
