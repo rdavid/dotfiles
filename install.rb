@@ -57,10 +57,10 @@ class OS
 
     # Packages without Xorg to install.
     @pkgs = %w[
-      atop bat base64 bfs bottom boxes cairo cmake cmatrix cmus cowsay cppcheck
-      curl ctags dos2unix eza f3 fdupes ffmpeg figlet fortune fzf gawk
-      git-delta gnupg goredo hadolint handbrake htop imagemagick jq lazydocker
-      lazygit librsync-dev lynx mkvtoolnix mosh most ncdu neofetch nnn node npm
+      atop bat base64 bfs boxes cairo cmake cmatrix cmus cowsay cppcheck curl
+      ctags dos2unix eza f3 fdupes ffmpeg figlet fortune fzf gawk git-delta
+      gnupg goredo hadolint handbrake htop imagemagick jq lazydocker lazygit
+      librsync-dev lynx mkvtoolnix mosh most ncdu neofetch nnn node npm
       pinentry python3 python-is-python3 qrencode ripgrep ruby-dev shellcheck
       shfmt syncthing thefuck tmux tree vifm vim vivid wget zsh
       zsh-syntax-highlighting yamllint yq
@@ -592,7 +592,7 @@ class Installer
     # Installs Python packages. rdiff_backup depends on wheel. speedtest-cli
     # depends on matplotlib.
     %w[
-      configobj click matplotlib pss pyotp pyperclip rdiff_backup s_tui
+      configobj click glances matplotlib pss pyotp pyperclip rdiff_backup s_tui
       speedtest-cli tmuxp wheel yt-dlp
     ].each do |p|
       chk = "python3 -c \"help('modules');\" | grep #{p} | wc -l | xargs"
