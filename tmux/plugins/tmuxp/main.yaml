@@ -4,7 +4,7 @@ start_directory: $HOME
 windows:
   - window_name: mon
     panes:
-      - btm
+      - glances
   - window_name: sup
     layout: tiled
     panes:
