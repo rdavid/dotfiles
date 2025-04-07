@@ -1,6 +1,6 @@
 # shellcheck shell=sh
 # vi:et lbr noet sw=2 ts=2 tw=79 wrap
-# Copyright 2024 David Rabkin
+# Copyright 2024-2025 David Rabkin
 redo-ifchange \
 	./*.do \
 	./install \
@@ -10,7 +10,7 @@ redo-ifchange \
 
 # shellcheck disable=SC2034 # Variable appears unused.
 readonly \
-	BASE_APP_VERSION=0.9.20240224 \
+	BASE_APP_VERSION=0.9.20250408 \
 	BASE_MIN_VERSION=0.9.20231212 \
 	BSH=/usr/local/bin/base.sh
 [ -r "$BSH" ] || {
@@ -21,7 +21,7 @@ set -- "$@" --quiet
 
 # shellcheck disable=SC1090 # File not following.
 . "$BSH"
-cmd_exists shellcheck && shellcheck ./*.do install
+cmd_exists shellcheck && shellcheck ./*.do install zshrc
 cmd_exists shfmt && shfmt -d ./*.do install
 cmd_exists typos && typos
 cmd_exists vale && {

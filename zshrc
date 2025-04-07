@@ -40,10 +40,21 @@ export CDPATH=:~
 # shellcheck disable=SC3030 # Arrays are undefined.
 export plugins=(
 	brew catimg colored-man-pages colorize common-aliases compleat docker
-	docker-compose gem git git-extras git-flow git-prompt github golang history
-	macos pip python rsync ruby sudo tmux vi-mode web-search yarn z
+	docker-compose gem git git-extras git-flow github golang history macos pip
+	python rsync ruby sudo tmux vi-mode web-search yarn z
 )
 autoload zmv
+
+# It's a local variable.
+GITSTATUS="$ZSH"/custom/plugins/gitstatus/gitstatus.prompt.zsh
+
+# shellcheck disable=SC1090 # File not following.
+[ -f "$GITSTATUS" ] && {
+	. "$GITSTATUS"
+
+	# shellcheck disable=SC2016 # Expressions don't expand in single quotes.
+	export RPROMPT='$GITSTATUS_PROMPT'
+}
 
 # Ensure that the GNUbin directory takes precedence over /usr/bin.
 PATH="\
