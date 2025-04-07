@@ -2,7 +2,7 @@
 # frozen_string_literal: true
 
 # vi:et lbr noet sw=2 ts=2 tw=79 wrap
-# Copyright 2017-2024 David Rabkin
+# Copyright 2017-2025 David Rabkin
 #
 # This script creates symlinks from the home directory to any desired
 # dotfiles in ~/dotfiles. Also it installs needfull packages.
@@ -583,6 +583,10 @@ class Installer
       {
         src: 'https://github.com/tmux-plugins/tpm',
         dst: File.join(@ndir, 'tmux', 'plugins', 'tpm')
+      },
+      {
+        src: 'https://github.com/romkatv/gitstatus.git',
+        dst: File.join(@ndir, 'ohmyzsh', 'custom', 'plugins', 'gitstatus')
       }
     ].each do |i|
       Git.clone(i[:src], i[:dst]) unless Dir.exist?(i[:dst])
