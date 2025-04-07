@@ -6,6 +6,7 @@
 export \
 	BAT_PAGER=less \
 	BAT_THEME=zenburn \
+	DISABLE_AUTO_TITLE=true \
 	EDITOR=vim \
 	HIST_STAMPS=%Y%m%d-%H:%M:%S \
 	HISTCONTROL=ignoredups \
