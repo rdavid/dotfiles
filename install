@@ -1,6 +1,6 @@
 #!/bin/sh
 # vi:et lbr noet sw=2 ts=2 tw=79 wrap
-# Copyright 2018-2024 David Rabkin
+# Copyright 2018-2025 David Rabkin
 # This script preparies ruby environment to run install.rb.
 # The script uses local variables which are not POSIX but supported by most
 # shells. See:
@@ -12,7 +12,7 @@
 # Installs shellbase to the current shell session. Packages curl and tar are
 # required.
 shellbase() {
-	local err pkg rel=0.9.20241111
+	local err pkg rel=0.9.20250404
 	local src=https://github.com/rdavid/shellbase/archive/refs/tags/v$rel.tar.gz
 	for pkg in curl tar; do
 		command -v $pkg >/dev/null 2>&1 || {
