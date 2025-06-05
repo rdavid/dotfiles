@@ -66,6 +66,7 @@ $HOME/src/toolbox/app:\
 /snap/bin:\
 /usr/local/opt/grep/libexec/gnubin:\
 /usr/local/opt/ruby/bin:\
+/opt/homebrew/opt/ruby/bin:\
 /usr/local/bin:\
 /usr/local/sbin:\
 /usr/local/go/bin:\
