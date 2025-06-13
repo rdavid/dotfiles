@@ -582,7 +582,7 @@ class Installer
       },
       {
         src: 'https://github.com/romkatv/gitstatus.git',
-        dst: File.join(@ndir, 'ohmyzsh', 'custom', 'plugins', 'gitstatus')
+        dst: File.join(@ndir, 'oh-my-zsh', 'custom', 'plugins', 'gitstatus')
       }
     ].each do |i|
       Git.clone(i[:src], i[:dst]) unless Dir.exist?(i[:dst])
