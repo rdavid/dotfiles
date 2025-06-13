@@ -581,10 +581,6 @@ class Installer
         dst: File.join(@ndir, 'vim', 'bundle', 'syntastic')
       },
       {
-        src: 'https://github.com/tmux-plugins/tpm',
-        dst: File.join(@ndir, 'tmux', 'plugins', 'tpm')
-      },
-      {
         src: 'https://github.com/romkatv/gitstatus.git',
         dst: File.join(@ndir, 'ohmyzsh', 'custom', 'plugins', 'gitstatus')
       }
