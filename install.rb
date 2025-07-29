@@ -131,7 +131,8 @@ module MacOS
         keepassxc keepingyouawake launchbar librsync linearmouse lolcat
         meetingbar microsoft-remote-desktop mpv nmap nvalt plex plexamp podman
         poppler pygments spectacle spotify sublime-text telegram tmuxp
-        typos-cli vanilla virtualbox visual-studio-code watch whatsapp xquartz
+        typos-cli vanilla virtualbox visual-studio-code watch whatsapp
+        wifi-explorer xquartz
       ]
     ).flatten!
       .map! { |i| DIC[i.to_sym].nil? ? i : DIC[i.to_sym] }
