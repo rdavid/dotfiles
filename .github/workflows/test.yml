@@ -1,35 +1,20 @@
+# SPDX-FileCopyrightText: 2025 David Rabkin
+# SPDX-License-Identifier: 0BSD
+# This workflow has limitations -- Ubuntu lacks a redo package
 ---
 name: test
-'on': push
+'on':
+  push:
+    branches:
+      - master
+  pull_request:
+    branches:
+      - master
 env:
   BASE_REL: 0.9.20250404
   BASE_SRC: https://github.com/rdavid/shellbase/archive/refs/tags/v0.9.20250404.tar.gz # yamllint disable-line
 jobs:
-  test-linux:
-    strategy:
-      matrix:
-        os: [ubuntu-22.04, ubuntu-24.04]
-    runs-on: ${{ matrix.os }}
-    steps:
-      - uses: actions/checkout@v4
-      - uses: ludeeus/action-shellcheck@master
-        with:
-          additional_files: >-
-            aliases
-            functions
-            install
-          ignore_paths: >-
-            ./app/z.sh
-            ./fzf.bash
-            ./fzf.zsh
-      - uses: mfinelli/setup-shfmt@v3
-      - run: shfmt -d aliases bashrc functions install zshrc
-      - uses: crate-ci/typos@master
-      - uses: ibiqlik/action-yamllint@v3
-        with:
-          file_or_dir: .github/*.yml .github/workflows/*.yml
-          strict: true
-  test-macos:
+  test:
     strategy:
       matrix:
         os: [macos-13, macos-14, macos-15]
@@ -37,14 +22,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - run: |
-          brew install \
-            asciidoctor \
-            goredo \
-            shellcheck \
-            shfmt \
-            typos-cli \
-            vale \
-            yamllint
+          brew install goredo
           curl --location --silent "$BASE_SRC" |
             tar \
               --directory /usr/local/bin \
