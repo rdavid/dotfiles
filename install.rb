@@ -2,7 +2,8 @@
 # frozen_string_literal: true
 
 # vi:et lbr noet sw=2 ts=2 tw=79 wrap
-# Copyright 2017-2025 David Rabkin
+# SPDX-FileCopyrightText: 2017-2025 David Rabkin
+# SPDX-License-Identifier: 0BSD
 #
 # This script creates symlinks from the home directory to any desired
 # dotfiles in ~/dotfiles. Also it installs needfull packages.
@@ -23,7 +24,7 @@ class Configuration
     ['-p', '--pass pass', 'Password for binary.', :pass]
   ].freeze
 
-  def initialize # rubocop:disable Metrics/AbcSize
+  def initialize
     ARGV << '-h' if ARGV.empty?
     @options = {}
     OptionParser.new do |o|
@@ -47,7 +48,7 @@ end
 class OS
   attr_reader :type, :test, :inst, :prec, :post, :pkgs, :dotf, :conf, :sudo
 
-  def initialize(cfg) # rubocop:disable Metrics/MethodLength
+  def initialize(cfg)
     @type = +''
     @test = +''
     @inst = +''
@@ -96,7 +97,7 @@ class OS
 
   private
 
-  def xconfigure # rubocop:disable Metrics/MethodLength
+  def xconfigure
     @prec << %(
       mkdir -p ~/.fonts
       for f in inconsolata-g.otf pragmatapro.ttf; do
@@ -123,7 +124,7 @@ module MacOS
     atop: ''
   }.freeze
 
-  def self.pkgs(mod) # rubocop:disable Metrics/MethodLength
+  def self.pkgs(mod)
     (
       mod.pkgs << %w[
         aerial appcleaner coreutils disk-inventory-x dropbox docker feh firefox
@@ -138,7 +139,7 @@ module MacOS
       .map! { |i| DIC[i.to_sym].nil? ? i : DIC[i.to_sym] }
   end
 
-  def self.prec(mod) # rubocop:disable Metrics/MethodLength
+  def self.prec(mod)
     mod.prec << %(
       for f in inconsolata-g.otf pragmatapro.ttf; do
         if [[ ! -e ~/Library/Fonts/$f ]]; then
@@ -299,7 +300,7 @@ module Arch
     mod.inst << 'yay -Sy --noconfirm %s'
     mod.test << 'yay -Qs %s >/dev/null 2>&1'
     mod.post << %(
-      #sed -i 's/usr\/share/usr\/lib/g' ~/.i3/i3blocks.conf
+      #sed -i 's/usr/share/usr/lib/g' ~/.i3/i3blocks.conf
     )
   end
 end
@@ -479,10 +480,10 @@ end
 # Defines current OS.
 class CurrentOS
   ARCH = ['/etc/arch-release', '/etc/artix-release'].freeze
-  def self.get # rubocop:disable Metrics/PerceivedComplexity, Metrics/CyclomaticComplexity, Metrics/AbcSize
+  def self.get
     return MacOS if OS.mac?
     return FreeBSD if OS.freebsd?
-    return OpenBSD if OS.host_os =~ /openbsd/
+    return OpenBSD if OS.host_os.include?('openbsd')
     return Arch if OS.linux? && ARCH.detect { |i| File.file?(i) }
     return Debian if OS.linux? && File.file?('/etc/debian_version')
     return RedHat if OS.linux? && File.file?('/etc/redhat-release')
@@ -493,7 +494,6 @@ class CurrentOS
 end
 
 # Actually does the job.
-# rubocop:disable Metrics/ClassLength
 class Installer
   def initialize
     @os = OS.new(Configuration.new).extend(CurrentOS.get)
@@ -556,7 +556,7 @@ class Installer
     system(@os.post) unless @os.post.empty?
 
     # Sets the default shell to zsh if it isn't currently set to zsh.
-    sh = ENV['SHELL']
+    sh = ENV.fetch('SHELL', nil)
     unless sh.eql? `which zsh`.strip
       system('chsh -s $(which zsh)')
       rc = $CHILD_STATUS.exitstatus
@@ -604,9 +604,9 @@ class Installer
     end
 
     # Updates all Python packages.
-    system('pip3 list --outdated --format=freeze |'\
-           'grep -v \'^\-e\' |'\
-           'cut -d = -f 1 |'\
+    system('pip3 list --outdated --format=freeze |' \
+           'grep -v \'^\-e\' |' \
+           'cut -d = -f 1 |' \
            'xargs -n1 pip3 install -U --user')
     puts('Unable to update Python.') unless $CHILD_STATUS.exitstatus.positive?
 
@@ -638,6 +638,5 @@ class Installer
     puts('Bye-bye.')
   end
 end
-# rubocop:enable Metrics/ClassLength
 
 Installer.new.do

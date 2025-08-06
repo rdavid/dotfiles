@@ -1,0 +1,24 @@
+# SPDX-FileCopyrightText: 2025 David Rabkin
+# SPDX-License-Identifier: 0BSD
+---
+AllCops:
+  Exclude:
+    - 'vim/**/*'
+  DisplayCopNames: true
+  TargetRubyVersion: 3.2
+  SuggestExtensions: false
+  NewCops: enable
+Layout/EndOfLine:
+  EnforcedStyle: lf
+Style/EvalWithLocation:
+  Enabled: false
+Metrics/AbcSize:
+  Max: 50
+Metrics/ClassLength:
+  Max: 112
+Metrics/CyclomaticComplexity:
+  Max: 22
+Metrics/PerceivedComplexity:
+  Max: 18
+Metrics/MethodLength:
+  Max: 38
