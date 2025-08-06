@@ -81,7 +81,6 @@ $HOME/src/toolbox/app:\
 command -v gem >/dev/null 2>&1 && PATH=$(gem environment gemdir)/bin:$PATH
 command -v go >/dev/null 2>&1 && PATH=$PATH:$(go env GOPATH)/bin
 export PATH
-export PYTHONPATH="$PYTHONPATH":/usr/local/lib/python3.9/site-packages
 
 # shellcheck disable=SC1090 # File not following.
 for f in \
