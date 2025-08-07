@@ -90,6 +90,8 @@ class OS
         else
           cp "$SRC" "$HST"
         fi
+        curl -L https://sw.kovidgoyal.net/kitty/installer.sh |
+          sh /dev/stdin installer=version-0.35.2
       )
     end
     xconfigure if cfg.xorg?
@@ -110,11 +112,10 @@ class OS
     # Extends with Xorg related packages.
     (@pkgs << %w[
       acpi feh blueman firefox font-awesome google-chrome i3 i3blocks
-      i3lock keepassxc kitty lm_sensors mpv network-manager-applet okular
+      i3lock keepassxc lm_sensors mpv network-manager-applet okular
       sublime-text visual-studio-code xautolock xkill xmodmap xrdp xrandr
     ]).flatten!
     (@dotf << %w[i3 xinitrc]).flatten!
-    (@conf << %w[kitty]).flatten!
   end
 end
 
@@ -163,8 +164,6 @@ module MacOS
     prec(mod)
     mod.sudo << 'sudo'
     mod.type << 'MacOS'
-    # MacOS is installed without Xorg, so some graphic settings are duplicated.
-    mod.conf << 'kitty'
     mod.test << %(
       brew ls --versions %s >/dev/null 2>&1|| \
         brew cask ls --versions %s >/dev/null 2>&1
@@ -221,7 +220,6 @@ module OpenBSD
     'google-chrome': 'chromium',
     handbrake: '',
     imagemagick: 'ImageMagick',
-    kitty: '',
     'sublime-text': '',
     'visual-studio-code': '',
     'zsh-syntax-highlighting': ''
