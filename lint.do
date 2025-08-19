@@ -1,17 +1,18 @@
 # shellcheck shell=sh
 # vi:et lbr noet sw=2 ts=2 tw=79 wrap
-# Copyright 2024-2025 David Rabkin
+# SPDX-FileCopyrightText: 2024-2025 David Rabkin
+# SPDX-License-Identifier: 0BSD
 redo-ifchange \
+	./.github/*.yml \
+	./.github/workflows/*.yml \
 	./*.do \
 	./install \
 	./install.rb \
-	.github/*.yml \
-	.github/workflows/*.yml \
-	README.adoc
+	./README.adoc
 
 # shellcheck disable=SC2034 # Variable appears unused.
 readonly \
-	BASE_APP_VERSION=0.9.20250807 \
+	BASE_APP_VERSION=0.9.20250820 \
 	BASE_MIN_VERSION=0.9.20231212 \
 	BSH=/usr/local/bin/base.sh
 [ -r "$BSH" ] || {
