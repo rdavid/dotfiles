@@ -35,9 +35,8 @@ These are my dotfiles.
 
 [,sh]
 ----
-cd ~ &&
-  git clone https://github.com/rdavid/dotfiles.git &&
-  cd ./dotfiles &&
+git clone https://github.com/rdavid/dotfiles.git ~/dotfiles &&
+  cd ~/dotfiles &&
   ./install
 ----
 
