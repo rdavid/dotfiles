@@ -6,14 +6,14 @@ redo-ifchange \
 	./.github/*.yml \
 	./.github/workflows/*.yml \
 	./*.do \
+	./.rubocop.yml \
 	./install \
 	./install.rb \
 	./README.adoc
 
 # shellcheck disable=SC2034 # Variable appears unused.
 readonly \
-	BASE_APP_VERSION=0.9.20250823 \
-	BASE_MIN_VERSION=0.9.20231212 \
+	BASE_APP_VERSION=0.9.20250903 \
 	BSH=/usr/local/bin/base.sh
 [ -r "$BSH" ] || {
 	printf >&2 Install\ Shellbase.\\n
@@ -23,6 +23,7 @@ set -- "$@" --quiet
 
 # shellcheck disable=SC1090 # File not following.
 . "$BSH"
+cmd_exists actionlint && actionlint
 cmd_exists rubocop && rubocop
 cmd_exists shellcheck && shellcheck ./*.do ./install ./zshrc
 cmd_exists shfmt && shfmt -d ./*.do ./install ./zshrc
@@ -31,7 +32,11 @@ cmd_exists vale && {
 	vale sync
 	vale ./README.adoc
 }
-cmd_exists yamllint && yamllint ./.github/*.yml ./.github/workflows/*.yml
+cmd_exists yamllint &&
+	yamllint \
+		./.github/*.yml \
+		./.github/workflows/*.yml \
+		./.rubocop.yml
 
 # Gracefully handle missing last tool without failing the script.
 :
