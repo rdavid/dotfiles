@@ -1,7 +1,11 @@
 # shellcheck shell=sh
 # vi:et lbr noet sw=2 ts=2 tw=79 wrap
-# Copyright 2019-2024 David Rabkin
+# Copyright 2019-2025 David Rabkin
 # shellcheck disable=SC3043,SC1091 # local is undefined.
+[ -r /usr/local/bin/base.sh ] || {
+	printf >&2 Install\ Shellbase.\\n
+	return 1
+}
 . base.sh
 
 # Runs the given command and then plays a sound to signal completion.
