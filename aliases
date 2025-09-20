@@ -58,10 +58,11 @@ rsync \
 alias cmatrix='cmatrix -a -b -u 6 -C blue'
 if cmd_exists brew; then
 	alias bu='\
+brew update-reset && \
 brew update && \
 brew upgrade && \
 brew upgrade --cask --greedy && \
-brew cleanup\
+brew cleanup --prune=all\
 '
 fi
 if cmd_exists bfs; then
