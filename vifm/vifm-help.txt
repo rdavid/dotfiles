@@ -2188,7 +2188,7 @@ Commands
 	      decreasing option value, removing sub-values.
 
        Where <expr> could be a single-quoted string, double-quoted string, an
-       environment variable, function call or a concatanation of any of them
+       environment variable, function call or a concatenation of any of them
        in any order using the '.' operator.  Any whitespace is ignored.
 
 						:locate
