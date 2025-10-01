@@ -39,9 +39,9 @@ export CDPATH=:~
 # Add wisely, as too many plugins slow down shell startup.
 # shellcheck disable=SC3030 # Arrays are undefined.
 export plugins=(
-	brew catimg colored-man-pages colorize common-aliases compleat docker
-	docker-compose gem git git-extras git-flow github golang history macos pip
-	python rsync ruby sudo tmux vi-mode web-search yarn z
+	brew catimg colored-man-pages colorize common-aliases docker docker-compose
+	gem git git-extras git-flow github golang history macos pip python rsync
+	ruby sudo tmux vi-mode web-search yarn z
 )
 autoload zmv
 

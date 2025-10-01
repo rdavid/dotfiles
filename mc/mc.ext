@@ -85,7 +85,7 @@
 #	instead (i.e. no piping, so it is different to %view cat %f)
 #	%view may be directly followed by {} with a list of any of
 #	ascii (Ascii mode), hex (Hex mode), nroff (color highlighting for
-#	text using backspace for bold and underscore) and unform
+#	text using backspace for bold and underscore) and inform
 #	(no highlighting for nroff sequences) separated by commas.
 #
 # %var -> You use it like this: %var{VAR:default}.  This macro will expand
