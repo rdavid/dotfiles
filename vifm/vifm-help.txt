@@ -982,13 +982,13 @@ Command line Mode
 Pasting special values
        The shortcuts listed below insert specified values into current cursor
        position.  Last key of every shortcut references value that it inserts:
-	 - c - [c]urrent file
+	 - c - current file
 	 - d - [d]irectory path
 	 - e - [e]xtension of a file name
 	 - r - [r]oot part of a file name
 	 - t - [t]ail part of directory path
 
-	 - a - [a]utomatic filter
+	 - a - automatic filter
 	 - m - [m]anual filter
 	 - = - local filter, which is bound to "=" in normal mode
 
