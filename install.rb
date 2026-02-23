@@ -2,7 +2,7 @@
 # frozen_string_literal: true
 
 # vi:et lbr noet sw=2 ts=2 tw=79 wrap
-# SPDX-FileCopyrightText: 2017-2025 David Rabkin
+# SPDX-FileCopyrightText: 2017-2026 David Rabkin
 # SPDX-License-Identifier: 0BSD
 #
 # This script creates symlinks from the home directory to any desired
@@ -137,7 +137,7 @@ module MacOS
         wifi-explorer xquartz
       ]
     ).flatten!
-      .map! { |i| DIC[i.to_sym].nil? ? i : DIC[i.to_sym] }
+     .map! { |i| DIC[i.to_sym].nil? ? i : DIC[i.to_sym] }
   end
 
   def self.prec(mod)
@@ -188,7 +188,7 @@ module FreeBSD
         py36-pip py36-setuptools rubygem-lolcat unzip zip
       ]
     ).flatten!
-      .map! { |i| DIC[i.to_sym].nil? ? i : DIC[i.to_sym] }
+     .map! { |i| DIC[i.to_sym].nil? ? i : DIC[i.to_sym] }
   end
 
   def self.prec(mod)
@@ -231,7 +231,7 @@ module OpenBSD
         coreutils py-pip terminator
       ]
     ).flatten!
-      .map! { |i| DIC[i.to_sym].nil? ? i : DIC[i.to_sym] }
+     .map! { |i| DIC[i.to_sym].nil? ? i : DIC[i.to_sym] }
   end
 
   def self.prec(mod)
@@ -275,7 +275,7 @@ module Arch
         alsa-utils lolcat python-pip
       ]
     ).flatten!
-      .map! { |i| DIC[i.to_sym].nil? ? i : DIC[i.to_sym] }
+     .map! { |i| DIC[i.to_sym].nil? ? i : DIC[i.to_sym] }
   end
 
   def self.prec(mod)
@@ -325,7 +325,7 @@ module Debian
         lolcat python3-pip net-tools
       ]
     ).flatten!
-      .map! { |i| DIC[i.to_sym].nil? ? i : DIC[i.to_sym] }
+     .map! { |i| DIC[i.to_sym].nil? ? i : DIC[i.to_sym] }
   end
 
   def self.prec(mod)
@@ -375,7 +375,7 @@ module RedHat
         librsync-devel lolcat python3-devel util-linux-user
       ]
     ).flatten!
-      .map! { |i| DIC[i.to_sym].nil? ? i : DIC[i.to_sym] }
+     .map! { |i| DIC[i.to_sym].nil? ? i : DIC[i.to_sym] }
   end
 
   def self.rpmfusion(mod)
@@ -455,7 +455,7 @@ module Alpine
         linux-headers musl-dev python-dev py-pip
       ]
     ).flatten!
-      .map! { |i| DIC[i.to_sym].nil? ? i : DIC[i.to_sym] }
+     .map! { |i| DIC[i.to_sym].nil? ? i : DIC[i.to_sym] }
   end
 
   def self.prec(mod)
