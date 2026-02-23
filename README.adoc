@@ -18,7 +18,7 @@
 :url-vale: https://vale.sh
 :url-yamllint: https://github.com/adrienverge/yamllint
 
-= Dotfiles
+= dotfiles
 
 // The width is set to 72 characters, and the height is 7 lines. An ASCII art
 // generator is used with the specific font Roman:
