@@ -1,12 +1,12 @@
 #!/bin/sh
 # vi:et lbr noet sw=2 ts=2 tw=79 wrap
 # Copyright 2018-2026 David Rabkin
-# This script preparies ruby environment to run install.rb.
-# The script uses local variables which are not POSIX but supported by most
+# This script prepares the Ruby environment to run install.rb.
+# Uses local variables that are not POSIX, but are supported by most
 # shells. See:
 #  https://stackoverflow.com/q/18597697
 # shellcheck disable=SC3043 # Uses local variables.
-# Uses Unix shell framework shellbase:
+# Uses the shellbase Unix shell framework:
 #  https://github.com/rdavid/shellbase/
 
 # Installs shellbase to the current shell session. Packages curl and tar are
@@ -37,7 +37,7 @@ shellbase() {
 	log shellbase "$BASE_VERSION" is installed to the current shell session.
 }
 
-# shellcheck disable=SC1091,SC2015 # File not following, A && B || C.
+# shellcheck disable=SC1091,SC2015 # File does not follow A && B || C.
 [ -r /usr/local/bin/base.sh ] && . /usr/local/bin/base.sh || shellbase "$@"
 platform="$(uname)"
 readonly \
@@ -45,7 +45,7 @@ readonly \
 	platform \
 	pkgs=ruby
 
-# Tests to see if a package is installed.
+# Checks whether a package is installed.
 for p in $pkgs; do
 	cmd_exists "$p" || {
 		if [ "$platform" = Linux ]; then
@@ -67,7 +67,7 @@ for p in $pkgs; do
 	}
 done
 
-# Installs needful Ruby packages.
+# Installs required Ruby packages.
 for g in $gems; do
 	gem list -ie "$g" >/dev/null 2>&1 || {
 		if [ -f /etc/arch-release ]; then
@@ -79,5 +79,5 @@ for g in $gems; do
 	}
 done
 
-# Runs Ruby's install.
+# Runs the Ruby installer script.
 "$(dirname "$0")"/install.rb "$@"
