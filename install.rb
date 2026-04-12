@@ -5,10 +5,10 @@
 # SPDX-FileCopyrightText: 2017-2026 David Rabkin
 # SPDX-License-Identifier: 0BSD
 #
-# This script creates symlinks from the home directory to any desired
-# dotfiles in ~/dotfiles. Also it installs needfull packages.
+# Creates symlinks from the home directory to selected
+# dotfiles in ~/dotfiles. Also installs required packages.
 #
-# For MacOS run without X and with the password for binary:
+# Runs on macOS without Xorg when the binary archive password is provided:
 #  install.rb --no-xorg --pass pass
 
 require 'English'
@@ -17,10 +17,10 @@ require 'fileutils'
 require 'optparse'
 require 'os'
 
-# Handles input parameters.
+# Handles command-line options.
 class Configuration
   DIC = [
-    ['-g', '--[no-]xorg', 'Install X packagest.', :xorg],
+    ['-g', '--[no-]xorg', 'Install X packages.', :xorg],
     ['-p', '--pass pass', 'Password for binary.', :pass]
   ].freeze
 
@@ -44,7 +44,7 @@ class Configuration
   end
 end
 
-# Base class for definition of multiple OS.
+# Base class for multiple OS definitions.
 class OS
   attr_reader :type, :test, :inst, :prec, :post, :pkgs, :dotf, :conf, :sudo
 
@@ -56,7 +56,7 @@ class OS
     @prec = +''
     @sudo = +''
 
-    # Packages without Xorg to install.
+    # Lists packages to install without Xorg.
     @pkgs = %w[
       atop bat base64 bfs boxes cairo checkmake cmake cmatrix cmus cowsay
       cppcheck curl ctags dos2unix eza f3 fdupes ffmpeg figlet fortune fzf gawk
@@ -67,16 +67,16 @@ class OS
       zsh-syntax-highlighting yamllint yq
     ]
 
-    # List of files/folders to symlink in homedir.
+    # Lists files and directories to symlink in the home directory.
     @dotf = %w[
       bash_profile bashrc fzf.bash fzf.zsh gitconfig oh-my-zsh tmux.conf tmux
       vim vimrc zshrc
     ]
 
-    # List of files/folders to symlink in ~/.config.
+    # Lists files and directories to symlink in ~/.config.
     @conf = %w[mc vifm]
 
-    # For MacOS run '--no-xorg --pass'.
+    # Runs on macOS with '--no-xorg --pass'.
     unless cfg.pass.nil?
       @prec << %(
         rm -rf ~/dotfiles/bin
@@ -109,7 +109,8 @@ class OS
       done
       fc-cache -vf
     )
-    # Extends with Xorg related packages.
+
+    # Extends the package list with Xorg-related packages.
     (@pkgs << %w[
       acpi feh blueman firefox font-awesome google-chrome i3 i3blocks
       i3lock keepassxc lm_sensors mpv network-manager-applet okular
