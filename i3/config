@@ -1,5 +1,6 @@
 # vi:ts=2 sw=2 tw=79 et lbr wrap
-# Copyright 2017-2022 David Rabkin
+# SPDX-FileCopyrightText: 2017-2026 David Rabkin
+# SPDX-License-Identifier: 0BSD
 # i3 config file (v4)
 
 # Font for window titles. Will also be used by the bar unless a different font

@@ -1,6 +1,7 @@
 # shellcheck shell=sh
 # vi:et lbr noet sw=2 ts=2 tw=79 wrap
-# Copyright 2019-2024 David Rabkin
+# SPDX-FileCopyrightText: 2019-2026 David Rabkin
+# SPDX-License-Identifier: 0BSD
 
 # Checks whether all commands exits.
 cmd_exists() {

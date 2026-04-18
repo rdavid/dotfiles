@@ -1,6 +1,7 @@
 # shellcheck shell=sh
 # vi:et lbr noet sw=2 ts=2 tw=79 wrap
-# Copyright 2019-2025 David Rabkin
+# SPDX-FileCopyrightText: 2019-2026 David Rabkin
+# SPDX-License-Identifier: 0BSD
 # shellcheck disable=SC3043,SC1091 # local is undefined.
 [ -r /usr/local/bin/base.sh ] || {
 	printf >&2 Install\ Shellbase.\\n
