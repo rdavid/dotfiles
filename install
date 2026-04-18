@@ -61,7 +61,7 @@ for p in $pkgs; do
 		elif [ "$platform" = FreeBSD ]; then
 			sudo pkg install "$p" devel/ruby-gems
 		elif [ "$platform" = OpenBSD ]; then
-			doas pkg_add install "$p"
+			doas pkg_add "$p"
 		fi
 		log "$p" is installed.
 	}
