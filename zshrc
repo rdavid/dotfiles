@@ -1,6 +1,7 @@
 # shellcheck shell=sh
 # vi:et lbr noet sw=2 ts=2 tw=79 wrap
-# Copyright 2016-2026 David Rabkin
+# SPDX-FileCopyrightText: 2016-2026 David Rabkin
+# SPDX-License-Identifier: 0BSD
 
 # Cool man pager, viewer and editor.
 export \

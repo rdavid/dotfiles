@@ -1,6 +1,7 @@
 #!/bin/sh
 # vi:et lbr noet sw=2 ts=2 tw=79 wrap
-# Copyright 2018-2026 David Rabkin
+# SPDX-FileCopyrightText: 2018-2026 David Rabkin
+# SPDX-License-Identifier: 0BSD
 # This script prepares the Ruby environment to run install.rb.
 # Uses local variables that are not POSIX, but are supported by most
 # shells. See:

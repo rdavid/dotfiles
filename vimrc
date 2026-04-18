@@ -1,5 +1,6 @@
 " vi:et lbr noet sw=2 ts=2 tw=79 wrap
-" Copyright 2016-2023 David Rabkin
+" SPDX-FileCopyrightText: 2016-2026 David Rabkin
+" SPDX-License-Identifier: 0BSD
 
 " This must be first, because it changes other options as side effect.
 set nocompatible

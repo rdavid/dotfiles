@@ -1,6 +1,7 @@
 #!/bin/sh -eu
 # vi:ts=2 sw=2 tw=79 et lbr wrap
-# Copyright 2018-2026 David Rabkin
+# SPDX-FileCopyrightText: 2018-2026 David Rabkin
+# SPDX-License-Identifier: 0BSD
 # Merges shell history entries while preserving multiline commands. See:
 #   https://david-kerwick.github.io/2017-01-04-combining-zsh-history-files/
 # shellcheck disable=SC2026 # Word splitting is intentional in this pipeline.
