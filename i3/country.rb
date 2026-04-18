@@ -18,7 +18,13 @@ if !$CHILD_STATUS.success? || str.include?('timed out')
 end
 
 # Extracts the country code.
-val = JSON.parse(str)['country'].downcase
+begin
+  val = JSON.parse(str).fetch('country').downcase
+rescue JSON::ParserError, KeyError, NoMethodError
+  print 'no'
+  exit
+end
+
 case val
 when 'us'
   val = ''
@@ -26,7 +32,7 @@ when 'il'
   val = ''
 when 'ge', 'fr'
   val = ''
-when 'uk'
+when 'gb', 'uk'
   val = ''
 when 'ru'
   val = ''

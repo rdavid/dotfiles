@@ -167,7 +167,7 @@ module MacOS
     mod.type << 'MacOS'
     mod.test << %(
       brew ls --versions %s >/dev/null 2>&1|| \
-        brew cask ls --versions %s >/dev/null 2>&1
+        brew list --cask --versions %s >/dev/null 2>&1
     )
     mod.inst << 'brew install %s || brew install --cask %s'
   end
@@ -239,11 +239,11 @@ module OpenBSD
     mod.prec << %(
       ln -sf ~/.xinitrc ~/.xsession
       doas rcctl enable xenodm
-      cd ~ && git clone git://github.com/tghelew/i3blocks
+      cd ~ && git clone https://github.com/tghelew/i3blocks
       cd i3blocks && doas pkg_add gmake
       gmake clean all
       doas gmake install
-      cd .. && rm -rf ~/3blocks
+      cd .. && rm -rf ~/i3blocks
     )
   end
 
@@ -281,7 +281,7 @@ module Arch
 
   def self.prec(mod)
     mod.prec << %(
-      if [ ! $(command -v yay >/dev/null 2>&1) ]; then
+      if ! command -v yay >/dev/null 2>&1; then
         sudo pacman -Sy --noconfirm base-devel
         git clone https://aur.archlinux.org/yay.git /tmp/yay
         cd /tmp/yay
