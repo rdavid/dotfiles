@@ -50,10 +50,14 @@ alias src-tmux="tmux source-file $HOME/.tmux.conf"
 alias src="source $HOME/.zshrc"
 alias rsync='\
 rsync \
+--append-verify \
+--archive \
+--compress \
 --human-readable \
---progress \
+--info=progress2 \
+--partial \
 --recursive \
---timeout=60 \
+--timeout=300 \
 --verbose\
 '
 alias cmatrix='cmatrix -a -b -u 6 -C blue'
