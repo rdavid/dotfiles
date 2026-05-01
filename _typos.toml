@@ -13,6 +13,7 @@ ove = "ove"
 typ = "typ"
 windo = "windo"
 wrk = "wrk"
+ype = "ype"
 
 [files]
 extend-exclude = ["install.rb","ohmyzsh"]
