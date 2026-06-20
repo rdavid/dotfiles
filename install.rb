@@ -627,7 +627,7 @@ class Installer
       gtop
     ].each do |p|
       system("npm list -g #{p}")
-      next unless $CHILD_STATUS.exitstatus
+      next if $CHILD_STATUS.exitstatus.zero?
 
       system("#{sudo} npm install #{p}")
       puts("Unable to install #{p}.") if $CHILD_STATUS.exitstatus.positive?
