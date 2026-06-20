@@ -21,14 +21,17 @@ beep() {
 calc() {
 	local res
 	res="$(printf 'scale=10;%s\n' "$*" | bc --mathlib | tr -d '\\\n')"
-	if [ "$res" = \*.\* ]; then
+	case "$res" in
+	*.*)
 		printf %s "$res" |
 			sed -e 's/^\./0./' `# add "0" for cases like ".5"` \
 				-e 's/^-\./-0./' `# add "0" for cases like "-.5"` \
 				-e 's/0*$//;s/\.$//' # remove trailing zeros
-	else
+		;;
+	*)
 		printf %s "$res"
-	fi
+		;;
+	esac
 	printf \\n
 }
 
