@@ -6,6 +6,7 @@ name: vale
   pull_request:
   push:
     branches: [master]
+  workflow_dispatch:
 permissions:
   contents: read
   checks: write
@@ -19,7 +20,7 @@ jobs:
     timeout-minutes: 15
     steps:
       - uses: actions/checkout@v7.0.0
-      - run: sudo apt-get install asciidoctor
+      - run: sudo apt-get install --yes asciidoctor
       - uses: errata-ai/vale-action@2.1.2
         with:
           fail_on_error: true
