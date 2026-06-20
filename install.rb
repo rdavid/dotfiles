@@ -559,7 +559,7 @@ class Installer
     unless sh.eql? `which zsh`.strip
       system('chsh -s $(which zsh)')
       rc = $CHILD_STATUS.exitstatus
-      puts("Unable to switch #{sh} to zsh.") unless rc.positive?
+      puts("Unable to switch #{sh} to zsh.") if rc.positive?
     end
 
     # Clones repositories out from GitHub.
@@ -599,7 +599,7 @@ class Installer
       next if `#{chk}`.strip.eql? '1'
 
       system("pip3 install --user #{p}")
-      puts("Unable to install #{p}.") unless $CHILD_STATUS.exitstatus.positive?
+      puts("Unable to install #{p}.") if $CHILD_STATUS.exitstatus.positive?
     end
 
     # Updates all Python packages.
@@ -607,7 +607,7 @@ class Installer
            'grep -v \'^\-e\' |' \
            'cut -d = -f 1 |' \
            'xargs -n1 pip3 install -U --user')
-    puts('Unable to update Python.') unless $CHILD_STATUS.exitstatus.positive?
+    puts('Unable to update Python.') if $CHILD_STATUS.exitstatus.positive?
 
     # Installs Ruby packages.
     %w[
@@ -617,10 +617,10 @@ class Installer
       next if `#{chk}`.strip.eql? 'true'
 
       system("#{sudo} gem install #{p}")
-      puts("Unable to install #{p}.") unless $CHILD_STATUS.exitstatus.positive?
+      puts("Unable to install #{p}.") if $CHILD_STATUS.exitstatus.positive?
     end
     system("#{sudo} update_rubygems && #{sudo} gem update --system")
-    puts('Unable to update Ruby.') unless $CHILD_STATUS.exitstatus.positive?
+    puts('Unable to update Ruby.') if $CHILD_STATUS.exitstatus.positive?
 
     # Installs NoJS packages.
     %w[
@@ -630,10 +630,10 @@ class Installer
       next unless $CHILD_STATUS.exitstatus
 
       system("#{sudo} npm install #{p}")
-      puts("Unable to install #{p}.") unless $CHILD_STATUS.exitstatus.positive?
+      puts("Unable to install #{p}.") if $CHILD_STATUS.exitstatus.positive?
     end
     system("#{sudo} npm update")
-    puts('Unable to update NodeJS.') unless $CHILD_STATUS.exitstatus.positive?
+    puts('Unable to update NodeJS.') if $CHILD_STATUS.exitstatus.positive?
     puts('Bye-bye.')
   end
 end
