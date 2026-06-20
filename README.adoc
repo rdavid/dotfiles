@@ -42,8 +42,7 @@ toc::[]
 
 == About
 
-Hi, I'm {url-cv}[David Rabkin].
-This repository contains my personal dotfiles.
+{url-cv}[David Rabkin] maintains this repository of personal dotfiles.
 
 == Installation
 
@@ -57,7 +56,7 @@ git clone https://github.com/rdavid/dotfiles.git ~/dotfiles &&
 == Test
 
 This project uses Daniel J. Bernstein's build system, {url-redo}[`redo`].
-Sergey Matveev's {url-goredo}[`goredo`] is a compatible implementation.
+Sergey Matveev's {url-goredo}[`goredo`] provides a compatible implementation.
 `redo lint` runs the following linters:
 {url-actionlint}[`actionlint`],
 {url-shellcheck}[`shellcheck`],
@@ -68,5 +67,5 @@ Sergey Matveev's {url-goredo}[`goredo`] is a compatible implementation.
 
 == License
 
-`dotfiles` is copyright {url-cv}[David Rabkin] and is available under the
+{url-cv}[David Rabkin] holds the copyright and releases `dotfiles` under the
 {url-license}[Zero-Clause BSD license].
