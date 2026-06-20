@@ -90,7 +90,7 @@ if __name__ == "__main__":
         print(to_fuzzy_time(time_to_convert.tm_hour,
                             time_to_convert.tm_min,
                             resolution))
-    except:
+    except Exception:
         print("Failed to convert {0} due to {1}".format(time_to_convert,
                                                         exc_info()))
         exit(1)
