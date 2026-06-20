@@ -1,6 +1,6 @@
 # shellcheck shell=sh
 # vi:et lbr noet sw=2 ts=2 tw=79 wrap
-# SPDX-FileCopyrightText: 2024-2025 David Rabkin
+# SPDX-FileCopyrightText: 2024-2026 David Rabkin
 # SPDX-License-Identifier: 0BSD
 redo-ifchange \
 	./.github/*.yml \
@@ -13,7 +13,7 @@ redo-ifchange \
 
 # shellcheck disable=SC2034 # Variable appears unused.
 readonly \
-	BASE_APP_VERSION=0.9.20250903 \
+	BASE_APP_VERSION=0.9.20260620 \
 	BSH=/usr/local/bin/base.sh
 [ -r "$BSH" ] || {
 	printf >&2 Install\ Shellbase.\\n
@@ -25,6 +25,7 @@ set -- "$@" --quiet
 . "$BSH"
 cmd_exists actionlint && actionlint
 cmd_exists rubocop && rubocop
+cmd_exists ruff && ruff check ./app ./i3
 cmd_exists shellcheck && shellcheck ./*.do ./install ./zshrc
 cmd_exists shfmt && shfmt -d ./*.do ./install ./zshrc
 cmd_exists typos && typos
