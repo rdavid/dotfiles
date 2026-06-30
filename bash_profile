@@ -1,7 +1,6 @@
 #!/bin/bash
-if [ -f ~/.bashrc ]; then
-	# shellcheck disable=SC1090 # File not following.
-  source ~/.bashrc
-fi
+# File not following:
+#  shellcheck disable=SC1090
+[ -f ~/.bashrc ] && . ~/.bashrc
 
 export PATH="$HOME/.cargo/bin:$PATH"

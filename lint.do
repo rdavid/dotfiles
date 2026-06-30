@@ -7,13 +7,21 @@ redo-ifchange \
 	./.github/workflows/*.yml \
 	./*.do \
 	./.rubocop.yml \
+	./aliases \
+	./app/lock \
+	./app/merge_history.sh \
+	./bash_profile \
+	./bashrc \
+	./functions \
 	./install \
 	./install.rb \
-	./README.adoc
+	./README.adoc \
+	./xinitrc \
+	./zshrc
 
 # shellcheck disable=SC2034 # Variable appears unused.
 readonly \
-	BASE_APP_VERSION=0.9.20260620 \
+	BASE_APP_VERSION=0.9.20260630 \
 	BSH=/usr/local/bin/base.sh
 [ -r "$BSH" ] || {
 	printf >&2 Install\ Shellbase.\\n
@@ -26,8 +34,30 @@ set -- "$@" --quiet
 cmd_exists actionlint && actionlint
 cmd_exists rubocop && rubocop
 cmd_exists ruff && ruff check ./app ./i3
-cmd_exists shellcheck && shellcheck ./*.do ./install ./zshrc
-cmd_exists shfmt && shfmt -d ./*.do ./install ./zshrc
+cmd_exists shellcheck &&
+	shellcheck \
+		./*.do \
+		./aliases \
+		./app/lock \
+		./app/merge_history.sh \
+		./bash_profile \
+		./bashrc \
+		./functions \
+		./install \
+		./xinitrc \
+		./zshrc
+cmd_exists shfmt &&
+	shfmt -d \
+		./*.do \
+		./aliases \
+		./app/lock \
+		./app/merge_history.sh \
+		./bash_profile \
+		./bashrc \
+		./functions \
+		./install \
+		./xinitrc \
+		./zshrc
 cmd_exists typos && typos
 cmd_exists vale && {
 	vale sync

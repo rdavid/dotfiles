@@ -9,5 +9,8 @@ readonly \
 	TMP=/tmp/screen.png
 . base.sh
 validate_cmd i3lock
-file_exists "$TMP" || { validate_cmd convert; convert "$IMG" "$TMP";}
+file_exists "$TMP" || {
+	validate_cmd convert
+	convert "$IMG" "$TMP"
+}
 i3lock --image="$TMP" --tiling
