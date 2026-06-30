@@ -19,4 +19,17 @@ jobs:
     steps:
       - uses: actions/checkout@v7.0.0
       - uses: mfinelli/setup-shfmt@v4.0.1
-      - run: shfmt -d aliases bashrc functions install zshrc
+      - run: |
+          shfmt -d \
+            aliases \
+            all.do \
+            app/lock \
+            app/merge_history.sh \
+            bash_profile \
+            bashrc \
+            clean.do \
+            functions \
+            install \
+            lint.do \
+            xinitrc \
+            zshrc

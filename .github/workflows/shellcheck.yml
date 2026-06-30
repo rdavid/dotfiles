@@ -22,8 +22,17 @@ jobs:
         with:
           additional_files: >-
             aliases
+            all.do
+            app/lock
+            app/merge_history.sh
+            bash_profile
+            bashrc
+            clean.do
             functions
             install
+            lint.do
+            xinitrc
+            zshrc
           ignore_paths: >-
             ./app/z.sh
             ./fzf.bash
