@@ -9,8 +9,8 @@
 }
 . base.sh
 
-# Runs the given command and then plays a sound to signal completion.
-# Currently, it works on MacOS only.
+# Plays a sound, runs the given command while keeping the machine awake, and
+# plays another sound to signal completion. Works on macOS only.
 beep() {
 	afplay /System/Library/Sounds/Tink.aiff
 	caffeinate "$@" || :
@@ -35,7 +35,8 @@ calc() {
 	printf \\n
 }
 
-# Improves change directory command.
+# Improves the change directory command. Without arguments, it browses
+# directories interactively with fzf.
 cd() {
 	if [ ! "$#" = 0 ]; then
 		builtin cd "$@" || return
@@ -61,21 +62,21 @@ cd() {
 	done
 }
 
-# Selects a docker container to start and attach to.
+# Selects a Docker container to start and attach to.
 da() {
 	local cid
 	cid=$(docker ps -a | sed 1d | fzf -1 -q "$1" | awk '{print $1}')
 	[ -n "$cid" ] && docker start "$cid" && docker attach "$cid"
 }
 
-# Selects a running docker container to stop.
+# Selects a running Docker container to stop.
 ds() {
 	local cid
 	cid=$(docker ps | sed 1d | fzf -q "$1" | awk '{print $1}')
 	[ -n "$cid" ] && docker stop "$cid"
 }
 
-# fkill - kill processes - list only the ones you can kill.
+# Kills selected processes. Lists only the ones the current user can kill.
 fkill() {
 	local pid
 	if [ "$(id -u)" != '0' ]; then
@@ -88,7 +89,7 @@ fkill() {
 	fi
 }
 
-# Git commit browser.
+# Browses Git commits interactively.
 fgit() {
 	cmd_exists fzf git grep head less xargs || return $?
 	git log \

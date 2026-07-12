@@ -3,7 +3,7 @@
 # SPDX-FileCopyrightText: 2019-2026 David Rabkin
 # SPDX-License-Identifier: 0BSD
 
-# Checks whether all commands exits.
+# Checks whether the given command exists.
 cmd_exists() {
 	command -v "$1" >/dev/null 2>&1
 }

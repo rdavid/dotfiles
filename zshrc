@@ -3,7 +3,7 @@
 # SPDX-FileCopyrightText: 2016-2026 David Rabkin
 # SPDX-License-Identifier: 0BSD
 
-# Cool man pager, viewer and editor.
+# Sets the preferred pager, viewer, and editor.
 export \
 	BAT_PAGER=less \
 	BAT_THEME=zenburn \
@@ -15,29 +15,25 @@ export \
 	PAGER=most \
 	VISUAL=vim
 
-# Path to your oh-my-zsh installation.
+# Points to the oh-my-zsh installation.
 export \
 	ZSH="$HOME"/.oh-my-zsh \
 	ZSH_THEME=minimal
 
-# Uncomment the following line to change how often to auto-update (in days).
+# Sets how often oh-my-zsh auto-updates, in days.
 export UPDATE_ZSH_DAYS=30
 
-# Uncomment the following line to display red dots whilst waiting for
-# completion.
+# Displays red dots while waiting for completion.
 export COMPLETION_WAITING_DOTS=true
 GPG_TTY="$(tty)"
 export GPG_TTY
 
-# This is useful if you sometimes type, for example, ‘cd src/bin’ wanting to go
-# to ~/src/bin but you aren't in ~.  If the path doesn't exist in the current
-# directory, cd will try it in ~ as well.
+# Lets cd fall back to ~ when the path does not exist in the current
+# directory. Typing 'cd src/bin' from outside ~ still reaches ~/src/bin.
 export CDPATH=:~
 
-# Which plugins would you like to load? (plugins can be found in
-# ~/.oh-my-zsh/plugins/*). Custom plugins may be added to
-# ~/.oh-my-zsh/custom/plugins/. Example format: plugins=(git textmate ruby)
-# Add wisely, as too many plugins slow down shell startup.
+# Loads the listed oh-my-zsh plugins from ~/.oh-my-zsh/plugins and
+# ~/.oh-my-zsh/custom/plugins. Too many plugins slow down shell startup.
 # shellcheck disable=SC3030 # Arrays are undefined.
 export plugins=(
 	brew catimg colored-man-pages colorize common-aliases docker docker-compose
@@ -46,7 +42,7 @@ export plugins=(
 )
 autoload zmv
 
-# It's a local variable.
+# Defines the path to the optional gitstatus prompt script.
 GITSTATUS="$ZSH"/custom/plugins/gitstatus/gitstatus.prompt.zsh
 
 # shellcheck disable=SC1090 # File not following.
@@ -57,7 +53,7 @@ GITSTATUS="$ZSH"/custom/plugins/gitstatus/gitstatus.prompt.zsh
 	export RPROMPT='$GITSTATUS_PROMPT'
 }
 
-# Ensure that the GNUbin directory takes precedence over /usr/bin.
+# Ensures that the GNUbin directory takes precedence over /usr/bin.
 PATH="\
 $HOME/.cargo/bin:\
 $HOME/.local/bin:\
@@ -159,7 +155,7 @@ bindkey -v
 	command -v startx >/dev/null 2>&1 &&
 	exec startx
 
-# Starts tmux. If inside tmux session then print MOTD.
+# Starts tmux. Prints the MOTD when already inside a tmux session.
 if [ "$TERM" != screen ] &&
 	[ -z "$TMUX" ] &&
 	! test tmux has-session -t main 2>/dev/null; then

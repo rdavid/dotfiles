@@ -46,7 +46,7 @@ readonly \
 	platform \
 	pkgs=ruby
 
-# Checks whether a package is installed.
+# Installs each missing package with the platform's package manager.
 for p in $pkgs; do
 	cmd_exists "$p" || {
 		if [ "$platform" = Linux ]; then
@@ -68,7 +68,7 @@ for p in $pkgs; do
 	}
 done
 
-# Installs required Ruby packages.
+# Installs each missing Ruby gem.
 for g in $gems; do
 	gem list -ie "$g" >/dev/null 2>&1 || {
 		if [ -f /etc/arch-release ]; then

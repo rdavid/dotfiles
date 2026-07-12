@@ -492,7 +492,7 @@ class CurrentOS
   end
 end
 
-# Actually does the job.
+# Performs the installation.
 class Installer
   def initialize
     @os = OS.new(Configuration.new).extend(CurrentOS.get)
@@ -501,14 +501,15 @@ class Installer
   end
 
   def do # rubocop:disable Metrics/PerceivedComplexity, Metrics/CyclomaticComplexity, Metrics/AbcSize, Metrics/MethodLength
-    # Sort should be first, reject! returns nil if there is no empty.
+    # Sorts before rejecting since reject! returns nil when nothing is
+    # removed.
     @os.pkgs.sort!.reject!(&:empty?)
     puts("Hello #{@os.type}: #{@os.pkgs}: #{@os.dotf}: #{@os.conf}.")
 
     # Runs pre-install commands.
     system(@os.prec) unless @os.prec.empty?
 
-    # Install packages.
+    # Installs packages.
     @os.pkgs.each do |p|
       # Tests if a package is installed.
       system(@os.test.gsub('%s', p))
@@ -522,12 +523,11 @@ class Installer
       end
     end
 
-    # Creates directory for existing dot files.
+    # Creates a directory for existing dotfiles.
     FileUtils.mkdir_p(@odir)
 
-    # Moves any existing dotfiles in homedir to dotfiles_old directory,
-    # then creates symlinks from the homedir to any files in the ~/dotfiles
-    # directory specified in $files.
+    # Moves existing dotfiles from the home directory to the backup
+    # directory, then symlinks the selected files from ~/dotfiles.
     @os.dotf.each do |f|
       src = File.join(Dir.home, ".#{f}")
       dst = File.join(@odir, ".#{f}")
@@ -541,7 +541,7 @@ class Installer
     # Prevents mc link error.
     FileUtils.mkdir_p(File.join(Dir.home, '.config'))
 
-    # Handles ~/.config in similar way.
+    # Handles ~/.config in a similar way.
     FileUtils.mkdir_p(File.join(@odir, '.config'))
     @os.conf.each do |f|
       src = File.join(Dir.home, '.config', f)
@@ -554,7 +554,7 @@ class Installer
     end
     system(@os.post) unless @os.post.empty?
 
-    # Sets the default shell to zsh if it isn't currently set to zsh.
+    # Sets the default shell to zsh unless it already is.
     sh = ENV.fetch('SHELL', nil)
     unless sh.eql? `which zsh`.strip
       system('chsh -s $(which zsh)')
@@ -562,7 +562,7 @@ class Installer
       puts("Unable to switch #{sh} to zsh.") if rc.positive?
     end
 
-    # Clones repositories out from GitHub.
+    # Clones repositories from GitHub.
     [
       {
         src: 'https://github.com/w0rp/ale.git',
@@ -622,7 +622,7 @@ class Installer
     system("#{sudo} update_rubygems && #{sudo} gem update --system")
     puts('Unable to update Ruby.') if $CHILD_STATUS.exitstatus.positive?
 
-    # Installs NoJS packages.
+    # Installs NodeJS packages.
     %w[
       gtop
     ].each do |p|
