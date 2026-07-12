@@ -1,4 +1,4 @@
-# SPDX-FileCopyrightText: 2025 David Rabkin
+# SPDX-FileCopyrightText: 2025-2026 David Rabkin
 # SPDX-License-Identifier: 0BSD
 ---
 AllCops:
@@ -11,6 +11,8 @@ AllCops:
 Layout/EndOfLine:
   EnforcedStyle: lf
 Style/EvalWithLocation:
+  Enabled: false
+Style/OneClassPerFile:
   Enabled: false
 Metrics/AbcSize:
   Max: 50
