@@ -3,3 +3,4 @@ dotfiles
 Matveev
 Rabkin
 Sergey
+tmux

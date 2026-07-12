@@ -7,7 +7,7 @@
 :img-test: https://github.com/rdavid/dotfiles/actions/workflows/test.yml/badge.svg
 :url-actionlint: https://github.com/rhysd/actionlint
 :url-cv: http://cv.rabkin.co.il
-:url-goredo: http://www.goredo.cypherpunks.su/Install.html
+:url-goredo: http://www.goredo.stargrave.org/INSTALL.html
 :url-hoc: https://hitsofcode.com/view/github/rdavid/dotfiles?branch=master
 :url-license: https://github.com/rdavid/dotfiles/blob/master/LICENSES/0BSD.txt
 :url-redo: http://cr.yp.to/redo.html
@@ -42,9 +42,13 @@ toc::[]
 
 == About
 
-{url-cv}[David Rabkin] maintains this repository of personal dotfiles.
+{url-cv}[David Rabkin] maintains this repository of personal dotfiles. It
+holds configuration for the shell, Git, tmux, and other everyday tools,
+together with an installer that puts everything in place.
 
 == Installation
+
+Clone the repository and run the installer:
 
 [,sh]
 ----
@@ -55,14 +59,14 @@ git clone https://github.com/rdavid/dotfiles.git ~/dotfiles &&
 
 == Test
 
-This project uses Daniel J. Bernstein's build system, {url-redo}[`redo`].
+The project uses Daniel J. Bernstein's build system, {url-redo}[`redo`].
 Sergey Matveev's {url-goredo}[`goredo`] provides a compatible implementation.
 `redo lint` runs the following linters:
 {url-actionlint}[`actionlint`],
 {url-shellcheck}[`shellcheck`],
 {url-shfmt}[`shfmt`],
 {url-typos}[`typos`],
-{url-vale}[`vale`],
+{url-vale}[`vale`], and
 {url-yamllint}[`yamllint`].
 
 == License
