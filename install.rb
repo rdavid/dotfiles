@@ -76,28 +76,32 @@ class OS
     # Lists files and directories to symlink in ~/.config.
     @conf = %w[mc vifm]
 
-    # Runs on macOS with '--no-xorg --pass'.
-    unless cfg.pass.nil?
-      @prec << %(
-        rm -rf ~/dotfiles/bin
-        unzip -P #{cfg.pass} ~/dotfiles/bin.zip -d ~/dotfiles
-        SRC="$HOME/dotfiles/bin/zsh_history"
-        HST="$HOME/.zsh_history"
-        TMP='/tmp/merged.tmp'
-        if [ -f "$HST" ]; then
-          ~/dotfiles/app/merge_history.sh "$SRC" "$HST" > "$TMP"
-          cp -f "$TMP" "$HST" && rm -f "$TMP"
-        else
-          cp "$SRC" "$HST"
-        fi
-        curl -L https://sw.kovidgoyal.net/kitty/installer.sh |
-          sh /dev/stdin installer=version-0.35.2
-      )
-    end
+    unpack(cfg.pass) unless cfg.pass.nil?
     xconfigure if cfg.xorg?
   end
 
   private
+
+  # Runs on macOS with '--no-xorg --pass'.
+  def unpack(pass)
+    @prec << %(
+      rm -rf ~/dotfiles/bin
+      openssl enc -d -aes-256-cbc -pbkdf2 -iter 600000 \
+        -pass pass:#{pass} -in ~/dotfiles/vol |
+        tar -xf - -C ~/dotfiles
+      SRC="$HOME/dotfiles/bin/zsh_history"
+      HST="$HOME/.zsh_history"
+      TMP='/tmp/merged.tmp'
+      if [ -f "$HST" ]; then
+        ~/dotfiles/app/merge_history.sh "$SRC" "$HST" > "$TMP"
+        cp -f "$TMP" "$HST" && rm -f "$TMP"
+      else
+        cp "$SRC" "$HST"
+      fi
+      curl -L https://sw.kovidgoyal.net/kitty/installer.sh |
+        sh /dev/stdin installer=version-0.35.2
+    )
+  end
 
   def xconfigure
     @prec << %(
