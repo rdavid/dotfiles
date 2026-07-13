@@ -1,0 +1,60 @@
+# SPDX-FileCopyrightText: 2026 David Rabkin
+# SPDX-License-Identifier: 0BSD
+version = 1
+[[annotations]]
+path = [
+	".github/styles/**",
+	".gitignore",
+	".vale.ini",
+	"mc/ini",
+	"mc/mc.ext",
+	"README.adoc",
+]
+precedence = "override"
+SPDX-FileCopyrightText = "2017-2026 David Rabkin"
+SPDX-License-Identifier = "0BSD"
+[[annotations]]
+path = "vol"
+SPDX-FileCopyrightText = "2018-2026 David Rabkin"
+SPDX-License-Identifier = "LicenseRef-proprietary"
+[[annotations]]
+path = "app/z.sh"
+SPDX-License-Identifier = "WTFPL"
+[[annotations]]
+path = "i3/battery.py"
+SPDX-License-Identifier = "GPL-2.0-only"
+[[annotations]]
+path = "vim/autoload/pathogen.vim"
+SPDX-FileCopyrightText = "Tim Pope <http://tpo.pe/>"
+SPDX-License-Identifier = "Vim"
+[[annotations]]
+path = "vim/colors/zenburn.vim"
+SPDX-FileCopyrightText = "Jani Nurminen <slinky@iki.fi>"
+SPDX-License-Identifier = "GPL-1.0-or-later"
+[[annotations]]
+path = [
+	"fzf.bash",
+	"fzf.zsh",
+]
+SPDX-FileCopyrightText = "Junegunn Choi"
+SPDX-License-Identifier = "MIT"
+[[annotations]]
+path = [
+	"vifm/colors/Default.vifm",
+	"vifm/scripts/README",
+	"vifm/vifm-help.txt",
+]
+SPDX-FileCopyrightText = "vifm developers"
+SPDX-License-Identifier = "GPL-2.0-or-later"
+[[annotations]]
+path = "vifm/colors/zenburn_1.vifm"
+SPDX-FileCopyrightText = "vifm-colors contributors"
+SPDX-License-Identifier = "GPL-2.0-only"
+[[annotations]]
+path = "mc/skins/zenburn.ini"
+SPDX-FileCopyrightText = "2012 Dmitry Geurkov <d.geurkov@gmail.com>"
+SPDX-License-Identifier = "LicenseRef-unknown"
+[[annotations]]
+path = "pic/bg.jpg"
+SPDX-FileCopyrightText = "unknown"
+SPDX-License-Identifier = "LicenseRef-unknown"

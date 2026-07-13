@@ -1,4 +1,6 @@
 #!/usr/bin/env python
+# SPDX-FileCopyrightText: 2019-2026 David Rabkin
+# SPDX-License-Identifier: 0BSD
 
 from __future__ import print_function
 from time import localtime

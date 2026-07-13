@@ -1,3 +1,5 @@
+# SPDX-FileCopyrightText: 2018-2026 David Rabkin
+# SPDX-License-Identifier: 0BSD
 [global_config]
   borderless = True
   extra_styling = False
