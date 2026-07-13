@@ -28,6 +28,7 @@ redo-ifchange \
 	./install \
 	./install.rb \
 	./README.adoc \
+	./REUSE.toml \
 	./xinitrc \
 	./zshrc
 BSH=/usr/local/bin/base.sh
@@ -54,6 +55,7 @@ for f in \
 	cmd_runif dash -n "$f"
 	cmd_runif mksh -n "$f"
 done
+cmd_runif reuse lint
 cmd_runif rubocop
 cmd_runif ruff check ./app ./i3
 cmd_runif shellcheck \
@@ -85,4 +87,5 @@ cmd_runif yamllint \
 	./.github/*.yml \
 	./.github/workflows/*.yml \
 	./.rubocop.yml
+cmd_runif zizmor --offline ./.github/
 printf OK
