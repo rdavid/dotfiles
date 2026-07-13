@@ -2,31 +2,40 @@
 # vi: lbr noet sw=2 ts=2 tw=79 wrap
 # SPDX-FileCopyrightText: 2019-2026 David Rabkin
 # SPDX-License-Identifier: 0BSD
-# shellcheck disable=SC3043,SC1091 # local is undefined.
-[ -r /usr/local/bin/base.sh ] || {
-	printf >&2 Install\ Shellbase.\\n
+#
+# Interactive helper functions sourced by bashrc and zshrc.
+#
+# Local is undefined and file is not following:
+#  shellcheck disable=SC3043,SC1090
+BSH=/usr/local/bin/base.sh
+[ -r "$BSH" ] || {
+	printf >&2 'Install Shellbase.\n'
 	return 1
 }
-. base.sh
+. "$BSH"
 
 # Plays a sound, runs the given command while keeping the machine awake, and
 # plays another sound to signal completion. Works on macOS only.
 beep() {
+	cmd_exists afplay caffeinate || return $?
 	afplay /System/Library/Sounds/Tink.aiff
 	caffeinate "$@" || :
 	afplay /System/Library/Sounds/Glass.aiff
 }
 
-# Simple calculator.
+# Simple calculator. Adds a leading zero to results like .5 and -.5, then
+# strips trailing zeros and a trailing dot from the fraction.
 calc() {
+	cmd_exists bc || return $?
 	local res
-	res="$(printf 'scale=10;%s\n' "$*" | bc --mathlib | tr -d '\\\n')"
+	res="$(printf 'scale=10;%s\n' "$*" | bc -l | tr -d '\\\n')"
 	case "$res" in
 	*.*)
 		printf %s "$res" |
-			sed -e 's/^\./0./' `# add "0" for cases like ".5"` \
-				-e 's/^-\./-0./' `# add "0" for cases like "-.5"` \
-				-e 's/0*$//;s/\.$//' # remove trailing zeros
+			sed \
+				-e 's/^\./0./' \
+				-e 's/^-\./-0./' \
+				-e 's/0*$//;s/\.$//'
 		;;
 	*)
 		printf %s "$res"
@@ -36,28 +45,20 @@ calc() {
 }
 
 # Improves the change directory command. Without arguments, it browses
-# directories interactively with fzf.
+# directories interactively with fzf until the selection is cancelled.
+# Ls to grep is intentional:
+#  shellcheck disable=SC2010
 cd() {
-	if [ ! "$#" = 0 ]; then
+	local dir lsd
+	[ $# -eq 0 ] || {
 		builtin cd "$@" || return
 		return
-	fi
+	}
+	cmd_exists fzf || return $?
 	while :; do
-		local dir lsd
-
-		# shellcheck disable=SC2010
 		lsd=$(echo '..' && ls -p | grep '/$' | sed 's;/$;;')
-
-		# shellcheck disable=SC2016,SC3054 # Don't expand, arrays are undefined.
-		dir="$(printf %s\\n "${lsd[@]}" |
-			fzf --reverse --preview '
-					__cd_nxt="$(echo {})";
-					__cd_path="$(echo $(pwd)/${__cd_nxt} | sed "s;//;/;")";
-					echo $__cd_path;
-					echo;
-					ls -p "${__cd_path}";
-				')"
-		[ ! ${#dir} = 0 ] || return 0
+		dir="$(printf %s\\n "$lsd" | fzf --reverse --preview 'ls -p {}')"
+		[ -n "$dir" ] || return 0
 		builtin cd "$dir" >/dev/null 2>&1 || return
 	done
 }
@@ -65,28 +66,27 @@ cd() {
 # Selects a Docker container to start and attach to.
 da() {
 	local cid
-	cid=$(docker ps -a | sed 1d | fzf -1 -q "$1" | awk '{print $1}')
-	[ -n "$cid" ] && docker start "$cid" && docker attach "$cid"
+	cmd_exists docker fzf || return $?
+	cid=$(
+		docker ps -a --format '{{.ID}}\t{{.Names}}\t{{.Status}}' |
+			fzf -1 -q "$1" |
+			awk '{print $1}'
+	)
+	[ -n "$cid" ] || return 0
+	docker start "$cid" && docker attach "$cid"
 }
 
 # Selects a running Docker container to stop.
 ds() {
 	local cid
-	cid=$(docker ps | sed 1d | fzf -q "$1" | awk '{print $1}')
-	[ -n "$cid" ] && docker stop "$cid"
-}
-
-# Kills selected processes. Lists only the ones the current user can kill.
-fkill() {
-	local pid
-	if [ "$(id -u)" != '0' ]; then
-		pid=$(ps -f -u "$(id -u)" | sed 1d | fzf -m | awk '{print $2}')
-	else
-		pid=$(ps -ef | sed 1d | fzf -m | awk '{print $2}')
-	fi
-	if [ "$pid" != '' ]; then
-		echo "$pid" | xargs kill -"${1:-9}"
-	fi
+	cmd_exists docker fzf || return $?
+	cid=$(
+		docker ps --format '{{.ID}}\t{{.Names}}\t{{.Status}}' |
+			fzf -q "$1" |
+			awk '{print $1}'
+	)
+	[ -n "$cid" ] || return 0
+	docker stop "$cid"
 }
 
 # Browses Git commits interactively.
@@ -111,4 +111,18 @@ fgit() {
 			) << FZF-EOF
 			{}
 FZF-EOF"
+}
+
+# Kills selected processes with the given signal, KILL by default. Lists
+# only the ones the current user can kill.
+fkill() {
+	local pid
+	cmd_exists fzf || return $?
+	if [ "$(id -u)" = 0 ]; then
+		pid=$(ps -ef | sed 1d | fzf -m | awk '{print $2}')
+	else
+		pid=$(ps -f -u "$(id -u)" | sed 1d | fzf -m | awk '{print $2}')
+	fi
+	[ -n "$pid" ] || return 0
+	echo "$pid" | xargs kill -"${1:-9}"
 }
