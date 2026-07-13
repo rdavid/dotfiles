@@ -1,25 +1,31 @@
 # SPDX-FileCopyrightText: 2026 David Rabkin
 # SPDX-License-Identifier: 0BSD
 ---
-name: ruff
+name: zizmor
 'on':
   pull_request:
+    paths: &paths
+      - .github/**
   push:
     branches: [master]
+    paths: *paths
   workflow_dispatch:
 permissions:
   contents: read
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+defaults:
+  run:
+    shell: sh
 jobs:
-  ruff:
+  zizmor:
     runs-on: ubuntu-24.04
     timeout-minutes: 15
     steps:
       - uses: actions/checkout@v7.0.0
         with:
           persist-credentials: false
-      - uses: astral-sh/ruff-action@v4.1.0
-        with:
-          src: ./app ./i3
+      - run: pipx run zizmor==1.26.1 .
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}

@@ -1,7 +1,7 @@
 # SPDX-FileCopyrightText: 2026 David Rabkin
 # SPDX-License-Identifier: 0BSD
 ---
-name: ruff
+name: rubocop
 'on':
   pull_request:
   push:
@@ -12,14 +12,16 @@ permissions:
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+defaults:
+  run:
+    shell: sh
 jobs:
-  ruff:
+  rubocop:
     runs-on: ubuntu-24.04
     timeout-minutes: 15
     steps:
       - uses: actions/checkout@v7.0.0
         with:
           persist-credentials: false
-      - uses: astral-sh/ruff-action@v4.1.0
-        with:
-          src: ./app ./i3
+      - run: sudo gem install rubocop
+      - run: rubocop
