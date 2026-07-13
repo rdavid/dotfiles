@@ -14,39 +14,44 @@ if cmd_exists vivid; then
 	export LS_COLORS
 fi
 if cmd_exists eza; then
-	# The order is important.
-	# shellcheck disable=SC2262 # Can't be defined.
-	alias ls=eza --group-directories-first
+	# The order is important. The alias applies to interactive shells only:
+	#  shellcheck disable=SC2262
+	alias ls='eza --group-directories-first'
 	alias l='ls --classify --grid --long'
 else
-	# Detects which `ls` flavor is in use.
-	if ls --color >/dev/null 2>&1; then # GNU `ls`
+	# Detects whether ls takes the GNU or the BSD color flag. The alias does
+	# not apply in the same parsing unit:
+	#  shellcheck disable=SC2263
+	if ls --color >/dev/null 2>&1; then
 		colorflag=--color
-	else # OS X `ls`
+	else
 		colorflag=-G
 	fi
 
-	# The order is important.
-	# shellcheck disable=SC2139
+	# The order is important. The flag expands when defined:
+	#  shellcheck disable=SC2139
 	alias ls="ls $colorflag"
-	alias l=ls -lFh
+	alias l='ls -lFh'
+	unset colorflag
 fi
-alias la=l -a
+alias la='l -a'
 if cmd_exists bat; then
-	alias cat=bat --style=plain
+	alias cat='bat --style=plain'
 fi
 
-# Always enables colored `grep` output.
-alias grep=grep --color=auto
+# Always enables colored grep output.
+alias grep='grep --color=auto'
 alias h=history
-alias untar=tar -zxvf
-alias ipe=curl ipinfo.io/ip
+alias untar='tar -zxvf'
+alias ipe='curl ipinfo.io/ip'
 alias c=clear
 
-# shellcheck disable=SC2139
+# The path expands when defined:
+#  shellcheck disable=SC2139
 alias src-tmux="tmux source-file $HOME/.tmux.conf"
 
-# shellcheck disable=SC2139
+# The path expands when defined:
+#  shellcheck disable=SC2139
 alias src="source $HOME/.zshrc"
 alias rsync='\
 rsync \
@@ -73,6 +78,7 @@ if cmd_exists bfs; then
 	alias find=bfs
 fi
 if cmd_exists python3; then
-	# shellcheck disable=SC2139 # This expands when defined.
-	alias python="$(which python3)"
+	# The path expands when defined:
+	#  shellcheck disable=SC2139
+	alias python="$(command -v python3)"
 fi
