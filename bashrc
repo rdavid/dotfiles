@@ -2,12 +2,16 @@
 # vi: lbr noet sw=2 ts=2 tw=79 wrap
 # SPDX-FileCopyrightText: 2016-2026 David Rabkin
 # SPDX-License-Identifier: 0BSD
-# shellcheck disable=SC1090,SC1091 # File not following.
+#
+# Configures interactive Bash sessions.
+#
+# Files are not following:
+#  shellcheck disable=SC1090,SC1091
 . "$HOME/dotfiles/aliases"
 . "$HOME/dotfiles/functions"
 export EDITOR=vim \
 	HISTCONTROL=ignoreboth \
-	HISTFILESIZE="$HISTSIZE" \
+	HISTFILESIZE=32768 \
 	HISTSIZE=32768 \
 	PAGER=most \
 	VISUAL=vim
