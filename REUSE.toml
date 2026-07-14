@@ -33,13 +33,6 @@ SPDX-FileCopyrightText = "Jani Nurminen <slinky@iki.fi>"
 SPDX-License-Identifier = "GPL-1.0-or-later"
 [[annotations]]
 path = [
-	"fzf.bash",
-	"fzf.zsh",
-]
-SPDX-FileCopyrightText = "Junegunn Choi"
-SPDX-License-Identifier = "MIT"
-[[annotations]]
-path = [
 	"vifm/colors/Default.vifm",
 	"vifm/scripts/README",
 	"vifm/vifm-help.txt",

@@ -31,11 +31,11 @@ jobs:
             bashrc
             clean.do
             functions
+            fzf.bash
+            fzf.zsh
             install
             lint.do
             xinitrc
             zshrc
           ignore_paths: >-
             ./app/z.sh
-            ./fzf.bash
-            ./fzf.zsh

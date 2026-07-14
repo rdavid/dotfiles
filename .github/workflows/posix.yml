@@ -20,6 +20,8 @@ name: posix
       - bash_profile
       - bashrc
       - functions
+      - fzf.bash
+      - fzf.zsh
       - install
       - xinitrc
   push:
@@ -61,6 +63,8 @@ jobs:
             ./bash_profile \
             ./bashrc \
             ./functions \
+            ./fzf.bash \
+            ./fzf.zsh \
             ./install \
             ./xinitrc; do
             "$SH" -n "$f"

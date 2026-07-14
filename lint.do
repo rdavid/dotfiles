@@ -24,6 +24,8 @@ redo-ifchange \
 	./bash_profile \
 	./bashrc \
 	./functions \
+	./fzf.bash \
+	./fzf.zsh \
 	./i3/*.py \
 	./install \
 	./install.rb \
@@ -37,7 +39,7 @@ BSH=/usr/local/bin/base.sh
 	exit 1
 }
 readonly \
-	BASE_APP_VERSION=0.9.20260713 \
+	BASE_APP_VERSION=0.9.20260714 \
 	BASE_MIN_VERSION=0.9.20260707 \
 	BSH
 . "$BSH"
@@ -50,6 +52,8 @@ for f in \
 	./bash_profile \
 	./bashrc \
 	./functions \
+	./fzf.bash \
+	./fzf.zsh \
 	./install \
 	./xinitrc; do
 	cmd_runif dash -n "$f"
@@ -66,6 +70,8 @@ cmd_runif shellcheck \
 	./bash_profile \
 	./bashrc \
 	./functions \
+	./fzf.bash \
+	./fzf.zsh \
 	./install \
 	./xinitrc \
 	./zshrc
@@ -77,6 +83,8 @@ cmd_runif shfmt -d \
 	./bash_profile \
 	./bashrc \
 	./functions \
+	./fzf.bash \
+	./fzf.zsh \
 	./install \
 	./xinitrc \
 	./zshrc
