@@ -31,6 +31,8 @@ jobs:
             bashrc \
             clean.do \
             functions \
+            fzf.bash \
+            fzf.zsh \
             install \
             lint.do \
             xinitrc \
