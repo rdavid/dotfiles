@@ -13,6 +13,7 @@ name: posix
 'on':
   pull_request:
     paths: &paths
+      - .github/workflows/posix.yml
       - '*.do'
       - aliases
       - app/lock

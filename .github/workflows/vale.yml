@@ -23,6 +23,6 @@ jobs:
         with:
           persist-credentials: false
       - run: sudo apt-get install --yes asciidoctor
-      - uses: errata-ai/vale-action@2.1.2
+      - uses: vale-cli/vale-action@2.1.2
         with:
           fail_on_error: true
