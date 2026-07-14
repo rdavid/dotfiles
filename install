@@ -6,19 +6,19 @@
 # Uses local variables that are not POSIX, but are supported by most
 # shells. See:
 #  https://stackoverflow.com/q/18597697
-# shellcheck disable=SC3043 # Uses local variables.
+#  shellcheck disable=SC3043
 # Uses the shellbase Unix shell framework:
 #  https://github.com/rdavid/shellbase/
 
 # Installs shellbase to the current shell session. Packages curl and tar are
 # required.
 shellbase() {
-	local err pkg rel=0.9.20260404
+	local err pkg rel=0.9.20260707
 	local src=https://github.com/rdavid/shellbase/archive/refs/tags/v$rel.tar.gz
 	for pkg in curl tar; do
-		command -v $pkg >/dev/null 2>&1 || {
+		command -v "$pkg" >/dev/null 2>&1 || {
 			err=$?
-			printf >&2 Install\ %s.\\n $pkg
+			printf >&2 'Install %s.\n' "$pkg"
 			exit $err
 		}
 	done
@@ -32,13 +32,14 @@ shellbase() {
 			tar --extract --gzip --to-stdout shellbase-$rel/lib/base.sh
 	)"
 	[ -n "${BASE_VERSION+x}" ] || {
-		printf >&2 No\ shellbase.\\n
+		printf >&2 'No shellbase.\n'
 		exit 1
 	}
 	log shellbase "$BASE_VERSION" is installed to the current shell session.
 }
 
-# shellcheck disable=SC1091,SC2015 # File does not follow A && B || C.
+# File is not following and A && B || C is intentional:
+#  shellcheck disable=SC1091,SC2015
 [ -r /usr/local/bin/base.sh ] && . /usr/local/bin/base.sh || shellbase "$@"
 platform="$(uname)"
 readonly \
@@ -56,11 +57,13 @@ for p in $pkgs; do
 				sudo dnf install --assumeyes "$p"
 			elif [ -f /etc/debian_version ]; then
 				sudo apt-get install --assume-yes "$p"
+			elif [ -f /etc/alpine-release ]; then
+				sudo apk add "$p"
 			fi
 		elif [ "$platform" = Darwin ]; then
 			brew install "$p"
 		elif [ "$platform" = FreeBSD ]; then
-			sudo pkg install "$p" devel/ruby-gems
+			sudo pkg install --yes "$p" devel/ruby-gems
 		elif [ "$platform" = OpenBSD ]; then
 			doas pkg_add "$p"
 		fi
