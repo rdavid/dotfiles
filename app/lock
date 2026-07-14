@@ -2,15 +2,27 @@
 # vi: lbr noet sw=2 ts=2 tw=79 wrap
 # SPDX-FileCopyrightText: 2021-2026 David Rabkin
 # SPDX-License-Identifier: 0BSD
-# shellcheck disable=SC1091,SC2034 # File is sourced dynamically; constant appears unused.
+#
+# Locks the screen with i3lock, converting the wallpaper to PNG once and
+# caching the result. The cache lives in the user directory rather than
+# /tmp, where another user could plant a predictable file.
+#
+# File is sourced dynamically and the constant appears unused:
+#  shellcheck disable=SC1090,SC2034
 readonly \
-	BASE_APP_VERSION=0.9.20221223 \
+	BASE_APP_VERSION=0.9.20260714 \
+	BSH=/usr/local/bin/base.sh \
 	IMG="$HOME"/dotfiles/pic/bg.jpg \
-	TMP=/tmp/screen.png
-. base.sh
-validate_cmd i3lock
-file_exists "$TMP" || {
-	validate_cmd convert
-	convert "$IMG" "$TMP"
+	PNG="${XDG_CACHE_HOME:-$HOME/.cache}"/lock.png
+[ -r "$BSH" ] || {
+	printf >&2 'Install Shellbase.\n'
+	exit 1
 }
-i3lock --image="$TMP" --tiling
+. "$BSH"
+validate_cmd i3lock
+file_exists "$PNG" || {
+	validate_cmd convert
+	mkdir -p "$(dirname "$PNG")"
+	convert "$IMG" "$PNG"
+}
+i3lock --image="$PNG" --tiling
