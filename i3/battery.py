@@ -5,6 +5,7 @@
 #
 # A battery indicator blocklet script for i3blocks
 
+import sys
 from subprocess import check_output
 
 status = check_output(['acpi'], universal_newlines=True)
@@ -43,10 +44,8 @@ else:
     if state == "Discharging":
         time = commasplitstatus[-1].split()[0]
         time = ":".join(time.split(":")[0:2])
-        timeleft = " ({})".format(time)
-    elif state == "Full":
-        fulltext = FA_PLUG + " "
-    elif state == "Unknown":
+        timeleft = f" ({time})"
+    elif state == "Full" or state == "Unknown":
         fulltext = FA_PLUG + " "
 #        fulltext = "<span font='FontAwesome'>\uf128</span> "
     else:
@@ -79,4 +78,4 @@ else:
 print(fulltext)
 print(fulltext)
 if percentleft < 10:
-    exit(33)
+    sys.exit(33)

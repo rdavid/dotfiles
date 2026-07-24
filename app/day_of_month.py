@@ -4,7 +4,7 @@
 # SPDX-License-Identifier: 0BSD
 """Prints the current day of the month for the i3blocks widget."""
 
-from datetime import datetime
+from datetime import datetime, timezone
 
 if __name__ == "__main__":
-  print(datetime.now().strftime("%d "))
+  print(datetime.now(timezone.utc).astimezone().strftime("%d "))
