@@ -47,9 +47,9 @@ toc::[]
 
 == About
 
-{url-cv}[David Rabkin] maintains this repository of personal dotfiles. It
-holds configuration for the shell, Git, tmux, and other everyday tools,
-together with an installer that puts everything in place.
+{url-cv}[David Rabkin] maintains this repository of personal dotfiles.
+It holds settings for the shell, Git, tmux, and other everyday tools, plus
+an installer that sets them all up.
 
 == Installation
 
@@ -64,9 +64,9 @@ git clone https://github.com/rdavid/dotfiles.git ~/dotfiles &&
 
 == Test
 
-The project uses Daniel J. Bernstein's build system, {url-redo}[`redo`].
-Sergey Matveev's {url-goredo}[`goredo`] provides a compatible implementation.
-`redo lint` runs the following linters:
+The project builds with Daniel J. Bernstein's {url-redo}[`redo`].
+Sergey Matveev's {url-goredo}[`goredo`] offers a compatible implementation.
+`redo lint` runs these linters:
 {url-actionlint}[`actionlint`],
 {url-shellcheck}[`shellcheck`],
 {url-shfmt}[`shfmt`],
