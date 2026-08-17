@@ -4,8 +4,13 @@
 name: yamllint
 'on':
   pull_request:
+    paths: &paths
+      - .github/*.yml
+      - .github/workflows/*.yml
+      - .rubocop.yml
   push:
     branches: [master]
+    paths: *paths
   workflow_dispatch:
 permissions:
   contents: read

@@ -4,8 +4,25 @@
 name: shfmt
 'on':
   pull_request:
+    paths: &paths
+      - .github/workflows/shfmt.yml
+      - aliases
+      - all.do
+      - app/lock
+      - app/merge_history.sh
+      - bash_profile
+      - bashrc
+      - clean.do
+      - functions
+      - fzf.bash
+      - fzf.zsh
+      - install
+      - lint.do
+      - xinitrc
+      - zshrc
   push:
     branches: [master]
+    paths: *paths
   workflow_dispatch:
 permissions:
   contents: read

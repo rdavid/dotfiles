@@ -4,8 +4,13 @@
 name: ruff
 'on':
   pull_request:
+    paths: &paths
+      - .github/workflows/ruff.yml
+      - app/*.py
+      - i3/*.py
   push:
     branches: [master]
+    paths: *paths
   workflow_dispatch:
 permissions:
   contents: read

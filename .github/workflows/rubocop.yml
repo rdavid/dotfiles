@@ -4,8 +4,13 @@
 name: rubocop
 'on':
   pull_request:
+    paths: &paths
+      - .github/workflows/rubocop.yml
+      - .rubocop.yml
+      - '**/*.rb'
   push:
     branches: [master]
+    paths: *paths
   workflow_dispatch:
 permissions:
   contents: read
