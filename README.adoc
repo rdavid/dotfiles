@@ -10,6 +10,7 @@
 :url-cv: http://cv.rabkin.co.il
 :url-goredo: http://www.goredo.stargrave.org/INSTALL.html
 :url-hoc: https://hitsofcode.com/view/github/rdavid/dotfiles?branch=master
+:url-install: https://github.com/rdavid/dotfiles/blob/master/install
 :url-license: https://github.com/rdavid/dotfiles/blob/master/LICENSES/0BSD.txt
 :url-redo: http://cr.yp.to/redo.html
 :url-shellcheck: https://github.com/koalaman/shellcheck
@@ -19,7 +20,7 @@
 :url-vale: https://vale.sh
 :url-yamllint: https://github.com/adrienverge/yamllint
 
-= dotfiles
+= Dotfiles
 
 // The width is set to 78 characters, and the height is 7 lines. An ASCII art
 // generator is used with the specific font Roman:
@@ -66,7 +67,7 @@ an installer that sets them all up.
 
 == Installation
 
-Clone the repository and run the installer:
+Clone the repository and run the {url-install}[installer]:
 
 [,sh]
 ----
