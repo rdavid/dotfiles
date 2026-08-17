@@ -15,6 +15,7 @@
 # Variable appears unused and file not following:
 #  shellcheck disable=SC2034,SC1090
 redo-ifchange \
+	./.conform.yaml \
 	./.github/*.yml \
 	./.github/workflows/*.yml \
 	./.rubocop.yml \
@@ -44,6 +45,7 @@ readonly \
 	BSH
 . "$BSH"
 cmd_runif actionlint
+cmd_runif conform enforce --commit-ref HEAD
 for f in \
 	./*.do \
 	./aliases \
