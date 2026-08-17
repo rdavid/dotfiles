@@ -28,8 +28,9 @@ the gitignored `bin/`.
 This repository uses `redo` (or `goredo`) as the task runner.
 
 - `redo all`: run the default target.
-- `redo lint`: run `actionlint`, `dash`, `mksh`, `reuse`, `rubocop`, `ruff`,
-  `shellcheck`, `shfmt`, `typos`, `vale`, `yamllint`, and `zizmor`.
+- `redo lint`: run `actionlint`, `conform`, `dash`, `mksh`, `reuse`,
+  `rubocop`, `ruff`, `shellcheck`, `shfmt`, `typos`, `vale`, `yamllint`, and
+  `zizmor`.
   Linters run through shellbase's `cmd_runif`, so a missing tool is
   skipped rather than failing the build.
 - `./install.rb --no-xorg --pass <pass>`: install on macOS.
@@ -82,6 +83,9 @@ Dependabot uses a seven-day cooldown.
 
 Use Conventional Commits with a meaningful scope, for example
 `chore(lint): ...` or `build(deps): ...`.
+`conform` enforces the header in CI: 72 characters or fewer, lowercase,
+in the imperative mood, and spellchecked against US English, per
+`.conform.yaml`.
 Do not add AI attribution, tool signatures, generated-by trailers, or AI
 co-author metadata to commits, pull requests, issues, or code comments.
 Before committing, update `BASE_APP_VERSION` (date-based, `0.9.YYYYMMDD`)
