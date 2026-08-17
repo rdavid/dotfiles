@@ -34,15 +34,14 @@ redo-ifchange \
 	./REUSE.toml \
 	./xinitrc \
 	./zshrc
-BSH=/usr/local/bin/base.sh
+readonly \
+	BASE_APP_VERSION=0.9.20260817 \
+	BASE_MIN_VERSION=0.9.20260707 \
+	BSH=/usr/local/bin/base.sh
 [ -r "$BSH" ] || {
 	printf >&2 'Install Shellbase.\n'
 	exit 1
 }
-readonly \
-	BASE_APP_VERSION=0.9.20260714 \
-	BASE_MIN_VERSION=0.9.20260707 \
-	BSH
 . "$BSH"
 cmd_runif actionlint
 cmd_runif conform enforce --commit-ref HEAD
