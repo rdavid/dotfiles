@@ -8,17 +8,23 @@
 :url-actionlint: https://github.com/rhysd/actionlint
 :url-conform: https://github.com/siderolabs/conform
 :url-cv: http://cv.rabkin.co.il
+:url-dash: http://gondor.apana.org.au/~herbert/dash/
 :url-goredo: http://www.goredo.stargrave.org/INSTALL.html
 :url-hoc: https://hitsofcode.com/view/github/rdavid/dotfiles?branch=master
 :url-install: https://github.com/rdavid/dotfiles/blob/master/install
 :url-license: https://github.com/rdavid/dotfiles/blob/master/LICENSES/0BSD.txt
+:url-mksh: https://github.com/MirBSD/mksh
 :url-redo: http://cr.yp.to/redo.html
+:url-reuse: https://reuse.software
+:url-rubocop: https://rubocop.org
+:url-ruff: https://docs.astral.sh/ruff
 :url-shellcheck: https://github.com/koalaman/shellcheck
 :url-shfmt: https://github.com/mvdan/sh
 :url-test: https://github.com/rdavid/dotfiles/actions/workflows/test.yml
 :url-typos: https://github.com/crate-ci/typos
 :url-vale: https://vale.sh
 :url-yamllint: https://github.com/adrienverge/yamllint
+:url-zizmor: https://docs.zizmor.sh
 
 = Dotfiles
 
@@ -83,11 +89,17 @@ Sergey Matveev's {url-goredo}[`goredo`] offers a compatible implementation.
 `redo lint` runs these linters:
 {url-actionlint}[`actionlint`],
 {url-conform}[`conform`],
+{url-dash}[`dash`],
+{url-mksh}[`mksh`],
+{url-reuse}[`reuse`],
+{url-rubocop}[`rubocop`],
+{url-ruff}[`ruff`],
 {url-shellcheck}[`shellcheck`],
 {url-shfmt}[`shfmt`],
 {url-typos}[`typos`],
-{url-vale}[`vale`], and
-{url-yamllint}[`yamllint`].
+{url-vale}[`vale`],
+{url-yamllint}[`yamllint`], and
+{url-zizmor}[`zizmor`].
 
 == License
 
