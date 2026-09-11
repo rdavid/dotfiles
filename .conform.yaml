@@ -22,6 +22,7 @@ policies:
       header:
         case: lower
         imperative: true
-        length: 72
+        invalidLastCharacters: .
+        length: 89
       spellcheck:
         locale: US
