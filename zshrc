@@ -13,6 +13,7 @@ export \
 	HISTCONTROL=ignoredups \
 	HISTIGNORE=install:youtube-dl \
 	PAGER=most \
+	RUBYOPT=-W0 \
 	VISUAL=vim
 
 # Points to the oh-my-zsh installation.
