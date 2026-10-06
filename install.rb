@@ -48,6 +48,8 @@ end
 class OS
   attr_reader :type, :test, :inst, :prec, :post, :pkgs, :dotf, :conf, :sudo
 
+  # Sets up the package list, the files and directories to symlink in the home
+  # directory and in ~/.config. The package list excludes Xorg packages.
   def initialize(cfg)
     @type = +''
     @test = +''
@@ -56,7 +58,6 @@ class OS
     @prec = +''
     @sudo = +''
 
-    # Lists packages to install without Xorg.
     @pkgs = %w[
       atop bat base64 bfs boxes cairo checkmake cmake cmatrix cmus cowsay
       cppcheck curl ctags dos2unix eza f3 fdupes ffmpeg figlet fortune fzf gawk
@@ -67,13 +68,11 @@ class OS
       zsh-syntax-highlighting yamllint yq
     ]
 
-    # Lists files and directories to symlink in the home directory.
     @dotf = %w[
       bash_profile bashrc fzf.bash fzf.zsh gitconfig oh-my-zsh tmux.conf tmux
       vim vimrc zshrc
     ]
 
-    # Lists files and directories to symlink in ~/.config.
     @conf = %w[mc vifm]
 
     unpack(cfg.pass) unless cfg.pass.nil?
@@ -103,6 +102,7 @@ class OS
     )
   end
 
+  # Extends the package list with Xorg-related packages.
   def xconfigure
     @prec << %(
       mkdir -p ~/.fonts
@@ -114,7 +114,6 @@ class OS
       fc-cache -vf
     )
 
-    # Extends the package list with Xorg-related packages.
     (@pkgs << %w[
       acpi feh blueman firefox font-awesome google-chrome i3 i3blocks
       i3lock keepassxc lm_sensors mpv network-manager-applet okular
@@ -504,21 +503,25 @@ class Installer
     @odir = File.join(Dir.home, 'dotfiles-old')
   end
 
+  # Runs the whole installation. Sorts the packages before rejecting empty ones
+  # since reject! returns nil when nothing is removed. Runs the pre-install
+  # commands, then installs missing packages. Creates a directory for existing
+  # dotfiles, moves them from the home directory into it, and symlinks the
+  # selected files from ~/dotfiles. Creates ~/.config first to prevent an mc
+  # link error and handles it in a similar way. Sets the default shell to zsh
+  # unless it already is. Clones repositories from GitHub. Installs Python
+  # packages, where rdiff_backup depends on wheel and speedtest-cli depends on
+  # matplotlib, then updates all of them. Installs and updates Ruby and NodeJS
+  # packages.
   def do # rubocop:disable Metrics/PerceivedComplexity, Metrics/CyclomaticComplexity, Metrics/AbcSize, Metrics/MethodLength
-    # Sorts before rejecting since reject! returns nil when nothing is
-    # removed.
     @os.pkgs.sort!.reject!(&:empty?)
     puts("Hello #{@os.type}: #{@os.pkgs}: #{@os.dotf}: #{@os.conf}.")
 
-    # Runs pre-install commands.
     system(@os.prec) unless @os.prec.empty?
 
-    # Installs packages.
     @os.pkgs.each do |p|
-      # Tests if a package is installed.
       system(@os.test.gsub('%s', p))
 
-      # Installs new packages.
       if $CHILD_STATUS.exitstatus.positive?
         puts("Install: #{p}.")
         system(@os.inst.gsub('%s', p))
@@ -527,11 +530,8 @@ class Installer
       end
     end
 
-    # Creates a directory for existing dotfiles.
     FileUtils.mkdir_p(@odir)
 
-    # Moves existing dotfiles from the home directory to the backup
-    # directory, then symlinks the selected files from ~/dotfiles.
     @os.dotf.each do |f|
       src = File.join(Dir.home, ".#{f}")
       dst = File.join(@odir, ".#{f}")
@@ -542,10 +542,8 @@ class Installer
       FileUtils.ln_s(File.join(@ndir, f), src, force: true)
     end
 
-    # Prevents mc link error.
     FileUtils.mkdir_p(File.join(Dir.home, '.config'))
 
-    # Handles ~/.config in a similar way.
     FileUtils.mkdir_p(File.join(@odir, '.config'))
     @os.conf.each do |f|
       src = File.join(Dir.home, '.config', f)
@@ -558,7 +556,6 @@ class Installer
     end
     system(@os.post) unless @os.post.empty?
 
-    # Sets the default shell to zsh unless it already is.
     sh = ENV.fetch('SHELL', nil)
     unless sh.eql? `which zsh`.strip
       system('chsh -s $(which zsh)')
@@ -566,7 +563,6 @@ class Installer
       puts("Unable to switch #{sh} to zsh.") if rc.positive?
     end
 
-    # Clones repositories from GitHub.
     [
       {
         src: 'https://github.com/w0rp/ale.git',
@@ -593,8 +589,6 @@ class Installer
     end
     sudo = @os.sudo
 
-    # Installs Python packages. rdiff_backup depends on wheel. speedtest-cli
-    # depends on matplotlib.
     %w[
       configobj click glances matplotlib pss pyotp pyperclip rdiff_backup s_tui
       speedtest-cli tmuxp wheel yt-dlp
@@ -606,14 +600,12 @@ class Installer
       puts("Unable to install #{p}.") if $CHILD_STATUS.exitstatus.positive?
     end
 
-    # Updates all Python packages.
     system('pip3 list --outdated |' \
            'grep -v \'^\-e\' |' \
            'cut -d = -f 1 |' \
            'xargs -n1 pip3 install -U --user')
     puts('Unable to update Python.') if $CHILD_STATUS.exitstatus.positive?
 
-    # Installs Ruby packages.
     %w[
       pry pry-doc renamr rubocop rubygems-update transcode
     ].each do |p|
@@ -626,7 +618,6 @@ class Installer
     system("#{sudo} update_rubygems && #{sudo} gem update --system")
     puts('Unable to update Ruby.') if $CHILD_STATUS.exitstatus.positive?
 
-    # Installs NodeJS packages.
     %w[
       gtop
     ].each do |p|
