@@ -68,12 +68,13 @@ endif::[]
 == About
 
 {url-cv}[David Rabkin] maintains this repository of personal dotfiles.
-It holds settings for the shell, Git, tmux, and other everyday tools, plus
-an installer that sets them all up.
+It holds settings for the shell, Git, tmux, and other tools.
+A script links them into your home folder and adds the tools they
+need.
 
 == Installation
 
-Clone the repository and run the {url-install}[installer]:
+Clone the repository, then run the {url-install}[installer]:
 
 [,sh]
 ----
@@ -84,8 +85,8 @@ git clone https://github.com/rdavid/dotfiles.git ~/dotfiles &&
 
 == Test
 
-The project builds with Daniel J. Bernstein's {url-redo}[`redo`].
-Sergey Matveev's {url-goredo}[`goredo`] offers a compatible implementation.
+The project uses Daniel J. Bernstein's {url-redo}[`redo`] as its task runner.
+Sergey Matveev's {url-goredo}[`goredo`] works as a drop-in swap.
 `redo lint` runs these linters:
 {url-actionlint}[`actionlint`],
 {url-conform}[`conform`],

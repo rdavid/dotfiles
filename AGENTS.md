@@ -42,15 +42,15 @@ CI enforces the same checks through dedicated workflows.
 ## Secrets & Binary Data
 
 `vol` is an encrypted tarball of personal binary data.
-Never commit such data outside it.
+Never commit that data anywhere else.
 
 ## Coding Style & Naming Conventions
 
 Write shell as portable `sh` first.
 Keep Bash-specific features out unless the file is Bash- or zsh-only, such
 as `bashrc` or `zshrc`.
-Keep files `shfmt`- and `shellcheck`-clean and within an approximately
-79-character width.
+Keep files clean under `shfmt` and `shellcheck`.
+Wrap lines at about 79 characters.
 Scripts open with the `# vi: lbr noet sw=2 ts=2 tw=79 wrap` modeline and
 the two SPDX lines.
 Write comments in third-person singular, start them with a capital letter,
@@ -71,12 +71,16 @@ Add the matching text under `LICENSES/` for any new license identifier.
 
 ## Continuous Integration
 
-Workflows follow these conventions, enforced by `zizmor` with the policy in
-`.github/zizmor.yml`: actions are pinned to release tags rather than commit
-hashes, every checkout sets `persist-credentials: false`, permissions stay
-at `contents: read` unless a step needs more, jobs set `timeout-minutes`,
-and `cancel-in-progress` applies only to pull requests so pushes to
-`master` always finish.
+`zizmor` enforces the workflow conventions with the policy in
+`.github/zizmor.yml`:
+
+- Pin actions to release tags rather than commit hashes.
+- Set `persist-credentials: false` on every checkout.
+- Keep permissions at `contents: read` unless a step needs more.
+- Set `timeout-minutes` on every job.
+- Apply `cancel-in-progress` only to pull requests, so pushes to `master`
+  always finish.
+
 Dependabot uses a seven-day cooldown.
 
 ## Commit & Pull Request Guidelines
