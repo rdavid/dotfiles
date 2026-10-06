@@ -60,7 +60,6 @@ PATH="\
 $HOME/.cargo/bin:\
 $HOME/.local/bin:\
 $HOME/bin:\
-$HOME/src/toolbox/app:\
 /snap/bin:\
 /usr/local/opt/grep/libexec/gnubin:\
 /usr/local/opt/ruby/bin:\
