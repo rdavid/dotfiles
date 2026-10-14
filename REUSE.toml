@@ -1,6 +1,12 @@
 # SPDX-FileCopyrightText: 2026 David Rabkin
 # SPDX-License-Identifier: 0BSD
+
+# Annotates the files that cannot carry SPDX headers. Own files get 0BSD,
+# third-party files keep their upstream license, files without a findable
+# upstream license get LicenseRef-unknown, and vol is proprietary.
 version = 1
+
+# Marks own files that cannot carry headers as 0BSD.
 [[annotations]]
 path = [
 	".github/styles/**",
@@ -13,24 +19,36 @@ path = [
 precedence = "override"
 SPDX-FileCopyrightText = "2017-2026 David Rabkin"
 SPDX-License-Identifier = "0BSD"
+
+# Marks the encrypted archive of personal binary data as proprietary.
 [[annotations]]
 path = "vol"
 SPDX-FileCopyrightText = "2018-2026 David Rabkin"
 SPDX-License-Identifier = "LicenseRef-proprietary"
+
+# Keeps the upstream license of z.sh.
 [[annotations]]
 path = "app/z.sh"
 SPDX-License-Identifier = "WTFPL"
+
+# Keeps the upstream license of the i3 battery script.
 [[annotations]]
 path = "i3/battery.py"
 SPDX-License-Identifier = "GPL-2.0-only"
+
+# Keeps the upstream license of the Pathogen plugin.
 [[annotations]]
 path = "vim/autoload/pathogen.vim"
 SPDX-FileCopyrightText = "Tim Pope <http://tpo.pe/>"
 SPDX-License-Identifier = "Vim"
+
+# Keeps the upstream license of the Vim zenburn color scheme.
 [[annotations]]
 path = "vim/colors/zenburn.vim"
 SPDX-FileCopyrightText = "Jani Nurminen <slinky@iki.fi>"
 SPDX-License-Identifier = "GPL-1.0-or-later"
+
+# Keeps the upstream license of the stock vifm files.
 [[annotations]]
 path = [
 	"vifm/colors/Default.vifm",
@@ -39,14 +57,21 @@ path = [
 ]
 SPDX-FileCopyrightText = "vifm developers"
 SPDX-License-Identifier = "GPL-2.0-or-later"
+
+# Keeps the upstream license of the vifm zenburn color scheme.
 [[annotations]]
 path = "vifm/colors/zenburn_1.vifm"
 SPDX-FileCopyrightText = "vifm-colors contributors"
 SPDX-License-Identifier = "GPL-2.0-only"
+
+# Marks the mc zenburn skin as LicenseRef-unknown, since no upstream license
+# is findable.
 [[annotations]]
 path = "mc/skins/zenburn.ini"
 SPDX-FileCopyrightText = "2012 Dmitry Geurkov <d.geurkov@gmail.com>"
 SPDX-License-Identifier = "LicenseRef-unknown"
+
+# Marks the wallpaper as LicenseRef-unknown, since its origin is unknown.
 [[annotations]]
 path = "pic/bg.jpg"
 SPDX-FileCopyrightText = "unknown"

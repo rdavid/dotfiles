@@ -1,37 +1,48 @@
 # SPDX-FileCopyrightText: 2019-2026 David Rabkin
 # SPDX-License-Identifier: 0BSD
-# This is Git's per-user configuration file.
+
+# Holds the per-user Git configuration.
+
+# Identifies the author and selects the GPG key for signing.
 [user]
   name = David Rabkin
   email = david@rabkin.co.il
   signingkey = 61DA1757
+
+# Defines the aliases.
 [alias]
-  # list files which have changed since master
+  # Lists files that have changed since master.
   files = !git diff --name-only $(git merge-base HEAD \"master\")
 
-  # Same as above, but with a diff stat instead of just names
-  # (better for interactive use)
+  # Shows a diff stat instead of just names, which suits interactive use.
   stat = !git diff --stat $(git merge-base HEAD \"master\")
 
-  # NOTE: These aliases depend on the `git files` alias from
-  # a few sections ago!
-
-  # Open all files changed since master in Vim tabs
-  # Then, run fugitive's :Gdiff in each tab, and finally
-  # tell vim-gitgutter to show +/- for changes since master
+  # Opens all files changed since master in Vim tabs. Runs fugitive's :Gdiff
+  # in each tab and tells vim-gitgutter to show changes since master. Depends
+  # on the files alias above.
   reviewall = !vim -p $(git files) +\"tabdo Gdiff master\" +\"let g:gitgutter_diff_base = 'master'\"
 
-  # Same as the above, except specify names of files as arguments,
-  # instead of opening all files:
-  # git reviewone foo.js bar.js
+  # Works like reviewall, but takes the file names as arguments instead of
+  # opening all changed files. Example: git reviewone foo.js bar.js
   reviewone = !vim -p +\"tabdo Gdiff master\" +\"let g:gitgutter_diff_base = 'master'\"
+
+  # Shows a compact, colored graph of the history.
   lg = log --color --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit
+
+# Signs every commit.
 [commit]
   gpgsign = true
+
+# Uses gpg for signing.
 [gpg]
   program = gpg
+
+# Pages the output through delta.
 [core]
   pager = delta
+
+# Colors diffs with the zenburn theme, green for additions and red for
+# removals.
 [delta]
   syntax-theme = zenburn
   plus-style = "syntax #003500"
@@ -41,7 +52,11 @@
   minus-emph-style = "syntax #3f0001"
   minus-non-emph-style = "syntax #3f3f3f"
   navigate = true
+
+# Lets delta color interactive diffs, such as git add --patch.
 [interactive]
   diffFilter = delta --color-only
+
+# Shows the common ancestor in conflict markers with the zdiff3 style.
 [merge]
   conflictStyle = zdiff3

@@ -5,8 +5,8 @@
 # SPDX-FileCopyrightText: 2017-2026 David Rabkin
 # SPDX-License-Identifier: 0BSD
 #
-# Creates symlinks from the home directory to selected
-# dotfiles in ~/dotfiles. Also installs required packages.
+# Symlinks selected dotfiles from ~/dotfiles into the home directory and
+# installs the required packages.
 #
 # Runs on macOS without Xorg when the binary archive password is provided:
 #  install.rb --no-xorg --pass pass
@@ -17,22 +17,22 @@ require 'fileutils'
 require 'optparse'
 require 'os'
 
-# Handles command-line options.
+# Parses and validates the command-line options.
 class Configuration
   DIC = [
-    ['-g', '--[no-]xorg', 'Install X packages.', :xorg],
-    ['-p', '--pass pass', 'Password for binary.', :pass]
+    ['-g', '--[no-]xorg', 'Install the Xorg packages.', :xorg],
+    ['-p', '--pass pass', 'Password for the binary archive.', :pass]
   ].freeze
 
   def initialize
     ARGV << '-h' if ARGV.empty?
     @options = {}
     OptionParser.new do |o|
-      o.banner = 'Usage: install.rb [options].'
+      o.banner = 'Usage: install.rb [options]'
       DIC.each { |f, p, d, k| o.on(f, p, d) { |i| @options[k] = i } }
     end.parse!
-    raise 'Xorg option is not given' if xorg?.nil?
-    raise 'Pass option is not given' if xorg? && pass.nil?
+    raise 'The --[no-]xorg option is required' if xorg?.nil?
+    raise 'The --pass option is required with --xorg' if xorg? && pass.nil?
   end
 
   def xorg?
@@ -44,7 +44,7 @@ class Configuration
   end
 end
 
-# Base class for multiple OS definitions.
+# Holds the settings shared by every supported OS.
 class OS
   attr_reader :type, :test, :inst, :prec, :post, :pkgs, :dotf, :conf, :sudo
 
@@ -81,7 +81,8 @@ class OS
 
   private
 
-  # Runs on macOS with '--no-xorg --pass'.
+  # Unpacks the encrypted binary archive, merges its shell history into the
+  # current one, and installs kitty. Runs only when a password is given.
   def unpack(pass)
     @prec << %(
       rm -rf ~/dotfiles/bin
@@ -123,7 +124,7 @@ class OS
   end
 end
 
-# Implements MacOS.
+# Defines the macOS package names and commands.
 module MacOS
   DIC = {
     atop: ''
@@ -176,7 +177,7 @@ module MacOS
   end
 end
 
-# Implements FreeBSD.
+# Defines the FreeBSD package names and commands.
 module FreeBSD
   DIC = {
     fortune: 'fortune-mod-freebsd-classic',
@@ -214,7 +215,7 @@ module FreeBSD
   end
 end
 
-# Implements OpenBSD.
+# Defines the OpenBSD package names and commands.
 module OpenBSD
   DIC = {
     bat: '',
@@ -261,7 +262,7 @@ module OpenBSD
   end
 end
 
-# Implements Arch Linux.
+# Defines the Arch Linux package names and commands.
 module Arch
   DIC = {
     base64: '',
@@ -307,7 +308,7 @@ module Arch
   end
 end
 
-# Implements Debian Linux.
+# Defines the Debian Linux package names and commands.
 module Debian
   DIC = {
     bat: '',
@@ -350,7 +351,7 @@ module Debian
   end
 end
 
-# Implements RedHat Linux.
+# Defines the Red Hat Linux package names and commands.
 module RedHat
   DIC = {
     base64: '',
@@ -437,7 +438,7 @@ module RedHat
   end
 end
 
-# Implements Alpine Linux.
+# Defines the Alpine Linux package names and commands.
 module Alpine
   DIC = {
     base64: 'coreutils',
@@ -479,7 +480,7 @@ module Alpine
   end
 end
 
-# Defines current OS.
+# Detects the running OS and returns the matching module.
 class CurrentOS
   ARCH = ['/etc/arch-release', '/etc/artix-release'].freeze
   def self.get
@@ -495,7 +496,7 @@ class CurrentOS
   end
 end
 
-# Performs the installation.
+# Performs the installation on the current OS.
 class Installer
   def initialize
     @os = OS.new(Configuration.new).extend(CurrentOS.get)

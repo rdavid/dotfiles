@@ -3,16 +3,17 @@
 # SPDX-FileCopyrightText: 2018-2026 David Rabkin
 # SPDX-License-Identifier: 0BSD
 #
-# This script prepares the Ruby environment to run install.rb.
-# Uses local variables that are not POSIX, but are supported by most
-# shells. See:
-#  https://stackoverflow.com/q/18597697
-#  shellcheck disable=SC3043
+# Prepares the Ruby environment to run install.rb. Installs the missing
+# packages and Ruby gems, then hands over to install.rb.
+#
 # Uses the shellbase Unix shell framework:
 #  https://github.com/rdavid/shellbase/
+#
+# Uses local variables that are not POSIX, but most shells support them. See:
+#  https://stackoverflow.com/q/18597697
+#  shellcheck disable=SC3043
 
-# Installs shellbase to the current shell session. Packages curl and tar are
-# required.
+# Installs shellbase into the current shell session. Requires curl and tar.
 shellbase() {
 	local err pkg rel=0.9.20261010
 	local src=https://github.com/rdavid/shellbase/archive/refs/tags/v$rel.tar.gz
@@ -47,9 +48,11 @@ shellbase() {
 	log shellbase "$BASE_VERSION" is installed to the current shell session.
 }
 
-# File is not following and A && B || C is intentional:
+# The file is not followed and the A && B || C pattern is intentional:
 #  shellcheck disable=SC1091,SC2015
 [ -r /usr/local/bin/base.sh ] && . /usr/local/bin/base.sh || shellbase "$@"
+
+# Defines the platform, the Ruby gems to install, and the packages to install.
 platform="$(uname)"
 readonly \
 	gems='colorize english git i18n os pidfile' \

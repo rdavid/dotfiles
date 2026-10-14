@@ -2,57 +2,62 @@
 " SPDX-FileCopyrightText: 2016-2026 David Rabkin
 " SPDX-License-Identifier: 0BSD
 
-" This must be first, because it changes other options as side effect.
+" Must come first because it changes other options as a side effect.
 set nocompatible
 
-" Allows utf-8 symbols in the file.
+" Allows UTF-8 symbols in the file.
 scriptencoding utf-8
 set encoding=utf-8
 
 " General.
-set noexpandtab                 " Doesn't expand tab to spaces.
+set noexpandtab                 " Keeps tabs instead of spaces.
 set hidden                      " Hides buffers instead of closing them.
-set linebreak                   " Break lines at word (requires Wrap lines).
-set textwidth=79                " Line wrap (number of cols).
-set showmatch                   " Highlight matching brace.
-set visualbell                  " Use visual bell (no beeping).
+set linebreak                   " Breaks lines at words (requires wrap).
+set textwidth=79                " Wraps lines at this column.
+set showmatch                   " Highlights the matching brace.
+set visualbell                  " Uses a visual bell instead of beeping.
 set hlsearch                    " Highlights all search results.
 set incsearch                   " Shows search matches as you type.
-set smartcase                   " Enable smart-case search.
-set ignorecase                  " Always case-insensitive.
-set incsearch                   " Searches for strings incrementally.
-set autoindent                  " Auto-indent new lines.
-set copyindent                  " Copy previous indentation on autoindenting.
-set shiftwidth=2                " Number of auto-indent spaces.
-set smartindent                 " Enable smart-indent.
-set smarttab                    " Enable smart-tabs.
-set tabstop=2                   " Number of spaces per Tab.
-set softtabstop=2               " Number of spaces per Tab.
-set ruler                       " Show row and column ruler information.
-set undolevels=1000             " Number of undo levels.
+set smartcase                   " Enables smart-case search.
+set ignorecase                  " Ignores case in searches by default.
+set incsearch                   " Searches incrementally while typing.
+set autoindent                  " Indents new lines automatically.
+set copyindent                  " Copies the previous indent.
+set shiftwidth=2                " Sets the number of spaces for auto-indent.
+set smartindent                 " Enables smart indent.
+set smarttab                    " Enables smart tabs.
+set tabstop=2                   " Sets the number of spaces per Tab.
+set softtabstop=2               " Sets the spaces per Tab while editing.
+set ruler                       " Shows the row and column of the cursor.
+set undolevels=1000             " Sets the number of undo levels.
 set history=1000                " Remembers more commands and search history.
-set backspace=indent,eol,start  " Backspace behaviour.
-set nobackup
-set noswapfile
+set backspace=indent,eol,start  " Lets backspace delete indents and breaks.
+set nobackup                    " Disables backup files.
+set noswapfile                  " Disables swap files.
 set title                       " Changes the terminal's title.
-set noerrorbells                " Don't beep.
-set lazyredraw                  " Redraw only when we need to.
+set noerrorbells                " Disables error beeps.
+set lazyredraw                  " Redraws only when needed.
+" Marks tabs, trailing spaces, and wrapped lines.
 set listchars=tab:␉·,extends:»,precedes:«,nbsp:⣿,trail:·
 set showbreak="\u21aa "
-set list
-set splitbelow
-set splitright
+set list                        " Shows the invisible characters.
+set splitbelow                  " Opens horizontal splits below.
+set splitright                  " Opens vertical splits on the right.
 
-" Switches on and off relativenumber in hybrid mode.
+" Toggles relative numbers in hybrid mode.
 augroup numbertoggle
   autocmd!
   autocmd BufEnter,FocusGained,InsertLeave,WinEnter * set nu rnu
   autocmd BufLeave,FocusLost,InsertEnter,WinLeave   * set nornu
 augroup END
+
+" Toggles line numbers with Ctrl-N.
 :nnoremap <silent> <C-n> :set nu! rnu!<cr>
 
-" Configures Pathogen before Colors.
+" Configures Pathogen before the colors.
 execute pathogen#infect()
+
+" Shows Syntastic warnings in the status line and selects its checkers.
 set statusline+=%#warningmsg#
 set statusline+=%{SyntasticStatuslineFlag()}
 set statusline+=%*
@@ -78,14 +83,14 @@ filetype indent on             " Enables filetype-specific indenting.
 filetype plugin on             " Enables filetype-specific plugins.
 colorscheme zenburn
 
-" Highlights for text that goes over the 79 column limit.
+" Highlights text that goes over the 79-column limit.
 highlight OverLength ctermbg=black ctermfg=white guibg=#592929
 match OverLength /\%80v.\+/
 
-set pastetoggle=<F2>            " Enables clear paste.
-let mapleader=","               " Leader is comma.
+set pastetoggle=<F2>            " Toggles paste mode.
+let mapleader=","               " Sets the leader key to a comma.
 
-" Edit vimrc/zshrc and load vimrc bindings.
+" Edits vimrc or zshrc and reloads vimrc.
 nnoremap <leader>ev :vsp $MYVIMRC<CR>
 nnoremap <leader>ez :vsp ~/.zshrc<CR>
 nnoremap <leader>sv :source $MYVIMRC<CR>
@@ -93,58 +98,58 @@ nnoremap <leader>sv :source $MYVIMRC<CR>
 " Turns off search highlight.
 nnoremap <leader><space> :nohlsearch<CR>
 
-" Easier split navigations.
+" Eases navigation between splits.
 nnoremap <C-J> <C-W><C-J>
 nnoremap <C-K> <C-W><C-K>
 nnoremap <C-L> <C-W><C-L>
 nnoremap <C-H> <C-W><C-H>
 
-" Window.
+" Opens an empty window at the edge of the screen.
 nmap <leader>sw<left>  :topleft  vnew<CR>
 nmap <leader>sw<right> :botright vnew<CR>
 nmap <leader>sw<up>    :topleft  new<CR>
 nmap <leader>sw<down>  :botright new<CR>
 
-" Buffer.
+" Splits the current window.
 nmap <leader>s<left>   :leftabove  vsplit<CR>
 nmap <leader>s<right>  :rightbelow vsplit<CR>
 nmap <leader>s<up>     :leftabove  split<CR>
 nmap <leader>s<down>   :rightbelow split<CR>
 
-" This mapping sorts the lines of a paragraph, or block of text separated by
-" blank lines. I use this a lot to sort #include directives.
+" Sorts the lines of a paragraph, meaning a block of text separated by blank
+" lines. Useful for sorting #include directives.
 nmap <leader>s vip:sort<CR>
 
-" Similar to the last mapping, this one sorts lines inside braces. I use this to
-" sort switch statement cases or array initializers.
+" Sorts the lines inside braces. Useful for sorting switch cases or array
+" initializers.
 nmap <leader>S $vi{:sort<CR>
 
-" Don't pollute directories with swap files, keep them in one place.
+" Keeps backup and swap files in one place instead of cluttering directories.
 silent !mkdir -p ~/.vim/{backup,swp}/
 set backupdir=~/.vim/backup//
 set directory=~/.vim/swp//
 
-" Except crontab, which will complain that it can't see any changes.
+" Makes an exception for crontab, which complains about unseen changes.
 au FileType crontab setlocal bkc=yes
 
-" Allows saving of files as sudo when I forgot to start vim using sudo.
+" Allows saving a file as root when Vim was started without sudo.
 cmap w!! w !sudo tee > /dev/null %
 
-" Allows saving remote file in case of vim scp://name@host:port/filename.ext.
+" Allows saving a remote file opened as scp://name@host:port/filename.ext.
 autocmd BufRead scp://* :set bt=acwrite
 autocmd BufWritePost scp://* :set bt=acwrite
 
 " Treats redo files as shell scripts.
 autocmd BufEnter *.do :setlocal filetype=sh
 
-" If installed using Homebrew.
+" Adds fzf to the runtime path when installed with Homebrew.
 set rtp+=/usr/local/opt/fzf
 
 " Provides tab-completion for all file-related tasks.
 set path+=**
 
-" Display all matching files when we tab complete.
+" Displays all matching files when completing with Tab.
 set wildmenu
 
-" Create the `tags` file (may need to install ctags first).
+" Creates the `tags` file. Requires ctags.
 command! MakeTags !ctags -R .

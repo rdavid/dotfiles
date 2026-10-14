@@ -3,7 +3,7 @@
 # SPDX-FileCopyrightText: 2016-2026 David Rabkin
 # SPDX-License-Identifier: 0BSD
 
-# Sets the preferred pager, viewer, and editor.
+# Sets the pager, editor, history, and other shell defaults.
 export \
 	BAT_PAGER=less \
 	BAT_THEME=zenburn \
@@ -16,7 +16,7 @@ export \
 	RUBYOPT=-W0 \
 	VISUAL=vim
 
-# Points to the oh-my-zsh installation.
+# Points to the oh-my-zsh installation and selects its theme.
 export \
 	ZSH="$HOME"/.oh-my-zsh \
 	ZSH_THEME=minimal
@@ -26,6 +26,8 @@ export UPDATE_ZSH_DAYS=30
 
 # Displays red dots while waiting for completion.
 export COMPLETION_WAITING_DOTS=true
+
+# Tells GnuPG which terminal to use for passphrase prompts.
 GPG_TTY="$(tty)"
 export GPG_TTY
 
@@ -55,7 +57,8 @@ GITSTATUS="$ZSH"/custom/plugins/gitstatus/gitstatus.prompt.zsh
 	export RPROMPT='$GITSTATUS_PROMPT'
 }
 
-# Ensures that the GNUbin directory takes precedence over /usr/bin.
+# Builds the search path. The GNU grep directory comes before /usr/bin so its
+# tools take precedence.
 PATH="\
 $HOME/.cargo/bin:\
 $HOME/.local/bin:\
@@ -79,6 +82,7 @@ command -v gem >/dev/null 2>&1 && PATH=$(gem environment gemdir)/bin:$PATH
 command -v go >/dev/null 2>&1 && PATH=$PATH:$(go env GOPATH)/bin
 export PATH
 
+# Sources oh-my-zsh, z, the aliases, and the functions.
 # shellcheck disable=SC1090 # File not following.
 for f in \
 	"$ZSH"/oh-my-zsh.sh \
@@ -87,6 +91,8 @@ for f in \
 	"$HOME"/dotfiles/functions; do
 	. "$f"
 done
+
+# Applies the OS-specific display, locale, search path, and fzf location.
 case $(uname -a) in
 *Microsoft*)
 	unsetopt BG_NICE
@@ -147,7 +153,7 @@ case $(uname -a) in
 	;;
 esac
 
-# Switches on vi command-line editing.
+# Enables vi editing on the command line.
 bindkey -v
 
 # Starts X if installed.
@@ -168,6 +174,9 @@ else
 	fi
 fi
 
+# Loads the fzf key bindings when present.
 # shellcheck disable=SC1090 # File not following.
 [ -f ~/.fzf.zsh ] && . ~/.fzf.zsh
+
+# Loads the thefuck alias when installed.
 command -v thefuck >/dev/null 2>&1 && eval "$(thefuck --alias)"

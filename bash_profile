@@ -8,7 +8,11 @@
 #
 # File is not following:
 #  shellcheck disable=SC1090
+
+# Loads the interactive settings.
 [ -f ~/.bashrc ] && . ~/.bashrc
+
+# Adds the Cargo directory to the path unless it is already there.
 case :$PATH: in
 *:"$HOME"/.cargo/bin:*) ;;
 *)
