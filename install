@@ -23,13 +23,21 @@ shellbase() {
 			exit $err
 		}
 	done
-	curl --fail --head --output /dev/null --silent $src || {
+	curl \
+		--fail \
+		--head \
+		--output /dev/null \
+		--silent \
+		$src || {
 		err=$?
 		printf >&2 '%s is unavailable.\n' $src
 		exit $err
 	}
 	eval "$(
-		curl --location --silent $src |
+		curl \
+			--location \
+			--silent \
+			$src |
 			tar --extract --gzip --to-stdout shellbase-$rel/lib/base.sh
 	)"
 	[ -n "${BASE_VERSION+x}" ] || {
