@@ -40,10 +40,15 @@ shellbase() {
 			--silent \
 			$src |
 			tar --extract --gzip --to-stdout shellbase-$rel/lib/base.sh
-	)"
+	)" || {
+		err=$?
+		printf >&2 'Unable to load shellbase.\n'
+		exit $err
+	}
 	[ -n "${BASE_VERSION+x}" ] || {
+		err=1
 		printf >&2 'No shellbase.\n'
-		exit 1
+		exit $err
 	}
 	log shellbase "$BASE_VERSION" is installed to the current shell session.
 }
