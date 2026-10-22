@@ -15,14 +15,15 @@ BSH=$(command -v base.sh) || {
 }
 readonly \
 	BASE_APP_VERSION=0.9.20261022 \
+	BASE_MIN_VERSION=0.9.20260707 \
 	BSH \
 	IMG="$HOME"/dotfiles/pic/bg.jpg \
 	PNG="${XDG_CACHE_HOME:-$HOME/.cache}"/lock.png
 . "$BSH"
-validate_cmd i3lock
+cmd_exists i3lock || die
 file_exists "$PNG" || {
-	validate_cmd convert
+	cmd_exists convert || die
 	mkdir -p "$(dirname "$PNG")"
-	convert "$IMG" "$PNG"
+	cmd_run convert "$IMG" "$PNG"
 }
 i3lock --image="$PNG" --tiling
