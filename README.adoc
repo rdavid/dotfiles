@@ -72,7 +72,9 @@ endif::[]
 It holds settings for the shell, Git, tmux, and other tools.
 A script links them into your home folder and adds the tools they
 need.
+ifndef::pages-build[]
 Dotfiles also has a {url-site}[website].
+endif::[]
 
 == Installation
 
