@@ -127,7 +127,8 @@ end
 # Defines the macOS package names and commands.
 module MacOS
   DIC = {
-    atop: ''
+    atop: '',
+    goredo: 'rdavid/tap/goredo'
   }.freeze
 
   def self.pkgs(mod)
