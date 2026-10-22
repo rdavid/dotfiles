@@ -40,4 +40,5 @@ jobs:
               --gzip \
               --strip-components=2 \
               shellbase-"$rel"/lib/base.sh
+          chmod +x /usr/local/bin/base.sh
           redo -xx

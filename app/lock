@@ -9,15 +9,15 @@
 #
 # File is sourced dynamically and the constant appears unused:
 #  shellcheck disable=SC1090,SC2034
-readonly \
-	BASE_APP_VERSION=0.9.20260714 \
-	BSH=/usr/local/bin/base.sh \
-	IMG="$HOME"/dotfiles/pic/bg.jpg \
-	PNG="${XDG_CACHE_HOME:-$HOME/.cache}"/lock.png
-[ -r "$BSH" ] || {
+BSH=$(command -v base.sh) || {
 	printf >&2 'Install Shellbase.\n'
 	exit 1
 }
+readonly \
+	BASE_APP_VERSION=0.9.20261022 \
+	BSH \
+	IMG="$HOME"/dotfiles/pic/bg.jpg \
+	PNG="${XDG_CACHE_HOME:-$HOME/.cache}"/lock.png
 . "$BSH"
 validate_cmd i3lock
 file_exists "$PNG" || {
