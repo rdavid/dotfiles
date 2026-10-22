@@ -41,7 +41,7 @@ export CDPATH=:~
 #  shellcheck disable=SC3030,SC2034
 plugins=(
 	brew catimg colored-man-pages colorize common-aliases docker docker-compose
-	gem git git-extras git-flow github golang history macos pip python rsync
+	gem gh git git-extras git-flow golang history macos pip python rsync
 	ruby sudo tmux vi-mode web-search yarn z
 )
 autoload zmv
