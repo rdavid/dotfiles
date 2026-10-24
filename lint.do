@@ -12,8 +12,8 @@
 # the first would be silently skipped rather than checked. The zshrc file
 # stays out of the syntax loop because it uses zsh-only constructs.
 #
-# Variable appears unused and file not following:
-#  shellcheck disable=SC2034,SC1090
+# Variable appears unused and shellbase is not followed:
+#  shellcheck disable=SC1091,SC2034
 redo-ifchange \
 	./.conform.yaml \
 	./.github/*.yml \
@@ -34,15 +34,10 @@ redo-ifchange \
 	./REUSE.toml \
 	./xinitrc \
 	./zshrc
-BSH=$(command -v base.sh) || {
-	printf >&2 'Install Shellbase.\n'
-	exit 1
-}
 readonly \
-	BASE_APP_VERSION=0.9.20261022 \
-	BASE_MIN_VERSION=0.9.20260707 \
-	BSH
-. "$BSH"
+	BASE_APP_VERSION=0.9.20261024 \
+	BASE_MIN_VERSION=0.9.20260707
+. base.sh
 cmd_runif actionlint
 cmd_runif conform enforce --commit-ref HEAD
 for f in \
