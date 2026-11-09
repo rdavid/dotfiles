@@ -20,6 +20,7 @@ redo-ifchange \
 	./.github/workflows/*.yml \
 	./.rubocop.yml \
 	./*.do \
+	./AGENTS.md \
 	./aliases \
 	./app/* \
 	./bash_profile \
@@ -35,10 +36,11 @@ redo-ifchange \
 	./xinitrc \
 	./zshrc
 readonly \
-	BASE_APP_VERSION=0.9.20261024 \
+	BASE_APP_VERSION=0.9.20261109 \
 	BASE_MIN_VERSION=0.9.20260707
 . base.sh
 cmd_runif actionlint
+cmd_runif agent-rules-lint --warnings-as-errors .
 cmd_runif conform enforce --commit-ref HEAD
 for f in \
 	./*.do \

@@ -35,9 +35,9 @@ Run `redo lint` before committing.
 This project uses `redo` (or `goredo`) as the task runner.
 
 - `redo all`: run the default target, which runs `lint`.
-- `redo lint`: run `actionlint`, `conform`, `dash`, `mksh`, `reuse`,
-  `rubocop`, `ruff`, `shellcheck`, `shfmt`, `typos`, `vale`, `yamllint`, and
-  `zizmor`.
+- `redo lint`: run `actionlint`, `agent-rules-lint`, `conform`, `dash`,
+  `mksh`, `reuse`, `rubocop`, `ruff`, `shellcheck`, `shfmt`, `typos`, `vale`,
+  `yamllint`, and `zizmor`.
   Linters run through shellbase's `cmd_runif`, so a missing tool is skipped
   rather than failing the build.
   CI enforces the same checks through dedicated workflows.
