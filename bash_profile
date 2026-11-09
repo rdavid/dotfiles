@@ -6,7 +6,7 @@
 # Configures Bash login sessions by loading the interactive settings and
 # extending the search path.
 #
-# File is not following:
+# The sourced file is not followed:
 #  shellcheck disable=SC1090
 
 # Loads the interactive settings.

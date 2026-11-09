@@ -3,7 +3,7 @@
 # SPDX-FileCopyrightText: 2019-2026 David Rabkin
 # SPDX-License-Identifier: 0BSD
 #
-# Interactive helper functions sourced by bashrc and zshrc.
+# Defines the interactive helper functions sourced by bashrc and zshrc.
 #
 # Local is undefined and shellbase is not followed:
 #  shellcheck disable=SC1091,SC3043

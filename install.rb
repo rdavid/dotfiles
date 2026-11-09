@@ -8,7 +8,8 @@
 # Symlinks selected dotfiles from ~/dotfiles into the home directory and
 # installs the required packages.
 #
-# Runs on macOS without Xorg when the binary archive password is provided:
+# Requires --xorg or --no-xorg. The --xorg option also requires --pass, the
+# password of the binary archive. For example, on macOS:
 #  install.rb --no-xorg --pass pass
 
 require 'English'
@@ -507,14 +508,14 @@ class Installer
 
   # Runs the whole installation. Sorts the packages before rejecting empty ones
   # since reject! returns nil when nothing is removed. Runs the pre-install
-  # commands, then installs missing packages. Creates a directory for existing
-  # dotfiles, moves them from the home directory into it, and symlinks the
-  # selected files from ~/dotfiles. Creates ~/.config first to prevent an mc
-  # link error and handles it in a similar way. Sets the default shell to zsh
-  # unless it already is. Clones repositories from GitHub. Installs Python
-  # packages, where rdiff_backup depends on wheel and speedtest-cli depends on
-  # matplotlib, then updates all of them. Installs and updates Ruby and NodeJS
-  # packages.
+  # commands, then installs missing packages. Moves existing dotfiles from the
+  # home directory into ~/dotfiles-old and symlinks the selected files from
+  # ~/dotfiles. Does the same for the ~/.config entries, creating ~/.config
+  # first to prevent an mc link error. Runs the post-install commands. Sets
+  # the default shell to zsh unless it already is. Clones repositories from
+  # GitHub. Installs Python packages, where rdiff_backup depends on wheel and
+  # speedtest-cli depends on matplotlib, then updates all of them. Installs
+  # and updates Ruby and NodeJS packages.
   def do # rubocop:disable Metrics/PerceivedComplexity, Metrics/CyclomaticComplexity, Metrics/AbcSize, Metrics/MethodLength
     @os.pkgs.sort!.reject!(&:empty?)
     puts("Hello #{@os.type}: #{@os.pkgs}: #{@os.dotf}: #{@os.conf}.")

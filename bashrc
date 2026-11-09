@@ -6,7 +6,7 @@
 # Configures interactive Bash sessions by loading the aliases and functions,
 # setting the environment, and enabling vi editing.
 #
-# Files are not following:
+# The sourced files are not followed:
 #  shellcheck disable=SC1090,SC1091
 . "$HOME/dotfiles/aliases"
 . "$HOME/dotfiles/functions"
