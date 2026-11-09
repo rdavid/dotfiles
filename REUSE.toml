@@ -12,6 +12,7 @@ path = [
 	".github/styles/**",
 	".gitignore",
 	".vale.ini",
+	"AGENTS.md",
 	"mc/ini",
 	"mc/mc.ext",
 	"README.adoc",
