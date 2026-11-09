@@ -68,15 +68,13 @@ endif::[]
 
 == About
 
-{url-cv}[David Rabkin] maintains this repository of personal dotfiles.
-It holds settings for the shell, Git, tmux, and other tools.
-A script links them into your home folder and adds the tools they
-need.
+`dotfiles` maintains a set of shell, editor, and desktop settings.
+One script adds the tools they need.
 ifndef::pages-build[]
 Dotfiles also has a {url-site}[website].
 endif::[]
 
-== Installation
+== Using
 
 Clone the repository, then run the {url-install}[installer]:
 
@@ -84,8 +82,14 @@ Clone the repository, then run the {url-install}[installer]:
 ----
 git clone https://github.com/rdavid/dotfiles.git ~/dotfiles &&
   cd ~/dotfiles &&
-  ./install
+  ./install --no-xorg
 ----
+
+The installer takes these options:
+
+`--no-xorg`:: Skips the desktop packages.
+`--xorg`:: Adds the desktop packages and requires `--pass`.
+`--pass <pass>`:: Unlocks the private data.
 
 == Test
 
@@ -105,6 +109,7 @@ Sergey Matveev's {url-goredo}[`goredo`] works as a drop-in swap.
 {url-vale}[`vale`],
 {url-yamllint}[`yamllint`], and
 {url-zizmor}[`zizmor`].
+It skips the ones the OS lacks.
 
 == License
 
