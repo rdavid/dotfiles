@@ -1,16 +1,15 @@
 # SPDX-FileCopyrightText: 2025-2026 David Rabkin
 # SPDX-License-Identifier: 0BSD
 #
-# Lints the GitHub Actions workflows. The downloader reports the linter path
-# as a step output, which the final step reads through an environment variable
-# rather than expanding inline, so the run block stays free of template
-# injection.
+# The release tarball is fetched and verified directly, rather than piping
+# the project's own download-actionlint.bash into bash, because that script
+# does not verify a checksum against the downloaded binary.
 ---
 name: actionlint
 'on':
   pull_request:
     paths: &paths
-      - .github/workflows/**
+      - .github/**
   push:
     branches: [master]
     paths: *paths
@@ -20,25 +19,37 @@ permissions:
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+defaults:
+  run:
+    shell: sh
 jobs:
   actionlint:
     runs-on: ubuntu-24.04
     timeout-minutes: 15
+    env:
+      ver: 1.7.12
     steps:
       - uses: actions/checkout@v7.0.1
         with:
           persist-credentials: false
-      - id: get
+      - id: cache
+        uses: actions/cache@v6.1.0
+        with:
+          path: ./actionlint
+          key: actionlint-${{ env.ver }}-${{ runner.os }}
+      - if: steps.cache.outputs.cache-hit != 'true'
         run: |
-          ver=1.7.12
-          srv=https://raw.githubusercontent.com/rhysd/actionlint
+          srv=https://github.com/rhysd/actionlint/releases/download
+          sum=8aca8db96f1b94770f1b0d72b6dddcb1ebb8123cb3712530b08cc387b349a3d8
+          tgz=actionlint_${ver}_linux_amd64.tar.gz
           curl \
             --fail \
             --location \
+            --output "$tgz" \
+            --retry 3 \
             --show-error \
             --silent \
-            "$srv/v$ver/scripts/download-actionlint.bash" |
-            bash -s "$ver"
-      - env:
-          EXECUTABLE: ${{ steps.get.outputs.executable }}
-        run: '"$EXECUTABLE"'
+            "$srv/v$ver/$tgz"
+          printf '%s  %s\n' "$sum" "$tgz" | sha256sum --check --status
+          tar --extract --file "$tgz" actionlint
+      - run: ./actionlint

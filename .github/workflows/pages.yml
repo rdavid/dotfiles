@@ -5,7 +5,10 @@ name: pages
 'on':
   push:
     branches: [master]
-    paths: [README.adoc, .github/pages/**]
+    paths:
+      - .github/pages/**
+      - .github/workflows/pages.yml
+      - README.adoc
   workflow_dispatch:
 permissions:
   contents: read

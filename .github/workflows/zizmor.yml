@@ -26,6 +26,6 @@ jobs:
       - uses: actions/checkout@v7.0.1
         with:
           persist-credentials: false
-      - run: pipx run zizmor==1.26.1 .
-        env:
+      - env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: pipx run zizmor==1.32.0 .

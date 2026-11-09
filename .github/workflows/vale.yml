@@ -15,13 +15,18 @@ name: vale
   workflow_dispatch:
 permissions:
   contents: read
-  checks: write
-  pull-requests: write
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+defaults:
+  run:
+    shell: sh
 jobs:
   vale:
+    permissions:
+      contents: read
+      checks: write
+      pull-requests: write
     runs-on: ubuntu-24.04
     timeout-minutes: 15
     steps:
