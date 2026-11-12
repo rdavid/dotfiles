@@ -23,8 +23,25 @@ export EDITOR=vim \
 GPG_TTY="$(tty)"
 export GPG_TTY
 
-# Puts the MacPorts and local directories ahead of the system ones.
-PATH=/opt/local/bin:/usr/local/bin:$PATH
+# Moves the Homebrew Ruby, MacPorts, and local directories ahead of the system
+# ones, so gem scripts such as rubocop run under Homebrew Ruby rather than the
+# macOS system Ruby. Then adds the gem directory unless it is already there.
+for d in \
+	/usr/local/bin \
+	/opt/local/bin \
+	/opt/homebrew/opt/ruby/bin \
+	/usr/local/opt/ruby/bin; do
+	[ -d "$d" ] || continue
+	PATH=$d$(printf ':%s:' "$PATH" | sed "s|:$d:|:|g; s|:$||")
+done
+command -v gem >/dev/null 2>&1 && {
+	d=$(gem environment gemdir)/bin
+	case :$PATH: in
+	*:"$d":*) ;;
+	*) PATH=$d:$PATH ;;
+	esac
+}
+unset d
 
 # Enables vi editing on the command line.
 set -o vi
