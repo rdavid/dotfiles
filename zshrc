@@ -72,11 +72,11 @@ $HOME/bin:\
 /usr/local/go/bin:\
 /opt/homebrew/bin:\
 /opt/homebrew/opt/grep/libexec/gnubin:\
-/opt/local/bin/:\
+/opt/local/bin:\
 /usr/sbin:\
 /usr/bin:\
 /sbin:\
-/bin:\
+/bin\
 "
 command -v gem >/dev/null 2>&1 && PATH=$(gem environment gemdir)/bin:$PATH
 command -v go >/dev/null 2>&1 && PATH=$PATH:$(go env GOPATH)/bin
