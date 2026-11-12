@@ -15,7 +15,7 @@
 
 # Installs shellbase into the current shell session. Requires curl and tar.
 shellbase() {
-	local err pkg rel=0.9.20261010
+	local err pkg rel=0.9.20261111
 	local src=https://github.com/rdavid/shellbase/archive/refs/tags/v$rel.tar.gz
 	for pkg in curl tar; do
 		command -v "$pkg" >/dev/null 2>&1 || {
