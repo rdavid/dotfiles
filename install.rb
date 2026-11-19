@@ -618,8 +618,8 @@ class Installer
       system("#{sudo} gem install #{p}")
       puts("Unable to install #{p}.") if $CHILD_STATUS.exitstatus.positive?
     end
-    system("#{sudo} update_rubygems && #{sudo} gem update --system")
-    puts('Unable to update Ruby.') if $CHILD_STATUS.exitstatus.positive?
+    system("#{sudo} gem update")
+    puts('Unable to update gems.') if $CHILD_STATUS.exitstatus.positive?
 
     %w[
       gtop
