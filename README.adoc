@@ -14,6 +14,7 @@
 :url-hoc: https://hitsofcode.com/view/github/rdavid/dotfiles?branch=master
 :url-install: https://github.com/rdavid/dotfiles/blob/master/install
 :url-license: https://github.com/rdavid/dotfiles/blob/master/LICENSES/0BSD.txt
+:url-lychee: https://lychee.cli.rs
 :url-mksh: https://github.com/MirBSD/mksh
 :url-redo: http://cr.yp.to/redo.html
 :url-reuse: https://reuse.software
@@ -101,6 +102,7 @@ Sergey Matveev's {url-goredo}[`goredo`] works as a drop-in swap.
 {url-agent-rules-lint}[`agent-rules-lint`],
 {url-conform}[`conform`],
 {url-dash}[`dash`],
+{url-lychee}[`lychee`],
 {url-mksh}[`mksh`],
 {url-reuse}[`reuse`],
 {url-rubocop}[`rubocop`],

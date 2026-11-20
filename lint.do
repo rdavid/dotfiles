@@ -17,6 +17,7 @@
 redo-ifchange \
 	./.conform.yaml \
 	./.github/*.yml \
+	./.github/pages/README-docinfo.html \
 	./.github/workflows/*.yml \
 	./.rubocop.yml \
 	./*.do \
@@ -36,7 +37,7 @@ redo-ifchange \
 	./xinitrc \
 	./zshrc
 readonly \
-	BASE_APP_VERSION=0.9.20261109 \
+	BASE_APP_VERSION=0.9.20261120 \
 	BASE_MIN_VERSION=0.9.20260707
 . base.sh
 cmd_runif actionlint
@@ -57,6 +58,10 @@ for f in \
 	cmd_runif dash -n "$f"
 	cmd_runif mksh -n "$f"
 done
+cmd_runif lychee --no-progress \
+	./.github/pages/README-docinfo.html \
+	./AGENTS.md \
+	./README.adoc
 cmd_runif reuse lint
 cmd_runif rubocop
 cmd_runif ruff check ./app ./i3
