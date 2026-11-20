@@ -11,11 +11,13 @@ before starting any task, unless they are already loaded.
 ## Structure
 
 Shell configuration lives at the repository root: `aliases`, `bash_profile`,
-`bashrc`, `functions`, `xinitrc`, and `zshrc`.
+`bashrc`, `functions`, `fzf.bash`, `fzf.zsh`, `xinitrc`, and `zshrc`.
+`gitconfig`, `tmux.conf`, and `vimrc` sit beside them.
 `app/` contains helper scripts such as `lock`, `merge_history.sh`, small
 Python utilities, and the third-party `z.sh`.
 Per-tool configuration sits in `i3/`, `kitty/`, `mc/`, `terminator/`,
 `tmux/`, `vifm/`, and `vim/`.
+`pic/` holds the desktop wallpaper that `i3/config` sets.
 CI lives in `.github/workflows/`.
 Targets live in `*.do` files, which `redo` executes directly.
 Treat `.redo/` as build metadata for the `redo` workflow, not hand-edited
@@ -33,6 +35,7 @@ imperative mood, and spellchecked against US English.
 This project uses `redo` (or `goredo`) as the task runner.
 
 - `redo all`: run the default target, which runs `lint`.
+- `redo clean`: remove the target outputs.
 - `redo lint`: run `actionlint`, `agent-rules-lint`, `conform`, `dash`,
   `lychee`, `mksh`, `reuse`, `rubocop`, `ruff`, `shellcheck`, `shfmt`,
   `tombi`, `typos`, `vale`, `yamllint`, and `zizmor`.
