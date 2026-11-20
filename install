@@ -7,10 +7,10 @@
 # packages and Ruby gems, then hands over to install.rb.
 #
 # Uses the shellbase Unix shell framework:
-#  https://github.com/rdavid/shellbase/
+#  https://rdavid.github.io/shellbase/
 #
-# Uses local variables that are not POSIX, but most shells support them. See:
-#  https://stackoverflow.com/q/18597697
+# Uses local variables that are not POSIX, but most shells support them, see
+# https://stackoverflow.com/q/18597697. Local is undefined:
 #  shellcheck disable=SC3043
 
 # Installs shellbase into the current shell session. Requires curl and tar.

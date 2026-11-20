@@ -49,11 +49,13 @@ autoload zmv
 # Defines the path to the optional gitstatus prompt script.
 GITSTATUS="$ZSH"/custom/plugins/gitstatus/gitstatus.prompt.zsh
 
-# shellcheck disable=SC1090 # File not following.
+# Loads the gitstatus prompt when present. The script is not followed:
+#  shellcheck disable=SC1090
 [ -f "$GITSTATUS" ] && {
 	. "$GITSTATUS"
 
-	# shellcheck disable=SC2016 # Expressions don't expand in single quotes.
+	# Expressions do not expand in single quotes, which is intended:
+	#  shellcheck disable=SC2016
 	export RPROMPT='$GITSTATUS_PROMPT'
 }
 
@@ -82,8 +84,9 @@ command -v gem >/dev/null 2>&1 && PATH=$(gem environment gemdir)/bin:$PATH
 command -v go >/dev/null 2>&1 && PATH=$PATH:$(go env GOPATH)/bin
 export PATH
 
-# Sources oh-my-zsh, z, the aliases, and the functions.
-# shellcheck disable=SC1090 # File not following.
+# Sources oh-my-zsh, z, the aliases, and the functions. The sourced files are
+# not followed:
+#  shellcheck disable=SC1090
 for f in \
 	"$ZSH"/oh-my-zsh.sh \
 	"$HOME"/dotfiles/app/z.sh \
@@ -98,7 +101,8 @@ case $(uname -a) in
 	unsetopt BG_NICE
 	;;
 *)
-	# shellcheck disable=SC3028 # OSTYPE is undefined.
+	# OSTYPE is undefined:
+	#  shellcheck disable=SC3028
 	case "$OSTYPE" in
 	darwin*)
 		export DISPLAY=:0 \
@@ -174,8 +178,8 @@ else
 	fi
 fi
 
-# Loads the fzf key bindings when present.
-# shellcheck disable=SC1090 # File not following.
+# Loads the fzf key bindings when present. The file is not followed:
+#  shellcheck disable=SC1090
 [ -f ~/.fzf.zsh ] && . ~/.fzf.zsh
 
 # Loads the thefuck alias when installed.
