@@ -3,6 +3,8 @@ SPDX-FileCopyrightText: 2026 David Rabkin
 SPDX-License-Identifier: 0BSD
 -->
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-  <circle cx="12" cy="12" r="6.5" fill="#2b2b2b"/>
-  <circle cx="12" cy="12" r="5" fill="#f0dfaf"/>
+  <rect fill="none" height="22" rx="4" stroke="#4f4f4f" stroke-width="2"
+    width="22" x="1" y="1"/>
+  <path d="M5.5 12c1.9-3 4.6-3 6.5 0s4.6 3 6.5 0" fill="none" stroke="#7f9f7f"
+    stroke-linecap="round" stroke-width="2.6"/>
 </svg>
