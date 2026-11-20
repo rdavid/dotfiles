@@ -23,12 +23,10 @@ source.
 `vol` is an encrypted archive of binary and personal data that extracts to
 the gitignored `bin/`.
 Never commit that data anywhere else.
-The version variable in `*.do` files is `BASE_APP_VERSION`.
-Update it and the `SPDX-FileCopyrightText` year only alongside a substantive
-change.
+Update `BASE_APP_VERSION` and the `SPDX-FileCopyrightText` year only
+alongside a substantive change.
 `conform` enforces the commit header per `.conform.yaml`: lowercase, in the
 imperative mood, and spellchecked against US English.
-Run `redo lint` before committing.
 
 ## Build
 
@@ -49,7 +47,6 @@ This project uses `redo` (or `goredo`) as the task runner.
 
 Keep Bash-specific features out unless the file is Bash- or zsh-only, such
 as `bashrc` or `zshrc`.
-Keep shell files clean under `shfmt` and `shellcheck`.
 The repository is REUSE 3.3 compliant.
 Start the copyright range of a new file at its first-commit year.
 Annotate files that cannot carry headers in `REUSE.toml`: own files as
