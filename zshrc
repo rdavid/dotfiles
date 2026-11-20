@@ -2,7 +2,7 @@
 # vi: lbr noet sw=2 ts=2 tw=79 wrap
 # SPDX-FileCopyrightText: 2016-2026 David Rabkin
 # SPDX-License-Identifier: 0BSD
-
+#
 # Sets the pager, editor, history, and other shell defaults.
 export \
 	BAT_PAGER=less \

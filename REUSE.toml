@@ -1,6 +1,6 @@
 # SPDX-FileCopyrightText: 2026 David Rabkin
 # SPDX-License-Identifier: 0BSD
-
+#
 # Annotates the files that cannot carry SPDX headers. Own files get 0BSD,
 # third-party files keep their upstream license, files without a findable
 # upstream license get LicenseRef-unknown, and vol is proprietary.

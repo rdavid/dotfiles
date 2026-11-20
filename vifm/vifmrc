@@ -1,7 +1,7 @@
-" vi:ts=2 sw=2 tw=79 et lbr wrap
+" vi: et lbr sw=2 ts=2 tw=79 wrap
 " SPDX-FileCopyrightText: 2019-2026 David Rabkin
 " SPDX-License-Identifier: 0BSD
-
+"
 " Removes confirmation for deletion into trash as well as permanent.
 set confirm-=delete,permdelete
 

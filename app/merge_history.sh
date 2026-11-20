@@ -1,6 +1,6 @@
 #!/bin/sh -eu
 # vi: lbr noet sw=2 ts=2 tw=79 wrap
-# SPDX-FileCopyrightText: 2018-2026 David Rabkin
+# SPDX-FileCopyrightText: 2019-2026 David Rabkin
 # SPDX-License-Identifier: 0BSD
 #
 # Merges shell history entries while preserving multiline commands. Joins

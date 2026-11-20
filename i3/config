@@ -33,7 +33,7 @@ bindsym Mod1+$down focus down
 bindsym Mod1+$up focus up
 bindsym Mod1+$right focus right
 
-# Alternatively, you can use the cursor keys:
+# Changes focus with the cursor keys as well.
 bindsym Mod1+Left focus left
 bindsym Mod1+Down focus down
 bindsym Mod1+Up focus up
@@ -45,7 +45,7 @@ bindsym Mod1+Shift+$down move down
 bindsym Mod1+Shift+$up move up
 bindsym Mod1+Shift+$right move right
 
-# Alternatively, you can use the cursor keys:
+# Moves the focused window with the cursor keys as well.
 bindsym Mod1+Shift+Left move left
 bindsym Mod1+Shift+Down move down
 bindsym Mod1+Shift+Up move up
@@ -120,15 +120,16 @@ bindsym Mod1+Shift+0 move container to workspace $tag0
 # Reloads the configuration file.
 bindsym Mod1+Shift+c reload
 
-# Restarts i3 inplace: preserves your layout/session, can be used to upgrade i3.
+# Restarts i3 in place, keeping the layout and session. It also loads an
+# upgraded i3.
 bindsym Mod1+Shift+r restart
 
-# Exits i3: logs you out of your X session.
+# Exits i3, which ends the X session.
 bindsym Mod1+Shift+e exec "i3-nagbar -t warning -m 'You pressed the exit shortcut. Do you really want to exit i3? This will end your X session.' -b 'Yes, exit i3' 'i3-msg exit'"
 
-# Resizes window, you can also use the mouse for that.
+# Resizes the window. The mouse works for that too.
 mode "resize" {
-  # These bindings trigger as soon as you enter the resize mode.
+  # These bindings trigger as soon as the resize mode starts.
 
   # Pressing left will shrink the window’s width.
   # Pressing right will grow the window’s width.

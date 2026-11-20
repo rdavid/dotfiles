@@ -2,7 +2,7 @@
 # vi: lbr noet sw=2 ts=2 tw=79 wrap
 # SPDX-FileCopyrightText: 2019-2026 David Rabkin
 # SPDX-License-Identifier: 0BSD
-
+#
 # Checks whether the given command exists.
 cmd_exists() {
 	command -v "$1" >/dev/null 2>&1

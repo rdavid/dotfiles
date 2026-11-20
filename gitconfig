@@ -1,6 +1,6 @@
 # SPDX-FileCopyrightText: 2019-2026 David Rabkin
 # SPDX-License-Identifier: 0BSD
-
+#
 # Holds the per-user Git configuration.
 
 # Identifies the author and selects the GPG key for signing.

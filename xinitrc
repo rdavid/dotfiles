@@ -1,6 +1,6 @@
 # shellcheck shell=sh
 # vi: lbr noet sw=2 ts=2 tw=79 wrap
-# SPDX-FileCopyrightText: 2016-2026 David Rabkin
+# SPDX-FileCopyrightText: 2017-2026 David Rabkin
 # SPDX-License-Identifier: 0BSD
 #
 # Starts the X session. Places the external monitor DP-1-3 left of the laptop

@@ -1,6 +1,6 @@
 # shellcheck shell=sh
 # vi: lbr noet sw=2 ts=2 tw=79 wrap
-# SPDX-FileCopyrightText: 2026 David Rabkin
+# SPDX-FileCopyrightText: 2019-2026 David Rabkin
 # SPDX-License-Identifier: 0BSD
 #
 # Loads fzf completion and key bindings into Bash. Replaces the stub that the
