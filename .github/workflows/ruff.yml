@@ -31,3 +31,4 @@ jobs:
       - uses: astral-sh/ruff-action@v4.1.0
         with:
           src: ./app ./i3
+          version: 0.17.5

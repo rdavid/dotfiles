@@ -4,8 +4,16 @@
 name: lychee
 'on':
   pull_request:
+    paths: &paths
+      - .github/pages/README-docinfo.html
+      - .github/workflows/lychee.yml
+      - AGENTS.md
+      - README.adoc
   push:
     branches: [master]
+    paths: *paths
+  schedule:
+    - cron: '0 6 * * 1'
   workflow_dispatch:
 permissions:
   contents: read

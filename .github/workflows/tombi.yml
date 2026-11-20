@@ -4,8 +4,12 @@
 name: tombi
 'on':
   pull_request:
+    paths: &paths
+      - .github/workflows/tombi.yml
+      - '*.toml'
   push:
     branches: [master]
+    paths: *paths
   workflow_dispatch:
 permissions:
   contents: read
