@@ -61,7 +61,7 @@ colorscheme zenburn_1
 
 " Formats the time in the file list. For example:
 " TIME_STAMP_FORMAT=%m/%d-%H:%M
-" See man date or man strftime for details.
+" The date and strftime manuals describe the format.
 
 set timefmt=%m/%d\ %H:%M
 
@@ -142,10 +142,10 @@ command! reload :write | restart
 " :fileviewer pattern1,pattern2 consoleviewer
 " The other programs for the file type can be accessed with the :file command
 " The command macros %f, %F, %d, %F may be used in the commands.
-" The %a macro is ignored.  To use a % you must put %%.
+" The %a macro is ignored. A literal % takes %%.
 
-" For automated FUSE mounts, you must register an extension with :file[x]type
-" in one of following formats:
+" Automated FUSE mounts require an extension registered with :file[x]type in
+" one of the following formats:
 "
 " :filetype extensions FUSE_MOUNT|some_mount_command using %SOURCE_FILE and %DESTINATION_DIR variables
 " %SOURCE_FILE and %DESTINATION_DIR are filled in by vifm at runtime.
@@ -159,8 +159,7 @@ command! reload :write | restart
 " %PARAM value is filled from the first line of file (whole line).
 " Example first line for SshMount filetype: root@127.0.0.1:/
 "
-" You can also add %CLEAR if you want to clear screen before running FUSE
-" program.
+" Adding %CLEAR clears the screen before the FUSE program runs.
 
 " Pdf
 filextype *.pdf zathura %c %i &, apvlv %c, xpdf %c
@@ -352,11 +351,11 @@ filextype */
 "
 " fileviewer *.jpg,*.png shellpic %c
 
-" Open all other files with default system programs (you can also remove all
-" :file[x]type commands above to ensure they don't interfere with system-wide
-" settings).  By default all unknown files are opened with 'vi[x]cmd'
-" uncommenting one of lines below will result in ignoring 'vi[x]cmd' option
-" for unknown file types.
+" Opens all other files with the default system programs. Removing the
+" :file[x]type commands above keeps them from overriding the system-wide
+" settings. By default, vifm opens unknown files with 'vi[x]cmd'.
+" Uncommenting one of the lines below ignores the 'vi[x]cmd' option for
+" unknown file types.
 " For *nix:
 " filetype * xdg-open
 " For OS X:

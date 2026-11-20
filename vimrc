@@ -17,7 +17,7 @@ set textwidth=79                " Wraps lines at this column.
 set showmatch                   " Highlights the matching brace.
 set visualbell                  " Uses a visual bell instead of beeping.
 set hlsearch                    " Highlights all search results.
-set incsearch                   " Shows search matches as you type.
+set incsearch                   " Shows search matches while typing.
 set smartcase                   " Enables smart-case search.
 set ignorecase                  " Ignores case in searches by default.
 set incsearch                   " Searches incrementally while typing.
