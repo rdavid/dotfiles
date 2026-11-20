@@ -18,4 +18,4 @@ wrk = "wrk"
 ype = "ype"
 
 [files]
-extend-exclude = ["install.rb","ohmyzsh"]
+extend-exclude = ["install.rb", "ohmyzsh"]

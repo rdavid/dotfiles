@@ -24,6 +24,7 @@
 :url-shfmt: https://github.com/mvdan/sh
 :url-site: https://rdavid.github.io/dotfiles/
 :url-test: https://github.com/rdavid/dotfiles/actions/workflows/test.yml
+:url-tombi: https://tombi-toml.github.io/tombi/
 :url-typos: https://github.com/crate-ci/typos
 :url-vale: https://vale.sh
 :url-yamllint: https://github.com/adrienverge/yamllint
@@ -109,6 +110,7 @@ Sergey Matveev's {url-goredo}[`goredo`] works as a drop-in swap.
 {url-ruff}[`ruff`],
 {url-shellcheck}[`shellcheck`],
 {url-shfmt}[`shfmt`],
+{url-tombi}[`tombi`],
 {url-typos}[`typos`],
 {url-vale}[`vale`],
 {url-yamllint}[`yamllint`], and

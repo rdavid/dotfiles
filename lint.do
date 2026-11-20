@@ -21,6 +21,7 @@ redo-ifchange \
 	./.github/workflows/*.yml \
 	./.rubocop.yml \
 	./*.do \
+	./*.toml \
 	./AGENTS.md \
 	./aliases \
 	./app/* \
@@ -91,6 +92,10 @@ cmd_runif shfmt -d \
 	./install \
 	./xinitrc \
 	./zshrc
+cmd_runif tombi lint \
+	./*.toml
+cmd_runif tombi format --check \
+	./*.toml
 cmd_runif typos
 cmd_runif vale sync
 cmd_runif vale ./README.adoc

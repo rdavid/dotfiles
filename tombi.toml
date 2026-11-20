@@ -1,0 +1,4 @@
+# SPDX-FileCopyrightText: 2026 David Rabkin
+# SPDX-License-Identifier: 0BSD
+[format.rules]
+indent-style = "tab"
