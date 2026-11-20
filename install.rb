@@ -599,15 +599,19 @@ class Installer
       chk = "python3 -c \"help('modules');\" | grep #{p} | wc -l | xargs"
       next if `#{chk}`.strip.eql? '1'
 
-      system("pip3 install --user #{p}")
+      system("pip3 install --break-system-packages --user #{p}")
       puts("Unable to install #{p}.") if $CHILD_STATUS.exitstatus.positive?
     end
 
-    system('pip3 list --outdated |' \
-           'grep -v \'^\-e\' |' \
-           'cut -d = -f 1 |' \
-           'xargs -n1 pip3 install -U --user')
-    puts('Unable to update Python.') if $CHILD_STATUS.exitstatus.positive?
+    chk = 'pip3 list --exclude-editable --format=freeze --outdated --user'
+    outdated = `#{chk} 2>/dev/null`
+               .lines.map { |l| l.split('==').first.strip }.reject(&:empty?)
+
+    outdated.each do |pkg|
+      system('pip3', 'install', '--break-system-packages', '--upgrade',
+             '--user', pkg)
+      puts("Unable to update #{pkg}.") if $CHILD_STATUS.exitstatus.positive?
+    end
 
     %w[
       pry pry-doc renamr rubocop rubygems-update transcode
