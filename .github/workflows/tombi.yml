@@ -27,6 +27,6 @@ jobs:
       - uses: actions/checkout@v7.0.1
         with:
           persist-credentials: false
-      - uses: tombi-toml/setup-tombi@v1.11.2
+      - uses: tombi-toml/setup-tombi@v1.11.3
       - run: tombi lint ./*.toml
       - run: tombi format --check ./*.toml
